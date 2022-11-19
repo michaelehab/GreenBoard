@@ -1,11 +1,18 @@
+import { assert, expect } from "chai";
 import request from "supertest";
-import { expect } from "chai";
 
 import createServer from "../../server";
 const app = createServer();
 
 describe("server checks", function () {
-  it("server instantiated without error", function (done) {
-    request(app).get("/").expect(200, done);
+  it("Server is up and running", function () {
+    return request(app)
+      .get("/healthz")
+      .set("Accept", "application/json")
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .then((response) => {
+        assert(response.status, "OK");
+      });
   });
 });

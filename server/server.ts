@@ -4,11 +4,11 @@ import routes from "./routes";
 export default function createServer() {
   const app: Application = express();
 
-  app.get("/", (req: Request, res: Response, next: NextFunction) => {
-    res.send("Hello world!");
+  app.get("/healthz", (req: Request, res: Response, next: NextFunction) => {
+    res.status(200).send({ status: "OK" });
   });
 
-  app.use(routes);
+  app.use("/api/v1", routes);
 
   return app;
 }
