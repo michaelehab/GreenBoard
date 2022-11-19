@@ -1,9 +1,7 @@
 import { Router, Request, Response } from "express";
-
+import { SignUpUser } from "../handlers/authHandler";
 const router = Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.sendStatus(200);
-});
+router.get("/", SignUpUser);
 
 export default router;
