@@ -5,6 +5,9 @@
 3. git checkout -b {Branch_Name}
 4. Do the work required in this branch
 5. npm test {Test_File_Name}
-6. If all your tests are passing, it's time to make a pull request to merge your changes to the main branch
-7. Open github, select the branch, click compare & pull request.
-8. Write anything that can help the one reviewing your pull request.
+6. git add .
+7. git commit -m "{Your_Commit_Message}"
+8. git push origin {Branch_Name}
+9. It's time to make a pull request to merge your changes to the main branch
+10. Open github, select the branch, click compare & pull request.
+11. Write anything that can help the one reviewing your pull request.
