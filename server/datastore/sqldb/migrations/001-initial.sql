@@ -1,13 +1,13 @@
 CREATE TABLE `users` (
   `id` varchar(255) PRIMARY KEY,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
+  `firstName` varchar(255) NOT NULL,
+  `lastName` varchar(255) NOT NULL,
   `email` varchar(255) UNIQUE NOT NULL,
   `password` varchar(255) NOT NULL,
-  `phone_number` varchar(255) UNIQUE NOT NULL,
-  `joined_at` datetime NOT NULL,
-  `department_id` varchar(255) NOT NULL,
-  FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`)
+  `phoneNumber` varchar(255) UNIQUE NOT NULL,
+  `joinedAt` datetime NOT NULL,
+  `departmentId` varchar(255) NOT NULL,
+  FOREIGN KEY (`departmentId`) REFERENCES `departments` (`id`)
 );
 
 CREATE TABLE `students` (
@@ -23,40 +23,40 @@ CREATE TABLE `instructors` (
 
 CREATE TABLE `courses` (
   `id` varchar(255) PRIMARY KEY,
-  `course_code` varchar(255) NOT NULL,
+  `courseCode` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `password` varchar(255),
-  `department_id` varchar(255) NOT NULL,
-  FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`)
+  `departmentId` varchar(255) NOT NULL,
+  FOREIGN KEY (`departmentId`) REFERENCES `departments` (`id`)
 );
 
 CREATE TABLE `enrollments` (
   `id` varchar(255) PRIMARY KEY,
-  `user_id` varchar(255) NOT NULL,
-  `course_id` varchar(255) NOT NULL,
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`)
+  `userId` varchar(255) NOT NULL,
+  `courseId` varchar(255) NOT NULL,
+  FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  FOREIGN KEY (`courseId`) REFERENCES `courses` (`id`)
 );
 
 CREATE TABLE `quizzes` (
   `id` varchar(255) PRIMARY KEY,
   `name` varchar(255) NOT NULL,
-  `quiz_date` datetime NOT NULL,
-  `is_active` boolean NOT NULL,
-  `course_id` varchar(255) NOT NULL,
-  FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`)
+  `quizDate` datetime NOT NULL,
+  `isActive` boolean NOT NULL,
+  `courseId` varchar(255) NOT NULL,
+  FOREIGN KEY (`courseId`) REFERENCES `courses` (`id`)
 );
 
 CREATE TABLE `quizzes_questions` (
   `question_number` int,
   `question` varchar(255) NOT NULL,
-  `choice_a` varchar(255) NOT NULL,
-  `choice_b` varchar(255) NOT NULL,
-  `choice_c` varchar(255) NOT NULL,
-  `choice_d` varchar(255) NOT NULL,
-  `right_choice` char NOT NULL,
-  `quiz_id` varchar(255),
-  FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`)
+  `choiceA` varchar(255) NOT NULL,
+  `choiceB` varchar(255) NOT NULL,
+  `choiceC` varchar(255) NOT NULL,
+  `choiceD` varchar(255) NOT NULL,
+  `rightChoice` char NOT NULL,
+  `quizId` varchar(255),
+  FOREIGN KEY (`quizId`) REFERENCES `quizzes` (`id`)
 );
 
 CREATE TABLE `posts` (
@@ -64,9 +64,9 @@ CREATE TABLE `posts` (
   `title` varchar(255) NOT NULL,
   `content` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
-  `posted_at` int NOT NULL,
-  `course_id` varchar(255) NOT NULL,
-  FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`)
+  `postedAt` int NOT NULL,
+  `courseId` varchar(255) NOT NULL,
+  FOREIGN KEY (`courseId`) REFERENCES `courses` (`id`)
 );
 
 CREATE TABLE `students_questions` (
@@ -81,34 +81,34 @@ CREATE TABLE `course_posts` (
 
 CREATE TABLE `grades` (
   `grade` float NOT NULL,
-  `student_id` varchar(255) NOT NULL,
-  `quiz_id` varchar(255) NOT NULL,
-  FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
-  FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`)
+  `studentId` varchar(255) NOT NULL,
+  `quizId` varchar(255) NOT NULL,
+  FOREIGN KEY (`studentId`) REFERENCES `students` (`id`),
+  FOREIGN KEY (`quizId`) REFERENCES `quizzes` (`id`)
 );
 
 CREATE TABLE `comments` (
   `id` varchar(255) PRIMARY KEY,
   `comment` varchar(255) NOT NULL,
-  `posted_at` int NOT NULL
+  `postedAt` int NOT NULL
 );
 
 CREATE TABLE `post_comments` (
   `id` varchar(255) PRIMARY KEY,
-  `user_id` varchar(255) NOT NULL,
-  `post_id` varchar(255) NOT NULL,
+  `userId` varchar(255) NOT NULL,
+  `postId` varchar(255) NOT NULL,
   FOREIGN KEY (`id`) REFERENCES `comments` (`id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  FOREIGN KEY (`post_id`) REFERENCES `course_posts` (`id`)
+  FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  FOREIGN KEY (`postId`) REFERENCES `course_posts` (`id`)
 );
 
 CREATE TABLE `instructors_answers` (
   `id` varchar(255) PRIMARY KEY,
-  `instructor_id` varchar(255) NOT NULL,
-  `question_id` varchar(255) NOT NULL,
+  `instructorId` varchar(255) NOT NULL,
+  `questionId` varchar(255) NOT NULL,
   FOREIGN KEY (`id`) REFERENCES `comments` (`id`),
-  FOREIGN KEY (`instructor_id`) REFERENCES `instructors` (`id`),
-  FOREIGN KEY (`question_id`) REFERENCES `students_questions` (`id`)
+  FOREIGN KEY (`instructorId`) REFERENCES `instructors` (`id`),
+  FOREIGN KEY (`questionId`) REFERENCES `students_questions` (`id`)
 );
 
 CREATE TABLE `colleges` (
@@ -116,9 +116,9 @@ CREATE TABLE `colleges` (
   `name` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `email` varchar(255) UNIQUE NOT NULL,
-  `admin_password` varchar(255) NOT NULL,
+  `adminPassword` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
-  `founded_at` int NOT NULL
+  `foundedAt` int NOT NULL
 );
 
 CREATE TABLE `schools` (
@@ -126,33 +126,33 @@ CREATE TABLE `schools` (
   `name` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `email` varchar(255) UNIQUE NOT NULL,
-  `admin_password` varchar(255) NOT NULL,
-  `college_id` varchar(255) NOT NULL,
-  FOREIGN KEY (`college_id`) REFERENCES `colleges` (`id`)
+  `adminPassword` varchar(255) NOT NULL,
+  `collegeId` varchar(255) NOT NULL,
+  FOREIGN KEY (`collegeId`) REFERENCES `colleges` (`id`)
 );
 
 CREATE TABLE `departments` (
   `id` varchar(255) PRIMARY KEY,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) UNIQUE NOT NULL,
-  `admin_password` varchar(255) NOT NULL,
-  `school_id` varchar(255) NOT NULL,
-  FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`)
+  `adminPassword` varchar(255) NOT NULL,
+  `schoolId` varchar(255) NOT NULL,
+  FOREIGN KEY (`schoolId`) REFERENCES `schools` (`id`)
 );
 
 CREATE TABLE `announcements` (
   `id` varchar(255) PRIMARY KEY,
   `title` varchar(255) NOT NULL,
   `content` varchar(255) NOT NULL,
-  `posted_at` int NOT NULL,
-  `department_id` varchar(255),
-  `school_id` varchar(255),
-  `college_id` varchar(255) NOT NULL,
-  FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`),
-  FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`),
-  FOREIGN KEY (`college_id`) REFERENCES `colleges` (`id`)
+  `postedAt` int NOT NULL,
+  `departmentId` varchar(255),
+  `schoolId` varchar(255),
+  `collegeId` varchar(255) NOT NULL,
+  FOREIGN KEY (`departmentId`) REFERENCES `departments` (`id`),
+  FOREIGN KEY (`schoolId`) REFERENCES `schools` (`id`),
+  FOREIGN KEY (`collegeId`) REFERENCES `colleges` (`id`)
 );
 
-CREATE UNIQUE INDEX `quizzes_questions_index_0` ON `quizzes_questions` (`question_number`, `quiz_id`);
+CREATE UNIQUE INDEX `quizzes_questions_index_0` ON `quizzes_questions` (`question_number`, `quizId`);
 
-CREATE UNIQUE INDEX `grades_index_1` ON `grades` (`student_id`, `quiz_id`);
+CREATE UNIQUE INDEX `grades_index_1` ON `grades` (`studentId`, `quizId`);

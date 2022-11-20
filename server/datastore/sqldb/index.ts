@@ -39,7 +39,7 @@ export class SQLDataStore implements DataStore {
   }
   async createCollege(college: College): Promise<void> {
     await this.db.run(
-      "INSERT INTO colleges(id, name, phone, email, admin_password, location, founded_at) VALUES (?,?,?,?,?,?,?)",
+      "INSERT INTO colleges(id, name, phone, email, adminPassword, location, foundedAt) VALUES (?,?,?,?,?,?,?)",
       college.id,
       college.name,
       college.phone,
