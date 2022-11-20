@@ -1,12 +1,23 @@
 import dotenv from "dotenv";
-import createServer from "./server";
+import path from "path";
 
-(() => {
-  dotenv.config();
-  const app = createServer();
-  const port = process.env.PORT || 3000;
+import { createServer } from "./server";
 
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
+(async () => {
+  // read .env file
+  dotenv.config({ path: path.join(__dirname, ".env") });
+
+  const dbPath = path.join(
+    __dirname,
+    "datastore",
+    "sqldb",
+    "greenboard.sqlite"
+  );
+
+  const server = await createServer(dbPath, true);
+
+  const { NODE_ENV, PORT } = process.env;
+  server.listen(PORT, () =>
+    console.log(`Listening on port ${PORT} in ${NODE_ENV} environment`)
+  );
 })();

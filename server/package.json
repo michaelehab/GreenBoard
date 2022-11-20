@@ -5,24 +5,26 @@
   "main": "index.js",
   "scripts": {
     "dev": "SET NODE_ENV=dev && nodemon app.ts",
-    "test": "SET NODE_ENV=test && mocha --check-leaks -r ts-node/register \"test/**/*.spec.ts\""
+    "test": "SET NODE_ENV=test && jest",
+    "test:watch": " SET NODE_ENV=test && jest --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@greenboard/shared": "file:../shared",
+    "@types/jest": "^29.2.3",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "jest": "^29.3.1",
+    "ts-jest": "^29.0.3"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.4",
     "@types/express": "^4.17.14",
-    "@types/mocha": "^10.0.0",
     "@types/node": "^18.11.9",
     "@types/supertest": "^2.0.12",
-    "chai": "^4.3.7",
-    "mocha": "^10.1.0",
     "nodemon": "^2.0.20",
+    "sqlite": "^4.1.2",
+    "sqlite3": "^5.1.2",
     "supertest": "^6.3.1",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
