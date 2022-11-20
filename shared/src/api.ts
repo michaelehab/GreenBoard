@@ -23,4 +23,6 @@ export type CollegeSignUpRequest = Pick<
   College,
   "email" | "foundedAt" | "location" | "name" | "phone" | "adminPassword"
 >;
-export interface CollegeSignUpResponse {}
+export interface CollegeSignUpResponse {
+  jwt: string;
+}

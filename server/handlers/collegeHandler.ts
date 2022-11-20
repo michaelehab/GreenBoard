@@ -6,6 +6,8 @@ import {
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
+import { getPasswordHashed } from "../utils";
+import { signJwt } from "../auth";
 
 export const SignUpCollege: ExpressHandler<
   CollegeSignUpRequest,
@@ -25,11 +27,14 @@ export const SignUpCollege: ExpressHandler<
     id: crypto.randomBytes(20).toString("hex"),
     email,
     phone,
-    adminPassword,
+    adminPassword: getPasswordHashed(adminPassword),
     foundedAt,
     name,
     location,
   };
   await db.createCollege(college);
-  return res.sendStatus(200);
+
+  return res.status(200).send({
+    jwt: signJwt({ collegeId: college.id }),
+  });
 };
