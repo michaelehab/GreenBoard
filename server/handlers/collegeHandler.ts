@@ -52,8 +52,7 @@ export const SignInCollege: ExpressHandler<
   }
 
   const existingCollege = await db.getCollegeByEmail(email);
-  console.log(existingCollege);
-  console.log(getPasswordHashed(password));
+
   if (
     !existingCollege ||
     existingCollege.adminPassword !== getPasswordHashed(password)
