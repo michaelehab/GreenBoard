@@ -1,10 +1,10 @@
 import { Router } from "express";
-import auth from "./auth";
+import student from "./student";
 import college from "./college";
 
 const router = Router();
 
-router.use("/auth", auth);
+router.use("/student", student);
 router.use("/college", college);
 
 export default router;

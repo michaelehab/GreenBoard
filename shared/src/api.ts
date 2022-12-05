@@ -1,7 +1,7 @@
 import { type } from "os";
-import { College, Department, School, Student } from "./types";
+import { College, Department, Instructor, School, Student } from "./types";
 
-// Auth APIs
+// Student APIs
 export type StudentSignUpRequest = Pick<
   Student,
   | "email"
@@ -13,10 +13,51 @@ export type StudentSignUpRequest = Pick<
   | "departmentId"
 >;
 
-export type StudentSignUpResponse = Pick<
-  Student,
-  "email" | "firstName" | "lastName" | "phone" | "id" | "level" | "departmentId"
+export interface StudentSignUpResponse {
+  jwt: string;
+}
+
+export interface StudentSignInRequest {
+  email: string;
+  password: string;
+}
+
+export interface StudentSignInResponse {
+  student: Pick<
+    Student,
+    | "id"
+    | "email"
+    | "firstName"
+    | "lastName"
+    | "phone"
+    | "level"
+    | "departmentId"
+  >;
+  jwt: string;
+}
+
+// Instructor APIs
+export type InstructorSignUpRequest = Pick<
+  Instructor,
+  "email" | "firstName" | "lastName" | "password" | "phone" | "departmentId"
 >;
+
+export interface InstructorSignUpResponse {
+  jwt: string;
+}
+
+export interface InstructorSignInRequest {
+  email: string;
+  password: string;
+}
+
+export interface InstructorSignInResponse {
+  instructor: Pick<
+    Instructor,
+    "email" | "firstName" | "lastName" | "id" | "phone" | "departmentId"
+  >;
+  jwt: string;
+}
 
 // College APIs
 export type CollegeSignUpRequest = Pick<
