@@ -1,7 +1,4 @@
-import {
-  InstructorSignUpRequest,
-  StudentSignUpRequest,
-} from "@greenboard/shared";
+import { InstructorSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
 import { getTestServer } from "./testServer";
 
