@@ -1,6 +1,11 @@
 import { type } from "os";
 import { College, Department, Instructor, School, Student } from "./types";
 
+export interface SignInRequest {
+  email: string;
+  password: string;
+}
+
 // Student APIs
 export type StudentSignUpRequest = Pick<
   Student,
@@ -15,11 +20,6 @@ export type StudentSignUpRequest = Pick<
 
 export interface StudentSignUpResponse {
   jwt: string;
-}
-
-export interface StudentSignInRequest {
-  email: string;
-  password: string;
 }
 
 export interface StudentSignInResponse {
@@ -46,11 +46,6 @@ export interface InstructorSignUpResponse {
   jwt: string;
 }
 
-export interface InstructorSignInRequest {
-  email: string;
-  password: string;
-}
-
 export interface InstructorSignInResponse {
   instructor: Pick<
     Instructor,
@@ -66,11 +61,6 @@ export type CollegeSignUpRequest = Pick<
 >;
 export interface CollegeSignUpResponse {
   jwt: string;
-}
-
-export interface CollegeSignInRequest {
-  email: string;
-  password: string;
 }
 
 export interface CollegeSignInResponse {
@@ -91,11 +81,6 @@ export interface SchoolSignUpResponse {
   jwt: string;
 }
 
-export interface SchoolSignInRequest {
-  email: string;
-  password: string;
-}
-
 export interface SchoolSignInResponse {
   school: Pick<School, "id" | "email" | "name" | "phone" | "collegeId">;
   jwt: string;
@@ -109,11 +94,6 @@ export type DepartmentSignUpRequest = Pick<
 
 export interface DepartmentSignUpResponse {
   jwt: string;
-}
-
-export interface DepartmentSignInRequest {
-  email: string;
-  password: string;
 }
 
 export interface DepartmentSignInResponse {

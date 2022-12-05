@@ -1,7 +1,7 @@
 import { ExpressHandler } from "../types";
 import {
   College,
-  CollegeSignInRequest,
+  SignInRequest,
   CollegeSignInResponse,
   CollegeSignUpRequest,
   CollegeSignUpResponse,
@@ -42,7 +42,7 @@ export const SignUpCollege: ExpressHandler<
 };
 
 export const SignInCollege: ExpressHandler<
-  CollegeSignInRequest,
+  SignInRequest,
   CollegeSignInResponse
 > = async (req, res) => {
   const { email, password } = req.body;
