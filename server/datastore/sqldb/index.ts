@@ -1,10 +1,10 @@
-import { User, Student, College, School } from "@greenboard/shared";
+import { User, Student, College, School, Department } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
 import sqlite3 from "sqlite3";
 
 import { DataStore } from "..";
-import { SEED_COLLEGES, SEED_SCHOOLS } from "./seeds";
+import { SEED_COLLEGES, SEED_DEPARTMENTS, SEED_SCHOOLS } from "./seeds";
 
 export class SQLDataStore implements DataStore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;
@@ -30,11 +30,15 @@ export class SQLDataStore implements DataStore {
     if (dbPath === ":memory:") {
       console.log("Seeding data...");
 
-      SEED_COLLEGES.forEach(async (u) => {
-        if (!(await this.getCollegeById(u.id))) await this.createCollege(u);
+      SEED_COLLEGES.forEach(async (c) => {
+        if (!(await this.getCollegeById(c.id))) await this.createCollege(c);
       });
-      SEED_SCHOOLS.forEach(async (p) => {
-        if (!(await this.getSchoolById(p.id))) await this.createSchool(p);
+      SEED_SCHOOLS.forEach(async (s) => {
+        if (!(await this.getSchoolById(s.id))) await this.createSchool(s);
+      });
+      SEED_DEPARTMENTS.forEach(async (d) => {
+        if (!(await this.getDepartmentById(d.id)))
+          await this.createDepartment(d);
       });
     }
 
@@ -107,6 +111,31 @@ export class SQLDataStore implements DataStore {
   async getSchoolByEmail(email: string): Promise<School | undefined> {
     return await this.db.get<School>(
       "SELECT * FROM schools WHERE email = ?",
+      email
+    );
+  }
+
+  async createDepartment(department: Department): Promise<void> {
+    await this.db.run(
+      "INSERT INTO departments(id, name, email, adminPassword, schoolId) VALUES (?,?,?,?,?,?)",
+      department.id,
+      department.name,
+      department.email,
+      department.adminPassword,
+      department.schoolId
+    );
+  }
+
+  async getDepartmentById(id: string): Promise<Department | undefined> {
+    return await this.db.get<Department>(
+      "SELECT * FROM departments WHERE id = ?",
+      id
+    );
+  }
+
+  async getDepartmentByEmail(email: string): Promise<Department | undefined> {
+    return await this.db.get<Department>(
+      "SELECT * FROM departments WHERE email = ?",
       email
     );
   }

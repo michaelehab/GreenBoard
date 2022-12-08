@@ -1,4 +1,4 @@
-import { College, School } from "@greenboard/shared";
+import { College, Department, School } from "@greenboard/shared";
 
 export const SEED_COLLEGES: College[] = [
   {
@@ -20,5 +20,15 @@ export const SEED_SCHOOLS: School[] = [
     email: "Email1",
     adminPassword: "AdminPassword1",
     collegeId: "COLLEGE001",
+  },
+];
+
+export const SEED_DEPARTMENTS: Department[] = [
+  {
+    id: "DEPT001",
+    name: "Department1",
+    email: "Email1",
+    adminPassword: "AdminPassword1",
+    schoolId: "SCHOOL001",
   },
 ];
