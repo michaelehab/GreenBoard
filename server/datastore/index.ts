@@ -4,7 +4,7 @@ import { CollegeDao } from "./dao/collegeDao";
 import { SchoolDao } from "./dao/schoolDao";
 import { SQLDataStore } from "./sqldb";
 
-export interface DataStore extends UserDao, StudentDao, CollegeDao {}
+export interface DataStore extends UserDao, StudentDao, CollegeDao, SchoolDao {}
 
 export let db: DataStore;
 

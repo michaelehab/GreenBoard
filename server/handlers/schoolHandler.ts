@@ -1,35 +1,78 @@
 import { ExpressHandler } from "../types";
 import {
-  College,
-  CollegeSignUpRequest,
-  CollegeSignUpResponse,
+  School,
+  SchoolSignInResponse,
+  SchoolSignUpRequest,
+  SchoolSignUpResponse,
+  SignInRequest,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
+import { signJwt } from "../auth";
+import { getPasswordHashed } from "../utils";
 
 export const SignUpSchool: ExpressHandler<
-  CollegeSignUpRequest,
-  CollegeSignUpResponse
+  SchoolSignUpRequest,
+  SchoolSignUpResponse
 > = async (req, res) => {
-  const { email, foundedAt, location, name, phone, adminPassword } = req.body;
-  if (!email || !foundedAt || !location || !name || !phone || !adminPassword) {
+  const { email, name, phone, adminPassword, collegeId } = req.body;
+  if (!email || !name || !phone || !adminPassword || !collegeId) {
     return res.status(400).send({ error: "All Fields are required!" });
   }
-  const existingCollege = await db.getCollegeByEmail(email);
+  const existingSchool = await db.getSchoolByEmail(email);
 
-  if (existingCollege) {
-    return res.status(403).send({ error: "User already exists!" });
+  if (existingSchool) {
+    return res
+      .status(403)
+      .send({ error: "School with this email already exists!" });
   }
 
-  const college: College = {
+  const validCollege = await db.getCollegeById(collegeId);
+  if (!validCollege) {
+    return res.status(403).send({ error: "College ID is invalid!" });
+  }
+
+  const school: School = {
     id: crypto.randomBytes(20).toString("hex"),
     email,
     phone,
-    adminPassword,
-    foundedAt,
+    adminPassword: getPasswordHashed(adminPassword),
     name,
-    location,
+    collegeId,
   };
-  await db.createCollege(college);
-  return res.sendStatus(200);
+  await db.createSchool(school);
+  return res.status(200).send({
+    jwt: signJwt({ schoolId: school.id }),
+  });
+};
+
+export const SignInSchool: ExpressHandler<
+  SignInRequest,
+  SchoolSignInResponse
+> = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).send({ error: "All fields are required" });
+  }
+
+  const existingSchool = await db.getSchoolByEmail(email);
+
+  if (
+    !existingSchool ||
+    existingSchool.adminPassword !== getPasswordHashed(password)
+  ) {
+    return res.status(403).send({ error: "Invalid Credentials" });
+  }
+
+  return res.status(200).send({
+    school: {
+      id: existingSchool.id,
+      email: existingSchool.email,
+      name: existingSchool.name,
+      phone: existingSchool.phone,
+      collegeId: existingSchool.collegeId,
+    },
+    jwt: signJwt({ schoolId: existingSchool.id }),
+  });
 };
