@@ -45,24 +45,77 @@ export class SQLDataStore implements DataStore {
     return this;
   }
 
-  getUserById(id: string): Promise<User | undefined> {
-    throw new Error("Method not implemented.");
+  async createUser(user: User): Promise<void> {
+    await this.db.run(
+      "INSERT INTO users(id, firstName, lastName, email, password, phoneNumber, joinedAt, departmentId) VALUES (?,?,?,?,?,?,?,?)",
+      user.id,
+      user.firstName,
+      user.lastName,
+      user.email,
+      user.password,
+      user.phone,
+      user.joinedAt,
+      user.departmentId
+    );
   }
 
-  getUserByEmail(email: string): Promise<User | undefined> {
-    throw new Error("Method not implemented.");
+  async getUserById(id: string): Promise<User | undefined> {
+    return await this.db.get<User>("SELECT * FROM users WHERE id = ?", id);
   }
 
-  createStudent(student: Student): Promise<void> {
-    throw new Error("Method not implemented.");
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    return await this.db.get<User>(
+      "SELECT * FROM users WHERE email = ?",
+      email
+    );
   }
 
-  getStudentById(id: string): Promise<Student | undefined> {
-    throw new Error("Method not implemented.");
+  async createStudent(student: Student): Promise<void> {
+    await this.createUser(student);
+
+    await this.db.run(
+      "INSERT INTO students(id, level) VALUES (?,?)",
+      student.id,
+      student.level
+    );
   }
 
-  getStudentByEmail(email: string): Promise<Student | undefined> {
-    throw new Error("Method not implemented.");
+  async getStudentById(id: string): Promise<Student | undefined> {
+    let usr: User | undefined = await this.getUserById(id);
+    if (!usr) return usr;
+    let std: Student | undefined = await this.db.get<Student>(
+      "SELECT * FROM users WHERE id = ?",
+      id
+    );
+    if (!std) return std;
+    std.firstName = usr.firstName;
+    std.lastName = usr.lastName;
+    std.email = usr.email;
+    std.password = usr.password;
+    std.phone = usr.phone;
+    std.joinedAt = usr.joinedAt;
+    std.departmentId = usr.departmentId;
+
+    return std;
+  }
+
+  async getStudentByEmail(email: string): Promise<Student | undefined> {
+    let usr: User | undefined = await this.getUserByEmail(email);
+    if (!usr) return usr;
+    let std: Student | undefined = await this.db.get<Student>(
+      "SELECT * FROM users WHERE email = ?",
+      email
+    );
+    if (!std) return std;
+    std.firstName = usr.firstName;
+    std.lastName = usr.lastName;
+    std.email = usr.email;
+    std.password = usr.password;
+    std.phone = usr.phone;
+    std.joinedAt = usr.joinedAt;
+    std.departmentId = usr.departmentId;
+
+    return std;
   }
 
   async createCollege(college: College): Promise<void> {
@@ -117,7 +170,7 @@ export class SQLDataStore implements DataStore {
 
   async createDepartment(department: Department): Promise<void> {
     await this.db.run(
-      "INSERT INTO departments(id, name, email, adminPassword, schoolId) VALUES (?,?,?,?,?,?)",
+      "INSERT INTO departments(id, name, email, adminPassword, schoolId) VALUES (?,?,?,?,?)",
       department.id,
       department.name,
       department.email,
