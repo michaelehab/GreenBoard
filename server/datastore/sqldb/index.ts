@@ -1,17 +1,24 @@
-import { User, Student, College } from "@greenboard/shared";
+import { User, Student, College, School } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
 import sqlite3 from "sqlite3";
 
 import { DataStore } from "..";
+import { SEED_COLLEGES, SEED_SCHOOLS } from "./seeds";
 
 export class SQLDataStore implements DataStore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;
   public async openDb(dbPath: string) {
-    this.db = await sqliteOpen({
-      filename: dbPath,
-      driver: sqlite3.Database,
-    });
+    const { NODE_ENV } = process.env;
+    try {
+      this.db = await sqliteOpen({
+        filename: dbPath,
+        driver: sqlite3.Database,
+      });
+    } catch (e) {
+      console.error("Failed to open database at path:", dbPath, "err:", e);
+      process.exit(1);
+    }
 
     // To keep the referential integrity
     this.db.run("PRAGMA foreign_keys = ON");
@@ -20,23 +27,40 @@ export class SQLDataStore implements DataStore {
       migrationsPath: path.join(__dirname, "migrations"),
     });
 
+    if (dbPath === ":memory:") {
+      console.log("Seeding data...");
+
+      SEED_COLLEGES.forEach(async (u) => {
+        if (!(await this.getCollegeById(u.id))) await this.createCollege(u);
+      });
+      SEED_SCHOOLS.forEach(async (p) => {
+        if (!(await this.getSchoolById(p.id))) await this.createSchool(p);
+      });
+    }
+
     return this;
   }
+
   getUserById(id: string): Promise<User | undefined> {
     throw new Error("Method not implemented.");
   }
+
   getUserByEmail(email: string): Promise<User | undefined> {
     throw new Error("Method not implemented.");
   }
+
   createStudent(student: Student): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   getStudentById(id: string): Promise<Student | undefined> {
     throw new Error("Method not implemented.");
   }
+
   getStudentByEmail(email: string): Promise<Student | undefined> {
     throw new Error("Method not implemented.");
   }
+
   async createCollege(college: College): Promise<void> {
     await this.db.run(
       "INSERT INTO colleges(id, name, phone, email, adminPassword, location, foundedAt) VALUES (?,?,?,?,?,?,?)",
@@ -49,12 +73,40 @@ export class SQLDataStore implements DataStore {
       college.foundedAt
     );
   }
-  getCollegeById(id: string): Promise<College | undefined> {
-    throw new Error("Method not implemented.");
+
+  async getCollegeById(id: string): Promise<College | undefined> {
+    return await this.db.get<College>(
+      "SELECT * FROM colleges WHERE id = ?",
+      id
+    );
   }
+
   async getCollegeByEmail(email: string): Promise<College | undefined> {
     return await this.db.get<College>(
       "SELECT * FROM colleges WHERE email = ?",
+      email
+    );
+  }
+
+  async createSchool(school: School): Promise<void> {
+    await this.db.run(
+      "INSERT INTO schools(id, name, phone, email, adminPassword, collegeId) VALUES (?,?,?,?,?,?)",
+      school.id,
+      school.name,
+      school.phone,
+      school.email,
+      school.adminPassword,
+      school.collegeId
+    );
+  }
+
+  async getSchoolById(id: string): Promise<School | undefined> {
+    return await this.db.get<School>("SELECT * FROM schools WHERE id = ?", id);
+  }
+
+  async getSchoolByEmail(email: string): Promise<School | undefined> {
+    return await this.db.get<School>(
+      "SELECT * FROM schools WHERE email = ?",
       email
     );
   }
