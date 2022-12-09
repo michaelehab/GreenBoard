@@ -6,3 +6,4 @@ router.get("/", SignUpUser);
 
 export default router;
 
+
