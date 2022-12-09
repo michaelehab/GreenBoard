@@ -1,6 +1,5 @@
 import { CollegeSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
-import { verifyJwt } from "../auth";
 import { getTestServer } from "./testServer";
 
 describe("College tests", () => {
