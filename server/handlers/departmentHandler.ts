@@ -15,25 +15,28 @@ export const SignUpDepartment: ExpressHandler<
   DepartmentSignUpRequest,
   DepartmentSignUpResponse
 > = async (req, res) => {
-  const { email, name, schoolId, adminPassword } = req.body;
-  if (!email || !schoolId|| !name ||!adminPassword) {
+  const { email, schoolId , name, adminPassword } = req.body;
+  if (!email  || !schoolId || !name || !adminPassword) {
     return res.status(400).send({ error: "All Fields are required!" });
   }
   const existingDepartment = await db.getDepartmentByEmail(email);
 
   if (existingDepartment) {
-    return res.status(403).send({ error: "User already exists!" });
+    return res.status(403).send({ error: "Department already exists!" });
   }
 
   const department: Department = {
     id: crypto.randomBytes(20).toString("hex"),
     email,
-    adminPassword,
     schoolId,
+    adminPassword: getPasswordHashed(adminPassword),
     name,
   };
   await db.createDepartment(department);
-  return res.sendStatus(200);
+
+  return res.status(200).send({
+    jwt: signJwt({ departmentId: department.id }),
+  });
 };
 
 export const SignInDepartment: ExpressHandler<
@@ -62,7 +65,7 @@ export const SignInDepartment: ExpressHandler<
       name: existingDepartment.name,
       schoolId: existingDepartment.schoolId,
     },
-    jwt: signJwt({ schoolId: existingDepartment.id }),
+    jwt: signJwt({ departmentId: existingDepartment.id }),
   });
 };
 
