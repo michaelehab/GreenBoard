@@ -1,6 +1,6 @@
 import { InstructorSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
-import { getTestServer } from "./testServer";
+import { getTestServer } from "./testUtils";
 
 describe("Instructor tests", () => {
   let client: supertest.SuperTest<supertest.Test>;

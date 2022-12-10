@@ -1,4 +1,11 @@
-import { User, Student, College, School, Department, Instructor } from "@greenboard/shared";
+import {
+  User,
+  Student,
+  College,
+  School,
+  Department,
+  Instructor,
+} from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
 import sqlite3 from "sqlite3";
@@ -28,8 +35,6 @@ export class SQLDataStore implements DataStore {
     });
 
     if (dbPath === ":memory:") {
-      console.log("Seeding data...");
-
       SEED_COLLEGES.forEach(async (c) => {
         if (!(await this.getCollegeById(c.id))) await this.createCollege(c);
       });
@@ -193,52 +198,47 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async createInstructor(instructor: Instructor): Promise<void> {
+    await this.createUser(instructor);
 
+    await this.db.run("INSERT INTO Instructors(id) VALUES (?)", instructor.id);
+  }
 
-async createInstructor(instructor: Instructor): Promise<void> {
-  await this.createUser(instructor);
+  async getInstructorById(id: string): Promise<Instructor | undefined> {
+    let usr: User | undefined = await this.getUserById(id);
+    if (!usr) return usr;
+    let ins: Instructor | undefined = await this.db.get<Instructor>(
+      "SELECT * FROM users WHERE id = ?",
+      id
+    );
+    if (!ins) return ins;
+    ins.firstName = usr.firstName;
+    ins.lastName = usr.lastName;
+    ins.email = usr.email;
+    ins.password = usr.password;
+    ins.phone = usr.phone;
+    ins.joinedAt = usr.joinedAt;
+    ins.departmentId = usr.departmentId;
 
-  await this.db.run(
-    "INSERT INTO Instructors(id) VALUES (?)",
-    instructor.id,
-  );
-}
+    return ins;
+  }
 
-async getInstructorById(id: string): Promise<Instructor | undefined> {
-  let usr: User | undefined = await this.getUserById(id);
-  if (!usr) return usr;
-  let ins: Instructor | undefined = await this.db.get<Instructor>(
-    "SELECT * FROM users WHERE id = ?",
-    id
-  );
-  if (!ins) return ins;
-  ins.firstName = usr.firstName;
-  ins.lastName = usr.lastName;
-  ins.email = usr.email;
-  ins.password = usr.password;
-  ins.phone = usr.phone;
-  ins.joinedAt = usr.joinedAt;
-  ins.departmentId = usr.departmentId;
+  async getInstructorByEmail(email: string): Promise<Instructor | undefined> {
+    let usr: User | undefined = await this.getUserByEmail(email);
+    if (!usr) return usr;
+    let ins: Instructor | undefined = await this.db.get<Instructor>(
+      "SELECT * FROM users WHERE email = ?",
+      email
+    );
+    if (!ins) return ins;
+    ins.firstName = usr.firstName;
+    ins.lastName = usr.lastName;
+    ins.email = usr.email;
+    ins.password = usr.password;
+    ins.phone = usr.phone;
+    ins.joinedAt = usr.joinedAt;
+    ins.departmentId = usr.departmentId;
 
-  return ins;
-}
-
-async getInstructorByEmail(email: string): Promise<Instructor | undefined> {
-  let usr: User | undefined = await this.getUserByEmail(email);
-  if (!usr) return usr;
-  let ins: Instructor | undefined = await this.db.get<Instructor>(
-    "SELECT * FROM users WHERE email = ?",
-    email
-  );
-  if (!ins) return ins;
-  ins.firstName = usr.firstName;
-  ins.lastName = usr.lastName;
-  ins.email = usr.email;
-  ins.password = usr.password;
-  ins.phone = usr.phone;
-  ins.joinedAt = usr.joinedAt;
-  ins.departmentId = usr.departmentId;
-
-  return ins;
-}
+    return ins;
+  }
 }

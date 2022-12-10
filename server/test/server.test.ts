@@ -1,6 +1,6 @@
 import supertest from "supertest";
 
-import { getTestServer } from "./testServer";
+import { getTestServer } from "./testUtils";
 
 describe("College tests", () => {
   let client: supertest.SuperTest<supertest.Test>;

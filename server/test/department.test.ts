@@ -4,7 +4,7 @@ import {
   SchoolSignUpRequest,
 } from "@greenboard/shared";
 import supertest from "supertest";
-import { getTestServer } from "./testServer";
+import { getTestServer } from "./testUtils";
 
 describe("Department tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
