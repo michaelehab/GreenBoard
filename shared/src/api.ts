@@ -71,6 +71,19 @@ export interface CollegeSignInResponse {
   jwt: string;
 }
 
+export type CollegeUpdateRequest = Partial<College>;
+export interface CollegeUpdateResponse {
+  college: Pick<
+    College,
+    "id" | "email" | "foundedAt" | "location" | "name" | "phone"
+  >;
+}
+
+export interface CollegeResetPasswordRequest {
+  newPassword: string;
+}
+export interface CollegeResetPasswordResponse {}
+
 // School APIs
 export type SchoolSignUpRequest = Pick<
   School,

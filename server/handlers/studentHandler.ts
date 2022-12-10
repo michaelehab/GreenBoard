@@ -28,12 +28,19 @@ export const SignUpStudent: ExpressHandler<
   ) {
     return res.status(400).send({ error: "All Fields are required!" });
   }
-  const existingStudent = await db.getStudentByEmail(email);
+  let existingStudent = await db.getStudentByEmail(email);
 
   if (existingStudent) {
     return res
       .status(403)
       .send({ error: "Student with this email already exists!" });
+  }
+
+  existingStudent = await db.getStudentByPhoneNumber(phone);
+  if (existingStudent) {
+    return res
+      .status(403)
+      .send({ error: "Student with this phone number already exists!" });
   }
 
   const student: Student = {

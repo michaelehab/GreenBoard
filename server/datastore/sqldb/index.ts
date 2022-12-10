@@ -75,6 +75,13 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async getUserByPhoneNumber(phone: string): Promise<User | undefined> {
+    return await this.db.get<User>(
+      "SELECT * FROM users WHERE phoneNumber = ?",
+      phone
+    );
+  }
+
   async createStudent(student: Student): Promise<void> {
     await this.createUser(student);
 
@@ -89,7 +96,7 @@ export class SQLDataStore implements DataStore {
     let usr: User | undefined = await this.getUserById(id);
     if (!usr) return usr;
     let std: Student | undefined = await this.db.get<Student>(
-      "SELECT * FROM users WHERE id = ?",
+      "SELECT * FROM students WHERE id = ?",
       id
     );
     if (!std) return std;
@@ -108,8 +115,27 @@ export class SQLDataStore implements DataStore {
     let usr: User | undefined = await this.getUserByEmail(email);
     if (!usr) return usr;
     let std: Student | undefined = await this.db.get<Student>(
-      "SELECT * FROM users WHERE email = ?",
-      email
+      "SELECT * FROM students WHERE id = ?",
+      usr.id
+    );
+    if (!std) return std;
+    std.firstName = usr.firstName;
+    std.lastName = usr.lastName;
+    std.email = usr.email;
+    std.password = usr.password;
+    std.phone = usr.phone;
+    std.joinedAt = usr.joinedAt;
+    std.departmentId = usr.departmentId;
+
+    return std;
+  }
+
+  async getStudentByPhoneNumber(phone: string): Promise<Student | undefined> {
+    let usr: User | undefined = await this.getUserByPhoneNumber(phone);
+    if (!usr) return usr;
+    let std: Student | undefined = await this.db.get<Student>(
+      "SELECT * FROM students WHERE id = ?",
+      usr.id
     );
     if (!std) return std;
     std.firstName = usr.firstName;
@@ -218,7 +244,7 @@ export class SQLDataStore implements DataStore {
     let usr: User | undefined = await this.getUserById(id);
     if (!usr) return usr;
     let ins: Instructor | undefined = await this.db.get<Instructor>(
-      "SELECT * FROM users WHERE id = ?",
+      "SELECT * FROM instructors WHERE id = ?",
       id
     );
     if (!ins) return ins;
@@ -237,8 +263,29 @@ export class SQLDataStore implements DataStore {
     let usr: User | undefined = await this.getUserByEmail(email);
     if (!usr) return usr;
     let ins: Instructor | undefined = await this.db.get<Instructor>(
-      "SELECT * FROM users WHERE email = ?",
-      email
+      "SELECT * FROM instructors WHERE id = ?",
+      usr.id
+    );
+    if (!ins) return ins;
+    ins.firstName = usr.firstName;
+    ins.lastName = usr.lastName;
+    ins.email = usr.email;
+    ins.password = usr.password;
+    ins.phone = usr.phone;
+    ins.joinedAt = usr.joinedAt;
+    ins.departmentId = usr.departmentId;
+
+    return ins;
+  }
+
+  async getInstructorByPhoneNumber(
+    phone: string
+  ): Promise<Instructor | undefined> {
+    let usr: User | undefined = await this.getUserByPhoneNumber(phone);
+    if (!usr) return usr;
+    let ins: Instructor | undefined = await this.db.get<Instructor>(
+      "SELECT * FROM instructors WHERE id = ?",
+      usr.id
     );
     if (!ins) return ins;
     ins.firstName = usr.firstName;

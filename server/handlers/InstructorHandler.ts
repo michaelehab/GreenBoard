@@ -27,12 +27,19 @@ export const SignUpInstructor: ExpressHandler<
   ) {
     return res.status(400).send({ error: "All Fields are required!" });
   }
-  const existingInstructor = await db.getInstructorByEmail(email);
+  let existingInstructor = await db.getInstructorByEmail(email);
 
   if (existingInstructor) {
     return res
       .status(403)
       .send({ error: "Instructor with this email already exists!" });
+  }
+
+  existingInstructor = await db.getInstructorByPhoneNumber(phone);
+  if (existingInstructor) {
+    return res
+      .status(403)
+      .send({ error: "Instructor with this phone number already exists!" });
   }
 
   const Instructor: Instructor = {
