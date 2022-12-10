@@ -1,10 +1,10 @@
-import { ExpressHandler } from "../types";
+import { ExpressHandler, UserJwtPayload } from "../types";
 import {
- Instructor,
- InstructorSignUpRequest,
- InstructorSignUpResponse,
- SignInRequest,
- InstructorSignInResponse
+  Instructor,
+  InstructorSignUpRequest,
+  InstructorSignUpResponse,
+  SignInRequest,
+  InstructorSignInResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -27,7 +27,7 @@ export const SignUpInstructor: ExpressHandler<
   ) {
     return res.status(400).send({ error: "All Fields are required!" });
   }
-  const existingInstructor = await db.getInstructorByEmail(email); 
+  const existingInstructor = await db.getInstructorByEmail(email);
 
   if (existingInstructor) {
     return res
@@ -48,8 +48,13 @@ export const SignUpInstructor: ExpressHandler<
 
   await db.createInstructor(Instructor);
 
+  const tokenPayload: UserJwtPayload = {
+    userId: Instructor.id,
+    role: "Instructor",
+  };
+
   return res.status(200).send({
-    jwt: signJwt({ userId: Instructor.id, role: "Instructor" }),
+    jwt: signJwt(tokenPayload),
   });
 };
 
@@ -72,6 +77,11 @@ export const SignInInstructor: ExpressHandler<
     return res.status(403).send({ error: "Invalid Credentials" });
   }
 
+  const tokenPayload: UserJwtPayload = {
+    userId: existingInstructor.id,
+    role: "Instructor",
+  };
+
   return res.status(200).send({
     instructor: {
       id: existingInstructor.id,
@@ -81,6 +91,6 @@ export const SignInInstructor: ExpressHandler<
       departmentId: existingInstructor.departmentId,
       phone: existingInstructor.phone,
     },
-    jwt: signJwt({ userId: existingInstructor.id, role: "Instructor" }),
+    jwt: signJwt(tokenPayload),
   });
 };

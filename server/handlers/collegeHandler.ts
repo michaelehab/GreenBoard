@@ -1,4 +1,4 @@
-import { ExpressHandler } from "../types";
+import { CollegeJwtPayload, ExpressHandler } from "../types";
 import {
   College,
   SignInRequest,
@@ -38,8 +38,13 @@ export const SignUpCollege: ExpressHandler<
   };
   await db.createCollege(college);
 
+  const tokenPayload: CollegeJwtPayload = {
+    collegeId: college.id,
+    role: "COLLEGE",
+  };
+
   return res.status(200).send({
-    jwt: signJwt({ collegeId: college.id, role: "COLLEGE" }),
+    jwt: signJwt(tokenPayload),
   });
 };
 
@@ -62,6 +67,11 @@ export const SignInCollege: ExpressHandler<
     return res.status(403).send({ error: "Invalid Credentials" });
   }
 
+  const tokenPayload: CollegeJwtPayload = {
+    collegeId: existingCollege.id,
+    role: "COLLEGE",
+  };
+
   return res.status(200).send({
     college: {
       id: existingCollege.id,
@@ -71,7 +81,7 @@ export const SignInCollege: ExpressHandler<
       location: existingCollege.location,
       phone: existingCollege.phone,
     },
-    jwt: signJwt({ collegeId: existingCollege.id, role: "COLLEGE" }),
+    jwt: signJwt(tokenPayload),
   });
 };
 

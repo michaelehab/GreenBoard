@@ -1,20 +1,23 @@
 import { RequestHandler } from "express";
 
-export interface UserJwtObject {
+export interface UserJwtPayload {
   userId: string;
   role: string; // "STUDENT" || "INSTRUCTOR"
 }
 
-export interface CollegeJwtObject {
+export interface CollegeJwtPayload {
   collegeId: string;
+  role: string; // "COLLEGE"
 }
 
-export interface SchoolJwtObject {
+export interface SchoolJwtPayload {
   schoolId: string;
+  role: string; // "SCHOOL"
 }
 
-export interface DepartmentJwtObject {
+export interface DepartmentJwtPayload {
   departmentId: string;
+  role: string; // "DEPARTMENT"
 }
 
 export type ExpressHandler<Req, Res> = RequestHandler<

@@ -1,4 +1,4 @@
-import { ExpressHandler } from "../types";
+import { ExpressHandler, SchoolJwtPayload } from "../types";
 import {
   School,
   SchoolSignInResponse,
@@ -41,8 +41,14 @@ export const SignUpSchool: ExpressHandler<
     collegeId,
   };
   await db.createSchool(school);
+
+  const tokenPayload: SchoolJwtPayload = {
+    schoolId: school.id,
+    role: "SCHOOL",
+  };
+
   return res.status(200).send({
-    jwt: signJwt({ schoolId: school.id }),
+    jwt: signJwt(tokenPayload),
   });
 };
 
@@ -65,6 +71,11 @@ export const SignInSchool: ExpressHandler<
     return res.status(403).send({ error: "Invalid Credentials" });
   }
 
+  const tokenPayload: SchoolJwtPayload = {
+    schoolId: existingSchool.id,
+    role: "SCHOOL",
+  };
+
   return res.status(200).send({
     school: {
       id: existingSchool.id,
@@ -73,6 +84,6 @@ export const SignInSchool: ExpressHandler<
       phone: existingSchool.phone,
       collegeId: existingSchool.collegeId,
     },
-    jwt: signJwt({ schoolId: existingSchool.id }),
+    jwt: signJwt(tokenPayload),
   });
 };

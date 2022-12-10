@@ -36,7 +36,6 @@ export const parseJwtMiddleware: RequestHandler = async (req, res, next) => {
       res.locals.userId = user.id;
     }
     res.locals.role = payload.role;
-    console.log("College Id is now ", res.locals.collegeId);
     return next();
   } catch {
     return res.status(401).send({ error: "Bad Token" });
