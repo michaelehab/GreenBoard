@@ -136,6 +136,16 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async updateCollege(college: College): Promise<void> {
+    await this.db.run(
+      "UPDATE colleges SET name = ?, phone = ?, email = ? WHERE id = ?",
+      college.name,
+      college.phone,
+      college.email,
+      college.id
+    );
+  }
+
   async getCollegeById(id: string): Promise<College | undefined> {
     return await this.db.get<College>(
       "SELECT * FROM colleges WHERE id = ?",

@@ -7,6 +7,6 @@ export const signJwt = (obj: any): string => {
   });
 };
 
-export const verifyJwt = (token: string) => {
+export const verifyJwt = (token: string): any => {
   return jwt.verify(token, getJwtSecret());
 };

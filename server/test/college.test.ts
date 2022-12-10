@@ -124,7 +124,7 @@ describe("College tests", () => {
       .send({
         name: newName,
       })
-      .expect(403);
+      .expect(401);
     expect(result.body.college).toBeUndefined();
   });
 
@@ -175,7 +175,7 @@ describe("College tests", () => {
       .set(
         await getAuthToken(
           "/api/v1/college/signin",
-          college.email,
+          newEmail,
           college.adminPassword
         )
       )
@@ -192,7 +192,7 @@ describe("College tests", () => {
       .set(
         await getAuthToken(
           "/api/v1/college/signin",
-          college.email,
+          newEmail,
           college.adminPassword
         )
       )
@@ -213,7 +213,7 @@ describe("College tests", () => {
       .set(
         await getAuthToken(
           "/api/v1/college/signin",
-          college.email,
+          newEmail,
           college.adminPassword
         )
       )

@@ -5,6 +5,8 @@ import {
   CollegeSignInResponse,
   CollegeSignUpRequest,
   CollegeSignUpResponse,
+  CollegeUpdateRequest,
+  CollegeUpdateResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -37,7 +39,7 @@ export const SignUpCollege: ExpressHandler<
   await db.createCollege(college);
 
   return res.status(200).send({
-    jwt: signJwt({ collegeId: college.id }),
+    jwt: signJwt({ collegeId: college.id, role: "COLLEGE" }),
   });
 };
 
@@ -69,6 +71,43 @@ export const SignInCollege: ExpressHandler<
       location: existingCollege.location,
       phone: existingCollege.phone,
     },
-    jwt: signJwt({ collegeId: existingCollege.id }),
+    jwt: signJwt({ collegeId: existingCollege.id, role: "COLLEGE" }),
+  });
+};
+
+export const UpdateCollege: ExpressHandler<
+  CollegeUpdateRequest,
+  CollegeUpdateResponse
+> = async (req, res) => {
+  const { name, email, phone } = req.body;
+
+  if (
+    (!name || name === "") &&
+    (!email || email === "") &&
+    (!phone || phone === "")
+  ) {
+    return res.status(400).send({ error: "At least one field is required" });
+  }
+
+  const existingCollege = await db.getCollegeById(res.locals.collegeId);
+
+  if (!existingCollege) {
+    return res.status(404).send({ error: "College not found" });
+  }
+
+  if (name) existingCollege.name = name;
+  if (email) existingCollege.email = email;
+  if (phone) existingCollege.phone = phone;
+
+  await db.updateCollege(existingCollege);
+  return res.status(200).send({
+    college: {
+      id: existingCollege.id,
+      email: existingCollege.email,
+      name: existingCollege.name,
+      foundedAt: existingCollege.foundedAt,
+      location: existingCollege.location,
+      phone: existingCollege.phone,
+    },
   });
 };
