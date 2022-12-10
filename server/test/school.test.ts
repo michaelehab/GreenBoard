@@ -1,6 +1,6 @@
 import { CollegeSignUpRequest, SchoolSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
-import { getTestServer } from "./testUtils";
+import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("School tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
@@ -12,6 +12,10 @@ describe("School tests", () => {
     adminPassword: "password",
     collegeId: "COLLEGE001",
   };
+
+  const newName = "Faculty of Arts";
+  const newEmail = "newemail@email.com";
+  const newPhone = "0103456789";
 
   beforeAll(async () => {
     client = await getTestServer();
@@ -41,7 +45,7 @@ describe("School tests", () => {
     expect(result.body.jwt).toBeUndefined();
   });
 
-  it("Sends with a missing field -- /api/v1/college/signup returns 400", async () => {
+  it("Sends with a missing field -- /api/v1/school/signup returns 400", async () => {
     const result = await client
       .post("/api/v1/school/signup")
       .send({
@@ -88,6 +92,127 @@ describe("School tests", () => {
       })
       .expect(403);
     expect(result.body.jwt).toBeUndefined();
+    expect(result.body.school).toBeUndefined();
+  });
+
+  it("Updates signed in school name -- PUT /api/v1/school/update returns 200", async () => {
+    const result = await client
+      .put("/api/v1/school/update")
+      .send({
+        name: newName,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/school/signin",
+          school.email,
+          school.adminPassword
+        )
+      )
+      .expect(200);
+    expect(result.body.school).toBeDefined();
+    expect(result.body.school.name).toEqual(newName);
+    expect(result.body.school.email).toEqual(school.email);
+    expect(result.body.school.phone).toEqual(school.phone);
+  });
+
+  it("Updates signed in school not signed in -- PUT /api/v1/school/update returns 403", async () => {
+    const result = await client
+      .put("/api/v1/school/update")
+      .send({
+        name: newName,
+      })
+      .expect(401);
+    expect(result.body.school).toBeUndefined();
+  });
+
+  it("Updates signed in school name with empty -- PUT /api/v1/school/update returns 400", async () => {
+    const result = await client
+      .put("/api/v1/school/update")
+      .send({
+        name: "",
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/school/signin",
+          school.email,
+          school.adminPassword
+        )
+      )
+      .expect(400);
+    expect(result.body.school).toBeUndefined();
+  });
+
+  it("Updates signed in school email -- PUT /api/v1/school/update returns 200", async () => {
+    const result = await client
+      .put("/api/v1/school/update")
+      .send({
+        email: newEmail,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/school/signin",
+          school.email,
+          school.adminPassword
+        )
+      )
+      .expect(200);
+    expect(result.body.school).toBeDefined();
+    expect(result.body.school.name).toEqual(newName);
+    expect(result.body.school.email).toEqual(newEmail);
+    expect(result.body.school.phone).toEqual(school.phone);
+  });
+
+  it("Updates signed in school email with empty -- PUT /api/v1/school/update returns 400", async () => {
+    const result = await client
+      .put("/api/v1/school/update")
+      .send({
+        email: "",
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/school/signin",
+          newEmail,
+          school.adminPassword
+        )
+      )
+      .expect(400);
+    expect(result.body.school).toBeUndefined();
+  });
+
+  it("Updates signed in school phone -- PUT /api/v1/school/update returns 200", async () => {
+    const result = await client
+      .put("/api/v1/school/update")
+      .send({
+        phone: newPhone,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/school/signin",
+          newEmail,
+          school.adminPassword
+        )
+      )
+      .expect(200);
+    expect(result.body.school).toBeDefined();
+    expect(result.body.school.name).toEqual(newName);
+    expect(result.body.school.email).toEqual(newEmail);
+    expect(result.body.school.phone).toEqual(newPhone);
+  });
+
+  it("Updates signed in school phone with empty -- PUT /api/v1/school/update returns 400", async () => {
+    const result = await client
+      .put("/api/v1/school/update")
+      .send({
+        phone: "",
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/school/signin",
+          newEmail,
+          school.adminPassword
+        )
+      )
+      .expect(400);
     expect(result.body.school).toBeUndefined();
   });
 });
