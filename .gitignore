@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # RESTClient for testing api
-/request.rest
+request.rest
