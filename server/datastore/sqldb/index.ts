@@ -234,6 +234,15 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async updateDepartment(department: Department): Promise<void> {
+    await this.db.run(
+      "UPDATE departments SET name = ?, email = ? WHERE id = ?",
+      department.name,
+      department.email,
+      department.id
+    );
+  }
+
   async createInstructor(instructor: Instructor): Promise<void> {
     await this.createUser(instructor);
 
@@ -298,4 +307,15 @@ export class SQLDataStore implements DataStore {
 
     return ins;
   }
+
+
+async updateSchool(school: School): Promise<void> {
+  await this.db.run(
+    "UPDATE Schools SET name = ?, phone = ?, email = ? WHERE id = ?",
+    school.name,
+    school.phone,
+    school.email,
+    school.id
+  );
+}
 }

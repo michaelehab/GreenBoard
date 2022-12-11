@@ -5,6 +5,7 @@ import { db } from "../datastore";
 
 export const parseJwtMiddleware: RequestHandler = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
+
   if (!token) {
     return next();
   }
@@ -18,6 +19,7 @@ export const parseJwtMiddleware: RequestHandler = async (req, res, next) => {
       res.locals.collegeId = college.id;
     } else if (payload.role === "SCHOOL") {
       const school = await db.getSchoolById(payload.schoolId);
+
       if (!school) {
         throw "School not found";
       }

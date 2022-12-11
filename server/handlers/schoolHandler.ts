@@ -5,6 +5,8 @@ import {
   SchoolSignUpRequest,
   SchoolSignUpResponse,
   SignInRequest,
+  SchoolUpdateRequest,
+  SchoolUpdateResponse
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -87,3 +89,40 @@ export const SignInSchool: ExpressHandler<
     jwt: signJwt(tokenPayload),
   });
 };
+
+export const UpdateSchool: ExpressHandler<
+SchoolUpdateRequest,
+SchoolUpdateResponse
+> = async (req, res) => {
+  const { name, email, phone } = req.body;
+
+  if (
+    (!name || name === "") &&
+    (!email || email === "") &&
+    (!phone || phone === "")
+  ) {
+    return res.status(400).send({ error: "At least one field is required" });
+  }
+
+  const existingSchool = await db.getSchoolById(res.locals.schoolId);
+
+  if (!existingSchool) {
+    return res.status(404).send({ error: "School not found" });
+  }
+
+  if (name) existingSchool.name = name;
+  if (email) existingSchool.email = email;
+  if (phone) existingSchool.phone = phone;
+
+  await db.updateSchool(existingSchool);
+  return res.status(200).send({
+    school: {
+      id: existingSchool.id,
+      email: existingSchool.email,
+      name: existingSchool.name,
+      phone: existingSchool.phone,
+      collegeId:existingSchool.collegeId
+    },
+  });
+};
+

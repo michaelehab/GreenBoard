@@ -100,7 +100,7 @@ describe("Department tests", () => {
     const result = await client
       .put("/api/v1/department/update")
       .send({
-        name: newName,
+        name: newName
       })
       .set(
         await getAuthToken(
