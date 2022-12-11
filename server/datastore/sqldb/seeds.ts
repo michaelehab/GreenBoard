@@ -56,10 +56,10 @@ export const SEED_INSTRUCTORS: Instructor[] = [
 export const SEED_STUDENTS: Student[] = [
   {
     id: "STD001",
-    firstName: "FName",
-    lastName: "LName",
-    phone: "Phone1",
-    email: "Email1",
+    firstName: "FName1",
+    lastName: "LName1",
+    phone: "Phone123",
+    email: "Email123",
     password: "Password",
     joinedAt: new Date(),
     departmentId: SEED_DEPARTMENTS[0].id,

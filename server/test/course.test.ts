@@ -26,13 +26,13 @@ describe("Course tests", () => {
   });
 
   describe("Creating Courses", () => {
-    it("Create a new course as a student -- POST /api/v1/college returns 403", async () => {
+    it("Create a new course as a student -- POST /api/v1/course returns 403", async () => {
       const result = await client
         .post("/api/v1/course/")
         .send(course)
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
+            "/api/v1/student/signin",
             SEED_STUDENTS[0].email,
             SEED_STUDENTS[0].password
           )
@@ -47,7 +47,7 @@ describe("Course tests", () => {
         .send(course)
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
+            "/api/v1/instructor/signin",
             SEED_INSTRUCTORS[0].email,
             SEED_INSTRUCTORS[0].password
           )
@@ -58,13 +58,13 @@ describe("Course tests", () => {
       expect(result.body.course.courseCode).toEqual(course.courseCode);
     });
 
-    it("Create the same course again as instructor -- POST /api/v1/college returns 403", async () => {
+    it("Create the same course again as instructor -- POST /api/v1/course returns 403", async () => {
       const result = await client
         .post("/api/v1/course/")
         .send(course)
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
+            "/api/v1/instructor/signin",
             SEED_INSTRUCTORS[0].email,
             SEED_INSTRUCTORS[0].password
           )
@@ -73,13 +73,13 @@ describe("Course tests", () => {
       expect(result.body.course).toBeUndefined();
     });
 
-    it("Send empty object as instructor -- POST /api/v1/college/signup returns 400", async () => {
+    it("Send empty object as instructor -- POST /api/v1/course returns 400", async () => {
       const result = await client
         .post("/api/v1/course/")
         .send({})
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
+            "/api/v1/instructor/signin",
             SEED_INSTRUCTORS[0].email,
             SEED_INSTRUCTORS[0].password
           )
@@ -122,7 +122,7 @@ describe("Course tests", () => {
         .send(enroll)
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
+            "/api/v1/instructor/signin",
             SEED_INSTRUCTORS[0].email,
             SEED_INSTRUCTORS[0].password
           )
@@ -136,7 +136,7 @@ describe("Course tests", () => {
         .send(enroll)
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
+            "/api/v1/student/signin",
             SEED_STUDENTS[0].email,
             SEED_STUDENTS[0].password
           )
@@ -153,7 +153,7 @@ describe("Course tests", () => {
         })
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
+            "/api/v1/student/signin",
             SEED_STUDENTS[0].email,
             SEED_STUDENTS[0].password
           )
@@ -170,7 +170,7 @@ describe("Course tests", () => {
         })
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
+            "/api/v1/instructor/signin",
             SEED_INSTRUCTORS[0].email,
             SEED_INSTRUCTORS[0].password
           )
@@ -186,7 +186,7 @@ describe("Course tests", () => {
         })
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
+            "/api/v1/student/signin",
             SEED_STUDENTS[0].email,
             SEED_STUDENTS[0].password
           )
@@ -202,7 +202,7 @@ describe("Course tests", () => {
         })
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
+            "/api/v1/instructor/signin",
             SEED_INSTRUCTORS[0].email,
             SEED_INSTRUCTORS[0].password
           )

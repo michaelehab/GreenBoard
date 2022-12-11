@@ -5,6 +5,7 @@ import {
   School,
   Department,
   Instructor,
+  Course,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -16,6 +17,8 @@ import {
   SEED_DEPARTMENTS,
   SEED_INSTRUCTORS,
   SEED_SCHOOLS,
+  SEED_STUDENTS,
+  SEED_COURSES,
 } from "./seeds";
 
 export class SQLDataStore implements DataStore {
@@ -53,6 +56,12 @@ export class SQLDataStore implements DataStore {
       SEED_INSTRUCTORS.forEach(async (i) => {
         if (!(await this.getInstructorById(i.id)))
           await this.createInstructor(i);
+      });
+      SEED_COURSES.forEach(async (i) => {
+        if (!(await this.getCourseById(i.id))) await this.createCourse(i);
+      });
+      SEED_STUDENTS.forEach(async (i) => {
+        if (!(await this.getStudentById(i.id))) await this.createStudent(i);
       });
     }
 
@@ -325,5 +334,27 @@ export class SQLDataStore implements DataStore {
       school.email,
       school.id
     );
+  }
+
+  async createCourse(course: Course): Promise<void> {
+    await this.db.run(
+      "INSERT INTO courses(id,courseCode,name,password,departmentId) VALUES(?,?,?,?,?)",
+      course.id,
+      course.courseCode,
+      course.name,
+      course.password,
+      course.departmentId
+    );
+  }
+
+  async getCourseByCode(courseCode: string): Promise<Course | undefined> {
+    return await this.db.get<Course>(
+      "SELECT * from courses where courseCode=?",
+      courseCode
+    );
+  }
+
+  async getCourseById(id: string): Promise<Course | undefined> {
+    return await this.db.get<Course>("SELECT * from courses where id=?", id);
   }
 }

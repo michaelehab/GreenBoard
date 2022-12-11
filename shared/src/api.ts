@@ -149,10 +149,7 @@ export type CreateCourseRequest = Pick<
 >;
 
 export interface CreateCourseResponse {
-  course: Pick<
-    Course,
-    "id" | "courseCode" | "name" | "password" | "departmentId"
-  >;
+  course: Pick<Course, "id" | "courseCode" | "name" | "departmentId">;
 }
 
 export interface CourseEnrollRequest {

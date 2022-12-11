@@ -6,6 +6,7 @@ import { DepartmentDao } from "./dao/departmentDao";
 import { SQLDataStore } from "./sqldb";
 import { Instructor } from "@greenboard/shared";
 import { InstructorDao } from "./dao/InstructorDao";
+import { CourseDao } from "./dao/courseDao";
 
 export interface DataStore
   extends UserDao,
@@ -13,7 +14,8 @@ export interface DataStore
     CollegeDao,
     SchoolDao,
     DepartmentDao,
-    InstructorDao {}
+    InstructorDao,
+    CourseDao {}
 
 export let db: DataStore;
 
