@@ -10,3 +10,5 @@ const router = Router();
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
 router.post("/", CreateCourse);
+
+export default router;
