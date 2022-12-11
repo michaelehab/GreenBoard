@@ -11,7 +11,12 @@ import { Database, open as sqliteOpen } from "sqlite";
 import sqlite3 from "sqlite3";
 
 import { DataStore } from "..";
-import { SEED_COLLEGES, SEED_DEPARTMENTS, SEED_SCHOOLS } from "./seeds";
+import {
+  SEED_COLLEGES,
+  SEED_DEPARTMENTS,
+  SEED_INSTRUCTORS,
+  SEED_SCHOOLS,
+} from "./seeds";
 
 export class SQLDataStore implements DataStore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;
@@ -44,6 +49,10 @@ export class SQLDataStore implements DataStore {
       SEED_DEPARTMENTS.forEach(async (d) => {
         if (!(await this.getDepartmentById(d.id)))
           await this.createDepartment(d);
+      });
+      SEED_INSTRUCTORS.forEach(async (i) => {
+        if (!(await this.getInstructorById(i.id)))
+          await this.createInstructor(i);
       });
     }
 
@@ -308,14 +317,13 @@ export class SQLDataStore implements DataStore {
     return ins;
   }
 
-
-async updateSchool(school: School): Promise<void> {
-  await this.db.run(
-    "UPDATE Schools SET name = ?, phone = ?, email = ? WHERE id = ?",
-    school.name,
-    school.phone,
-    school.email,
-    school.id
-  );
-}
+  async updateSchool(school: School): Promise<void> {
+    await this.db.run(
+      "UPDATE Schools SET name = ?, phone = ?, email = ? WHERE id = ?",
+      school.name,
+      school.phone,
+      school.email,
+      school.id
+    );
+  }
 }

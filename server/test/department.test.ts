@@ -4,6 +4,7 @@ import {
   SchoolSignUpRequest,
 } from "@greenboard/shared";
 import supertest from "supertest";
+import { SEED_SCHOOLS } from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("Department tests", () => {
@@ -13,7 +14,7 @@ describe("Department tests", () => {
     name: "Computer Engineering",
     email: "cmp@eng.cu.edu.eg",
     adminPassword: "password",
-    schoolId: "SCHOOL001",
+    schoolId: SEED_SCHOOLS[0].id,
   };
 
   const newName = "Electronics";
@@ -100,7 +101,7 @@ describe("Department tests", () => {
     const result = await client
       .put("/api/v1/department/update")
       .send({
-        name: newName
+        name: newName,
       })
       .set(
         await getAuthToken(

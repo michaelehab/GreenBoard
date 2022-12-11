@@ -1,5 +1,12 @@
 import { type } from "os";
-import { College, Department, Instructor, School, Student } from "./types";
+import {
+  College,
+  Course,
+  Department,
+  Instructor,
+  School,
+  Student,
+} from "./types";
 
 export interface SignInRequest {
   email: string;
@@ -101,10 +108,7 @@ export interface SchoolSignInResponse {
 
 export type SchoolUpdateRequest = Partial<School>;
 export interface SchoolUpdateResponse {
-  school: Pick<
-    School,
-    "id" | "email" | "collegeId" | "name" | "phone"
-  >;
+  school: Pick<School, "id" | "email" | "collegeId" | "name" | "phone">;
 }
 
 export interface SchoolResetPasswordRequest {
@@ -129,13 +133,32 @@ export interface DepartmentSignInResponse {
 
 export type DepartmentUpdateRequest = Partial<Department>;
 export interface DepartmentUpdateResponse {
-  department: Pick<
-  Department,
-    "id" | "email" | "schoolId" | "name" 
-  >;
+  department: Pick<Department, "id" | "email" | "schoolId" | "name">;
 }
 
 export interface DepartmentResetPasswordRequest {
   newPassword: string;
 }
 export interface DepartmentResetPasswordResponse {}
+
+// Course APIs
+export type CreateCourseRequest = Pick<
+  Course,
+  "courseCode" | "name" | "password"
+  // DepartmentId will be fetched from the signed in user token
+>;
+
+export interface CreateCourseResponse {
+  course: Pick<
+    Course,
+    "id" | "courseCode" | "name" | "password" | "departmentId"
+  >;
+}
+
+export interface CourseEnrollRequest {
+  courseId: string;
+  password: string;
+  // UserId should be found in JWT token
+}
+
+export interface CourseEnrollResponse {}

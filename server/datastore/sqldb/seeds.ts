@@ -1,4 +1,11 @@
-import { College, Department, School } from "@greenboard/shared";
+import {
+  College,
+  Department,
+  School,
+  Instructor,
+  Student,
+  Course,
+} from "@greenboard/shared";
 
 export const SEED_COLLEGES: College[] = [
   {
@@ -19,7 +26,7 @@ export const SEED_SCHOOLS: School[] = [
     phone: "Phone1",
     email: "Email1",
     adminPassword: "AdminPassword1",
-    collegeId: "COLLEGE001",
+    collegeId: SEED_COLLEGES[0].id,
   },
 ];
 
@@ -29,6 +36,43 @@ export const SEED_DEPARTMENTS: Department[] = [
     name: "Department1",
     email: "Email1",
     adminPassword: "AdminPassword1",
-    schoolId: "SCHOOL001",
+    schoolId: SEED_SCHOOLS[0].id,
+  },
+];
+
+export const SEED_INSTRUCTORS: Instructor[] = [
+  {
+    id: "INSTR001",
+    firstName: "FName",
+    lastName: "LName",
+    phone: "Phone1",
+    email: "Email1",
+    password: "Password",
+    joinedAt: new Date(),
+    departmentId: SEED_DEPARTMENTS[0].id,
+  },
+];
+
+export const SEED_STUDENTS: Student[] = [
+  {
+    id: "STD001",
+    firstName: "FName",
+    lastName: "LName",
+    phone: "Phone1",
+    email: "Email1",
+    password: "Password",
+    joinedAt: new Date(),
+    departmentId: SEED_DEPARTMENTS[0].id,
+    level: 1,
+  },
+];
+
+export const SEED_COURSES: Course[] = [
+  {
+    id: "COURSE001",
+    name: "CourseName",
+    courseCode: "Code1",
+    password: "Password",
+    departmentId: SEED_DEPARTMENTS[0].id,
   },
 ];

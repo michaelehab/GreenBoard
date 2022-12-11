@@ -41,3 +41,17 @@ export interface Department {
   adminPassword: string;
   schoolId: string;
 }
+
+export interface Course {
+  id: string;
+  courseCode: string;
+  name: string;
+  password: string;
+  departmentId: string;
+}
+
+export interface Enrollment {
+  id: string;
+  userId: string;
+  courseId: string;
+}

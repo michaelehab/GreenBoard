@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "SET NODE_ENV=dev && nodemon app.ts",
-    "test": "SET NODE_ENV=test && jest --runInBand --detectOpenHandles --forceExit",
+    "test": "SET NODE_ENV=test && jest --runInBand --detectOpenHandles --forceExit --watchAll --no-cache",
     "test:watch": " SET NODE_ENV=test && jest --watch"
   },
   "author": "",
