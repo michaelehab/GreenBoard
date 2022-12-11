@@ -99,6 +99,19 @@ export interface SchoolSignInResponse {
   jwt: string;
 }
 
+export type SchoolUpdateRequest = Partial<School>;
+export interface SchoolUpdateResponse {
+  school: Pick<
+    School,
+    "id" | "email" | "collegeId" | "name" | "phone"
+  >;
+}
+
+export interface SchoolResetPasswordRequest {
+  newPassword: string;
+}
+export interface SchoolResetPasswordResponse {}
+
 // Department APIs
 export type DepartmentSignUpRequest = Pick<
   Department,
@@ -113,3 +126,16 @@ export interface DepartmentSignInResponse {
   department: Pick<Department, "id" | "email" | "name" | "schoolId">;
   jwt: string;
 }
+
+export type DepartmentUpdateRequest = Partial<Department>;
+export interface DepartmentUpdateResponse {
+  department: Pick<
+  Department,
+    "id" | "email" | "schoolId" | "name" 
+  >;
+}
+
+export interface DepartmentResetPasswordRequest {
+  newPassword: string;
+}
+export interface DepartmentResetPasswordResponse {}
