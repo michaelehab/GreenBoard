@@ -1,9 +1,9 @@
 import { CourseEnrollRequest, CreateCourseRequest } from "@greenboard/shared";
 import supertest from "supertest";
 import {
-  SEED_COURSES,
-  SEED_INSTRUCTORS,
-  SEED_STUDENTS,
+  SEED_COURSE,
+  SEED_INSTRUCTOR,
+  SEED_STUDENT,
 } from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
@@ -17,8 +17,8 @@ describe("Course tests", () => {
   };
 
   const enroll: CourseEnrollRequest = {
-    courseId: SEED_COURSES[0].id,
-    password: SEED_COURSES[0].password,
+    courseId: SEED_COURSE.id,
+    password: SEED_COURSE.password,
   };
 
   beforeAll(async () => {
@@ -33,8 +33,8 @@ describe("Course tests", () => {
         .set(
           await getAuthToken(
             "/api/v1/student/signin",
-            SEED_STUDENTS[0].email,
-            SEED_STUDENTS[0].password
+            SEED_STUDENT.email,
+            SEED_STUDENT.password
           )
         )
         .expect(403);
@@ -48,8 +48,8 @@ describe("Course tests", () => {
         .set(
           await getAuthToken(
             "/api/v1/instructor/signin",
-            SEED_INSTRUCTORS[0].email,
-            SEED_INSTRUCTORS[0].password
+            SEED_INSTRUCTOR.email,
+            SEED_INSTRUCTOR.password
           )
         )
         .expect(200);
@@ -65,23 +65,23 @@ describe("Course tests", () => {
         .set(
           await getAuthToken(
             "/api/v1/instructor/signin",
-            SEED_INSTRUCTORS[0].email,
-            SEED_INSTRUCTORS[0].password
+            SEED_INSTRUCTOR.email,
+            SEED_INSTRUCTOR.password
           )
         )
         .expect(403);
       expect(result.body.course).toBeUndefined();
     });
 
-    it("Send empty object as instructor -- POST /api/v1/course returns 400", async () => {
+    it("Send empty object as instructor -- POST /api/v1/course/signup returns 400", async () => {
       const result = await client
         .post("/api/v1/course/")
         .send({})
         .set(
           await getAuthToken(
             "/api/v1/instructor/signin",
-            SEED_INSTRUCTORS[0].email,
-            SEED_INSTRUCTORS[0].password
+            SEED_INSTRUCTOR.email,
+            SEED_INSTRUCTOR.password
           )
         )
         .expect(200);
@@ -105,9 +105,9 @@ describe("Course tests", () => {
         })
         .set(
           await getAuthToken(
-            "/api/v1/college/signin",
-            SEED_INSTRUCTORS[0].email,
-            SEED_INSTRUCTORS[0].password
+            "/api/v1/instructor/signin",
+            SEED_INSTRUCTOR.email,
+            SEED_INSTRUCTOR.password
           )
         )
         .expect(400);
@@ -123,8 +123,8 @@ describe("Course tests", () => {
         .set(
           await getAuthToken(
             "/api/v1/instructor/signin",
-            SEED_INSTRUCTORS[0].email,
-            SEED_INSTRUCTORS[0].password
+            SEED_INSTRUCTOR.email,
+            SEED_INSTRUCTOR.password
           )
         )
         .expect(200);
@@ -137,8 +137,8 @@ describe("Course tests", () => {
         .set(
           await getAuthToken(
             "/api/v1/student/signin",
-            SEED_STUDENTS[0].email,
-            SEED_STUDENTS[0].password
+            SEED_STUDENT.email,
+            SEED_STUDENT.password
           )
         )
         .expect(200);
@@ -154,8 +154,8 @@ describe("Course tests", () => {
         .set(
           await getAuthToken(
             "/api/v1/student/signin",
-            SEED_STUDENTS[0].email,
-            SEED_STUDENTS[0].password
+            SEED_STUDENT.email,
+            SEED_STUDENT.password
           )
         )
         .expect(404);
@@ -171,8 +171,8 @@ describe("Course tests", () => {
         .set(
           await getAuthToken(
             "/api/v1/instructor/signin",
-            SEED_INSTRUCTORS[0].email,
-            SEED_INSTRUCTORS[0].password
+            SEED_INSTRUCTOR.email,
+            SEED_INSTRUCTOR.password
           )
         )
         .expect(404);
@@ -187,8 +187,8 @@ describe("Course tests", () => {
         .set(
           await getAuthToken(
             "/api/v1/student/signin",
-            SEED_STUDENTS[0].email,
-            SEED_STUDENTS[0].password
+            SEED_STUDENT.email,
+            SEED_STUDENT.password
           )
         )
         .expect(400);
@@ -203,8 +203,8 @@ describe("Course tests", () => {
         .set(
           await getAuthToken(
             "/api/v1/instructor/signin",
-            SEED_INSTRUCTORS[0].email,
-            SEED_INSTRUCTORS[0].password
+            SEED_INSTRUCTOR.email,
+            SEED_INSTRUCTOR.password
           )
         )
         .expect(400);

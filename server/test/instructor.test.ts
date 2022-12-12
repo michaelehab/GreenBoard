@@ -1,6 +1,6 @@
 import { InstructorSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
-import { SEED_DEPARTMENTS } from "../datastore/sqldb/seeds";
+import { SEED_DEPARTMENT } from "../datastore/sqldb/seeds";
 import { getTestServer } from "./testUtils";
 
 describe("Instructor tests", () => {
@@ -12,7 +12,7 @@ describe("Instructor tests", () => {
     lastName: "Doe",
     password: "password",
     phone: "+20123456789",
-    departmentId: SEED_DEPARTMENTS[0].id,
+    departmentId: SEED_DEPARTMENT.id,
   };
 
   beforeAll(async () => {

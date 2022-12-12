@@ -4,7 +4,7 @@ import {
   SchoolSignUpRequest,
 } from "@greenboard/shared";
 import supertest from "supertest";
-import { SEED_SCHOOLS } from "../datastore/sqldb/seeds";
+import { SEED_SCHOOL } from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("Department tests", () => {
@@ -14,7 +14,7 @@ describe("Department tests", () => {
     name: "Computer Engineering",
     email: "cmp@eng.cu.edu.eg",
     adminPassword: "password",
-    schoolId: SEED_SCHOOLS[0].id,
+    schoolId: SEED_SCHOOL.id,
   };
 
   const newName = "Electronics";

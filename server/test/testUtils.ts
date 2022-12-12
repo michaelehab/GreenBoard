@@ -1,13 +1,13 @@
-import superset from "supertest";
+import request from "supertest";
 
 import { createServer } from "../server";
 
-let client: superset.SuperTest<superset.Test>;
+let client: request.SuperTest<request.Test>;
 
 export async function getTestServer() {
   if (!client) {
     const server = await createServer(":memory:", false);
-    client = superset(server);
+    client = request(server);
   }
 
   return client;
@@ -24,6 +24,6 @@ export const getAuthToken = async (
   email: string,
   password: string
 ) => {
-  const result = await client.post(url).send({ email, password }).expect(200);
+  const result = await client.post(url).send({ email, password });
   return { Authorization: "Bearer " + result.body.jwt };
 };

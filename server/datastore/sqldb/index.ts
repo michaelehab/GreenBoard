@@ -13,12 +13,12 @@ import sqlite3 from "sqlite3";
 
 import { DataStore } from "..";
 import {
-  SEED_COLLEGES,
-  SEED_DEPARTMENTS,
-  SEED_INSTRUCTORS,
-  SEED_SCHOOLS,
-  SEED_STUDENTS,
-  SEED_COURSES,
+  SEED_COLLEGE,
+  SEED_SCHOOL,
+  SEED_DEPARTMENT,
+  SEED_COURSE,
+  SEED_STUDENT,
+  SEED_INSTRUCTOR,
 } from "./seeds";
 
 export class SQLDataStore implements DataStore {
@@ -42,27 +42,18 @@ export class SQLDataStore implements DataStore {
       migrationsPath: path.join(__dirname, "migrations"),
     });
 
-    if (dbPath === ":memory:") {
-      SEED_COLLEGES.forEach(async (c) => {
-        if (!(await this.getCollegeById(c.id))) await this.createCollege(c);
-      });
-      SEED_SCHOOLS.forEach(async (s) => {
-        if (!(await this.getSchoolById(s.id))) await this.createSchool(s);
-      });
-      SEED_DEPARTMENTS.forEach(async (d) => {
-        if (!(await this.getDepartmentById(d.id)))
-          await this.createDepartment(d);
-      });
-      SEED_INSTRUCTORS.forEach(async (i) => {
-        if (!(await this.getInstructorById(i.id)))
-          await this.createInstructor(i);
-      });
-      SEED_COURSES.forEach(async (i) => {
-        if (!(await this.getCourseById(i.id))) await this.createCourse(i);
-      });
-      SEED_STUDENTS.forEach(async (i) => {
-        if (!(await this.getStudentById(i.id))) await this.createStudent(i);
-      });
+    if (dbPath == ":memory:") {
+      await this.createCollege(SEED_COLLEGE);
+
+      await this.createSchool(SEED_SCHOOL);
+
+      await this.createDepartment(SEED_DEPARTMENT);
+
+      await this.createInstructor(SEED_INSTRUCTOR);
+
+      await this.createCourse(SEED_COURSE);
+
+      await this.createStudent(SEED_STUDENT);
     }
 
     return this;

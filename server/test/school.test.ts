@@ -1,6 +1,6 @@
-import { CollegeSignUpRequest, SchoolSignUpRequest } from "@greenboard/shared";
+import { SchoolSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
-import { SEED_COLLEGES } from "../datastore/sqldb/seeds";
+import { SEED_COLLEGE } from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("School tests", () => {
@@ -11,7 +11,7 @@ describe("School tests", () => {
     phone: "+20123456789",
     email: "eng@cu.edu.eg",
     adminPassword: "password",
-    collegeId: SEED_COLLEGES[0].id,
+    collegeId: SEED_COLLEGE.id,
   };
 
   const newName = "Faculty of Arts";

@@ -19,5 +19,5 @@ export const createServer = async (dbPath: string, logRequests: boolean) => {
 
   app.use("/api/v1", routes);
 
-  return http.createServer(app);
+  return app;
 };
