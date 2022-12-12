@@ -92,6 +92,17 @@ describe("Course tests", () => {
         .expect(200);
     });
 
+    it("Enroll in existing course as Student wrong password -- POST /api/v1/course/join returns 400", async () => {
+      const result = await client
+        .post("/api/v1/course/join")
+        .send({
+          courseId: enroll.courseId,
+          password: "veryWrongLongPassword",
+        })
+        .set(await createAuthToken("STUDENT"))
+        .expect(400);
+    });
+
     it("Enroll in existing course as Student -- POST /api/v1/course/join returns 200", async () => {
       const result = await client
         .post("/api/v1/course/join")
