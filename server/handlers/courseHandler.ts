@@ -5,6 +5,7 @@ import {
   CourseEnrollRequest,
   CourseEnrollResponse,
   Course,
+  Enrollment,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -46,4 +47,38 @@ export const CreateCourse: ExpressHandler<
       courseCode: newCourse.courseCode,
     },
   });
+};
+
+export const JoinCourse: ExpressHandler<
+  CourseEnrollRequest,
+  CourseEnrollResponse
+> = async (req, res) => {
+  const { courseId, password } = req.body;
+  if (!courseId || !password) {
+    return res.status(400).send({ error: "All fields are required" });
+  }
+
+  const existingEnrollment = await db.checkEnrollment(
+    res.locals.userId,
+    courseId
+  );
+  if (existingEnrollment) {
+    return res.status(403).send({ error: "Already enrolled in this course" });
+  }
+
+  const existingCourse = await db.getCourseById(courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
+  }
+  if (existingCourse.password !== getPasswordHashed(password)) {
+    return res.status(400).send({ error: "Password is wrong" });
+  }
+  const newEnrollment: Enrollment = {
+    id: crypto.randomBytes(20).toString("hex"),
+    userId: res.locals.userId,
+    courseId: courseId,
+  };
+
+  await db.createEnrollment(newEnrollment);
+  return res.sendStatus(200);
 };

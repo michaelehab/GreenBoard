@@ -6,6 +6,7 @@ import {
   Department,
   Instructor,
   Course,
+  Enrollment,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -347,5 +348,25 @@ export class SQLDataStore implements DataStore {
 
   async getCourseById(id: string): Promise<Course | undefined> {
     return await this.db.get<Course>("SELECT * from courses where id=?", id);
+  }
+
+  async createEnrollment(enrollment: Enrollment): Promise<void> {
+    await this.db.run(
+      "INSERT INTO enrollments(id, userId, courseId) VALUES (?,?,?)",
+      enrollment.id,
+      enrollment.userId,
+      enrollment.courseId
+    );
+  }
+
+  async checkEnrollment(
+    userId: string,
+    courseId: string
+  ): Promise<Enrollment | undefined> {
+    return await this.db.get<Enrollment>(
+      "SELECT * from enrollments where userId = ? AND courseId = ? ",
+      userId,
+      courseId
+    );
   }
 }

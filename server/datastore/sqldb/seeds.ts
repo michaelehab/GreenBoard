@@ -60,7 +60,7 @@ export const SEED_STUDENT: Student = {
 export const SEED_COURSE: Course = {
   id: "COURSE001",
   name: "CourseName",
-  courseCode: "Code1",
+  courseCode: "COURSECODE1",
   password: "Password",
   departmentId: SEED_DEPARTMENT.id,
 };

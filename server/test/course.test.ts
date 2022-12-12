@@ -1,11 +1,7 @@
 import { CourseEnrollRequest, CreateCourseRequest } from "@greenboard/shared";
 import supertest from "supertest";
-import {
-  SEED_COURSE,
-  SEED_INSTRUCTOR,
-  SEED_STUDENT,
-} from "../datastore/sqldb/seeds";
-import { getAuthToken, getTestServer } from "./testUtils";
+import { SEED_COURSE } from "../datastore/sqldb/seeds";
+import { createAuthToken, getTestServer } from "./testUtils";
 
 describe("Course tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
@@ -17,8 +13,8 @@ describe("Course tests", () => {
   };
 
   const enroll: CourseEnrollRequest = {
-    courseId: SEED_COURSE.id,
-    password: SEED_COURSE.password,
+    courseId: "", // To be filled with the id after course creation
+    password: course.password,
   };
 
   beforeAll(async () => {
@@ -30,13 +26,7 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/")
         .send(course)
-        .set(
-          await getAuthToken(
-            "/api/v1/student/signin",
-            SEED_STUDENT.email,
-            SEED_STUDENT.password
-          )
-        )
+        .set(await createAuthToken("STUDENT"))
         .expect(403);
       expect(result.body.course).toBeUndefined();
     });
@@ -45,30 +35,20 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/")
         .send(course)
-        .set(
-          await getAuthToken(
-            "/api/v1/instructor/signin",
-            SEED_INSTRUCTOR.email,
-            SEED_INSTRUCTOR.password
-          )
-        )
+        .set(await createAuthToken("INSTRUCTOR"))
         .expect(200);
       expect(result.body.course).toBeDefined();
       expect(result.body.course.name).toEqual(course.name);
       expect(result.body.course.courseCode).toEqual(course.courseCode);
+
+      enroll.courseId = result.body.course.id;
     });
 
     it("Create the same course again as instructor -- POST /api/v1/course returns 403", async () => {
       const result = await client
         .post("/api/v1/course/")
         .send(course)
-        .set(
-          await getAuthToken(
-            "/api/v1/instructor/signin",
-            SEED_INSTRUCTOR.email,
-            SEED_INSTRUCTOR.password
-          )
-        )
+        .set(await createAuthToken("INSTRUCTOR"))
         .expect(403);
       expect(result.body.course).toBeUndefined();
     });
@@ -77,14 +57,8 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/")
         .send({})
-        .set(
-          await getAuthToken(
-            "/api/v1/instructor/signin",
-            SEED_INSTRUCTOR.email,
-            SEED_INSTRUCTOR.password
-          )
-        )
-        .expect(200);
+        .set(await createAuthToken("INSTRUCTOR"))
+        .expect(400);
       expect(result.body.course).toBeUndefined();
     });
 
@@ -103,13 +77,7 @@ describe("Course tests", () => {
           name: "Course1",
           password: "password",
         })
-        .set(
-          await getAuthToken(
-            "/api/v1/instructor/signin",
-            SEED_INSTRUCTOR.email,
-            SEED_INSTRUCTOR.password
-          )
-        )
+        .set(await createAuthToken("INSTRUCTOR"))
         .expect(400);
       expect(result.body.course).toBeUndefined();
     });
@@ -120,13 +88,7 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/join")
         .send(enroll)
-        .set(
-          await getAuthToken(
-            "/api/v1/instructor/signin",
-            SEED_INSTRUCTOR.email,
-            SEED_INSTRUCTOR.password
-          )
-        )
+        .set(await createAuthToken("INSTRUCTOR"))
         .expect(200);
     });
 
@@ -134,13 +96,7 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/join")
         .send(enroll)
-        .set(
-          await getAuthToken(
-            "/api/v1/student/signin",
-            SEED_STUDENT.email,
-            SEED_STUDENT.password
-          )
-        )
+        .set(await createAuthToken("STUDENT"))
         .expect(200);
     });
 
@@ -151,13 +107,7 @@ describe("Course tests", () => {
           courseId: "abcd",
           password: "pass",
         })
-        .set(
-          await getAuthToken(
-            "/api/v1/student/signin",
-            SEED_STUDENT.email,
-            SEED_STUDENT.password
-          )
-        )
+        .set(await createAuthToken("STUDENT"))
         .expect(404);
     });
 
@@ -168,13 +118,7 @@ describe("Course tests", () => {
           courseId: "abcd",
           password: "pass",
         })
-        .set(
-          await getAuthToken(
-            "/api/v1/instructor/signin",
-            SEED_INSTRUCTOR.email,
-            SEED_INSTRUCTOR.password
-          )
-        )
+        .set(await createAuthToken("INSTRUCTOR"))
         .expect(404);
     });
 
@@ -184,13 +128,7 @@ describe("Course tests", () => {
         .send({
           courseId: "abcd",
         })
-        .set(
-          await getAuthToken(
-            "/api/v1/student/signin",
-            SEED_STUDENT.email,
-            SEED_STUDENT.password
-          )
-        )
+        .set(await createAuthToken("STUDENT"))
         .expect(400);
     });
 
@@ -200,13 +138,7 @@ describe("Course tests", () => {
         .send({
           courseId: "abcd",
         })
-        .set(
-          await getAuthToken(
-            "/api/v1/instructor/signin",
-            SEED_INSTRUCTOR.email,
-            SEED_INSTRUCTOR.password
-          )
-        )
+        .set(await createAuthToken("INSTRUCTOR"))
         .expect(400);
     });
 
