@@ -65,9 +65,9 @@ export interface Post {
   courseId: string;
 }
 
-export interface coursePost extends Post {}
+export interface CoursePost extends Post {}
 
-export interface studentQuestion extends Post {}
+export interface StudentQuestion extends Post {}
 
 export interface Comment {
   id: string;
@@ -75,12 +75,12 @@ export interface Comment {
   postedAt: number;
 }
 
-export interface postComment extends Comment {
+export interface PostComment extends Comment {
   userId: string;
   postId: string;
 }
 
-export interface instructorAnswer extends Comment {
+export interface InstructorAnswer extends Comment {
   instructorId: string;
   questionId: string;
 }

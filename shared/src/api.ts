@@ -2,10 +2,13 @@ import { type } from "os";
 import {
   College,
   Course,
+  CoursePost,
   Department,
   Instructor,
+  Post,
   School,
   Student,
+  StudentQuestion,
 } from "./types";
 
 export interface SignInRequest {
@@ -159,3 +162,27 @@ export interface CourseEnrollRequest {
 }
 
 export interface CourseEnrollResponse {}
+
+// Post APIs
+export type CreatePostRequest = Pick<
+  Post,
+  "title" | "url" | "content" | "courseId"
+>;
+
+export interface CreateCoursePostResponse {
+  post: CoursePost;
+}
+
+export interface CreateStudentQuestionResponse {
+  question: StudentQuestion;
+}
+
+export interface GetCoursePostsRequest {} // Course Id will be a url param
+export interface GetCoursePostsResponse {
+  posts: CoursePost[];
+}
+
+export interface GetCourseStudentsQuestionsRequest {} // Course Id will be a url param
+export interface GetCourseStudentsQuestionsResponse {
+  questions: StudentQuestion[];
+}
