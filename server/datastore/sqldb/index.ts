@@ -7,6 +7,8 @@ import {
   Instructor,
   Course,
   Enrollment,
+  CoursePost,
+  Post,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -30,6 +32,8 @@ import {
   SEED_INSTRUCTOR2,
   SEED_STUDENT2,
   SEED_DEPARTMENT2,
+  SEED_STUDENT_ENROLLMENT,
+  SEED_INSTRUCTOR_ENROLLMENT,
 } from "./seeds";
 
 export class SQLDataStore implements DataStore {
@@ -369,6 +373,34 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async createPost(post: Post): Promise<void> {
+    await this.db.run(
+      "INSERT INTO posts(id, title, content, url, postedAt, courseId) VALUES (?,?,?,?,?,?)",
+      post.id,
+      post.title,
+      post.content,
+      post.url,
+      post.postedAt,
+      post.courseId
+    );
+  }
+  async createCoursePost(coursePost: CoursePost): Promise<void> {
+    await this.createPost(coursePost);
+    await this.db.run("INSERT INTO course_posts(id) VALUES (?)", coursePost.id);
+  }
+  async getCoursePostById(postId: string): Promise<CoursePost | undefined> {
+    return await this.db.get<CoursePost>(
+      "SELECT * FROM posts JOIN course_posts ON course_posts.id = posts.id WHERE posts.id = ?",
+      postId
+    );
+  }
+  async listCoursePostsByCourseId(courseId: string): Promise<CoursePost[]> {
+    return await this.db.all<CoursePost[]>(
+      "SELECT * FROM posts JOIN course_posts ON course_posts.id = posts.id WHERE posts.courseId = ?",
+      courseId
+    );
+  }
+
   private seedDb = async () => {
     SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);
     await this.createCollege(SEED_COLLEGE);
@@ -398,5 +430,9 @@ export class SQLDataStore implements DataStore {
 
     SEED_COURSE.password = getPasswordHashed(SEED_COURSE_PASSWORD);
     await this.createCourse(SEED_COURSE);
+
+    await this.createEnrollment(SEED_STUDENT_ENROLLMENT);
+
+    await this.createEnrollment(SEED_INSTRUCTOR_ENROLLMENT);
   };
 }

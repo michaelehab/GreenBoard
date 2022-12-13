@@ -164,10 +164,7 @@ export interface CourseEnrollRequest {
 export interface CourseEnrollResponse {}
 
 // Post APIs
-export type CreatePostRequest = Pick<
-  Post,
-  "title" | "url" | "content" | "courseId"
->;
+export type CreatePostRequest = Pick<Post, "title" | "url" | "content">;
 
 export interface CreateCoursePostResponse {
   post: CoursePost;
@@ -177,8 +174,8 @@ export interface CreateStudentQuestionResponse {
   question: StudentQuestion;
 }
 
-export interface GetCoursePostsRequest {} // Course Id will be a url param
-export interface GetCoursePostsResponse {
+export interface ListCoursePostsRequest {} // Course Id will be a url param
+export interface ListCoursePostsResponse {
   posts: CoursePost[];
 }
 
