@@ -182,7 +182,17 @@ export interface GetCoursePostsResponse {
   posts: CoursePost[];
 }
 
+export interface GetCoursePostRequest {} // Course Id will be a url param
+export interface GetCoursePostResponse {
+  post: CoursePost;
+}
+
 export interface GetCourseStudentsQuestionsRequest {} // Course Id will be a url param
 export interface GetCourseStudentsQuestionsResponse {
   questions: StudentQuestion[];
+}
+
+export interface GetCourseStudentQuestionRequest {} // Course Id will be a url param
+export interface GetCourseStudentQuestionResponse {
+  question: StudentQuestion;
 }
