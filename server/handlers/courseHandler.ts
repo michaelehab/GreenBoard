@@ -58,10 +58,16 @@ export const JoinCourse: ExpressHandler<
     return res.status(400).send({ error: "All fields are required" });
   }
 
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "User not found" });
+  }
+
   const existingEnrollment = await db.checkEnrollment(
     res.locals.userId,
     courseId
   );
+
   if (existingEnrollment) {
     return res.status(403).send({ error: "Already enrolled in this course" });
   }
@@ -70,9 +76,18 @@ export const JoinCourse: ExpressHandler<
   if (!existingCourse) {
     return res.status(404).send({ error: "Course not found" });
   }
+
   if (existingCourse.password !== getPasswordHashed(password)) {
     return res.status(400).send({ error: "Password is wrong" });
   }
+
+  if (
+    res.locals.role === "STUDENT" &&
+    existingUser.departmentId !== existingCourse.departmentId
+  ) {
+    return res.status(403).send({ error: "Not in the same department" });
+  }
+
   const newEnrollment: Enrollment = {
     id: crypto.randomBytes(20).toString("hex"),
     userId: res.locals.userId,

@@ -2,8 +2,10 @@ import { CourseEnrollRequest, CreateCourseRequest } from "@greenboard/shared";
 import supertest from "supertest";
 import {
   SEED_INSTRUCTOR,
+  SEED_INSTRUCTOR2,
   SEED_INSTRUCTOR_PASSWORD,
   SEED_STUDENT,
+  SEED_STUDENT2,
   SEED_STUDENT_PASSWORD,
 } from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
@@ -12,6 +14,8 @@ describe("Course tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
   let studentAuthHeader: object;
   let instructorAuthHeader: object;
+  let studentNotInSameDeptAuthHeader: object;
+  let instructorNotInSameDeptAuthHeader: object;
 
   const course: CreateCourseRequest = {
     name: "Course1",
@@ -36,6 +40,18 @@ describe("Course tests", () => {
     instructorAuthHeader = await getAuthToken(
       "/api/v1/instructor/signin",
       SEED_INSTRUCTOR.email,
+      SEED_INSTRUCTOR_PASSWORD
+    );
+
+    studentNotInSameDeptAuthHeader = await getAuthToken(
+      "/api/v1/student/signin",
+      SEED_STUDENT2.email,
+      SEED_STUDENT_PASSWORD
+    );
+
+    instructorNotInSameDeptAuthHeader = await getAuthToken(
+      "/api/v1/instructor/signin",
+      SEED_INSTRUCTOR2.email,
       SEED_INSTRUCTOR_PASSWORD
     );
   });
@@ -103,11 +119,19 @@ describe("Course tests", () => {
   });
 
   describe("Enroll in Course", () => {
-    it("Enroll in existing course as Instructor -- POST /api/v1/course/join returns 200", async () => {
+    it("Enroll in existing course as Instructor in same department -- POST /api/v1/course/join returns 200", async () => {
       const result = await client
         .post("/api/v1/course/join")
         .send(enroll)
         .set(instructorAuthHeader)
+        .expect(200);
+    });
+
+    it("Enroll in existing course as Instructor not in same department -- POST /api/v1/course/join returns 200", async () => {
+      const result = await client
+        .post("/api/v1/course/join")
+        .send(enroll)
+        .set(instructorNotInSameDeptAuthHeader)
         .expect(200);
     });
 
@@ -122,12 +146,20 @@ describe("Course tests", () => {
         .expect(400);
     });
 
-    it("Enroll in existing course as Student -- POST /api/v1/course/join returns 200", async () => {
+    it("Enroll in existing course as Student in same department -- POST /api/v1/course/join returns 200", async () => {
       const result = await client
         .post("/api/v1/course/join")
         .send(enroll)
         .set(studentAuthHeader)
         .expect(200);
+    });
+
+    it("Enroll in existing course as Student not in same department -- POST /api/v1/course/join returns 403", async () => {
+      const result = await client
+        .post("/api/v1/course/join")
+        .send(enroll)
+        .set(studentNotInSameDeptAuthHeader)
+        .expect(403);
     });
 
     it("Try to enroll with invalid course as Student -- POST /api/v1/course/join returns 404", async () => {
