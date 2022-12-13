@@ -8,7 +8,7 @@ import {
 } from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
-describe("Course tests", () => {
+describe("Course Posts tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
   let studentAuthHeader: object;
   let instructorAuthHeader: object;

@@ -55,3 +55,51 @@ export interface Enrollment {
   userId: string;
   courseId: string;
 }
+
+export interface Post {
+  id: string;
+  title: string;
+  content: string;
+  url: string;
+  postedAt: number;
+  courseId: string;
+}
+
+export interface coursePost extends Post {}
+
+export interface studentQuestion extends Post {}
+
+export interface Comment {
+  id: string;
+  comment: string;
+  postedAt: number;
+}
+
+export interface postComment extends Comment {
+  userId: string;
+  postId: string;
+}
+
+export interface instructorAnswer extends Comment {
+  instructorId: string;
+  questionId: string;
+}
+
+export interface Quiz {
+  id: string;
+  name: string;
+  quizDate: Date;
+  isActive: boolean;
+  courseId: string;
+}
+
+export interface QuizQuestion {
+  question_number: number;
+  question: string;
+  choiceA: string;
+  choiceB: string;
+  choiceC: string;
+  choiceD: string;
+  rightChoice: string;
+  quizId: string;
+}
