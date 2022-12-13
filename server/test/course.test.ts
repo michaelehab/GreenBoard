@@ -1,10 +1,15 @@
 import { CourseEnrollRequest, CreateCourseRequest } from "@greenboard/shared";
 import supertest from "supertest";
-import { SEED_COURSE } from "../datastore/sqldb/seeds";
-import { createAuthToken, getTestServer } from "./testUtils";
+import {
+  SEED_COURSE,
+  SEED_STUDENT,
+  SEED_STUDENT_PASSWORD,
+} from "../datastore/sqldb/seeds";
+import { createAuthToken, getAuthToken, getTestServer } from "./testUtils";
 
 describe("Course tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
+  let studentAuthHeader: object;
 
   const course: CreateCourseRequest = {
     name: "Course1",
@@ -19,6 +24,12 @@ describe("Course tests", () => {
 
   beforeAll(async () => {
     client = await getTestServer();
+
+    studentAuthHeader = await getAuthToken(
+      "/api/v1/student/signin",
+      SEED_STUDENT.email,
+      SEED_STUDENT_PASSWORD
+    );
   });
 
   describe("Creating Courses", () => {
@@ -26,7 +37,7 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/")
         .send(course)
-        .set(await createAuthToken("STUDENT"))
+        .set(studentAuthHeader)
         .expect(403);
       expect(result.body.course).toBeUndefined();
     });
@@ -99,7 +110,7 @@ describe("Course tests", () => {
           courseId: enroll.courseId,
           password: "veryWrongLongPassword",
         })
-        .set(await createAuthToken("STUDENT"))
+        .set(studentAuthHeader)
         .expect(400);
     });
 
@@ -107,7 +118,7 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/join")
         .send(enroll)
-        .set(await createAuthToken("STUDENT"))
+        .set(studentAuthHeader)
         .expect(200);
     });
 
@@ -118,7 +129,7 @@ describe("Course tests", () => {
           courseId: "abcd",
           password: "pass",
         })
-        .set(await createAuthToken("STUDENT"))
+        .set(studentAuthHeader)
         .expect(404);
     });
 
@@ -139,7 +150,7 @@ describe("Course tests", () => {
         .send({
           courseId: "abcd",
         })
-        .set(await createAuthToken("STUDENT"))
+        .set(studentAuthHeader)
         .expect(400);
     });
 

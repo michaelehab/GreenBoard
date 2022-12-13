@@ -2,12 +2,13 @@ import dotenv from "dotenv";
 import express, { Application, Request, Response, NextFunction } from "express";
 import { loggerMiddleWare } from "./middlewares/loggerMiddleware";
 import routes from "./routes";
-import http from "http";
-import { db, initDb } from "./datastore";
+import { initDb } from "./datastore";
+import path from "path";
 
 export const createServer = async (dbPath: string, logRequests: boolean) => {
+  dotenv.config({ path: path.join(__dirname, ".env") });
+
   await initDb(dbPath);
-  dotenv.config();
 
   const app: Application = express();
   app.use(express.json());

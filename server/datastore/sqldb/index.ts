@@ -13,6 +13,7 @@ import { Database, open as sqliteOpen } from "sqlite";
 import sqlite3 from "sqlite3";
 
 import { DataStore } from "..";
+import { getPasswordHashed } from "../../utils";
 import {
   SEED_COLLEGE,
   SEED_SCHOOL,
@@ -20,12 +21,17 @@ import {
   SEED_COURSE,
   SEED_STUDENT,
   SEED_INSTRUCTOR,
+  SEED_COLLEGE_PASSWORD,
+  SEED_SCHOOL_PASSWORD,
+  SEED_DEPARTMENT_PASSWORD,
+  SEED_INSTRUCTOR_PASSWORD,
+  SEED_STUDENT_PASSWORD,
+  SEED_COURSE_PASSWORD,
 } from "./seeds";
 
 export class SQLDataStore implements DataStore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;
   public async openDb(dbPath: string) {
-    const { NODE_ENV } = process.env;
     try {
       this.db = await sqliteOpen({
         filename: dbPath,
@@ -44,17 +50,7 @@ export class SQLDataStore implements DataStore {
     });
 
     if (dbPath == ":memory:") {
-      await this.createCollege(SEED_COLLEGE);
-
-      await this.createSchool(SEED_SCHOOL);
-
-      await this.createDepartment(SEED_DEPARTMENT);
-
-      await this.createInstructor(SEED_INSTRUCTOR);
-
-      await this.createCourse(SEED_COURSE);
-
-      await this.createStudent(SEED_STUDENT);
+      await this.seedDb();
     }
 
     return this;
@@ -369,4 +365,24 @@ export class SQLDataStore implements DataStore {
       courseId
     );
   }
+
+  private seedDb = async () => {
+    SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);
+    await this.createCollege(SEED_COLLEGE);
+
+    SEED_SCHOOL.adminPassword = getPasswordHashed(SEED_SCHOOL_PASSWORD);
+    await this.createSchool(SEED_SCHOOL);
+
+    SEED_DEPARTMENT.adminPassword = getPasswordHashed(SEED_DEPARTMENT_PASSWORD);
+    await this.createDepartment(SEED_DEPARTMENT);
+
+    SEED_INSTRUCTOR.password = getPasswordHashed(SEED_INSTRUCTOR_PASSWORD);
+    await this.createInstructor(SEED_INSTRUCTOR);
+
+    SEED_STUDENT.password = getPasswordHashed(SEED_STUDENT_PASSWORD);
+    await this.createStudent(SEED_STUDENT);
+
+    SEED_COURSE.password = getPasswordHashed(SEED_COURSE_PASSWORD);
+    await this.createCourse(SEED_COURSE);
+  };
 }
