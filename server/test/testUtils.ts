@@ -21,22 +21,6 @@ export async function getTestServer() {
   return client;
 }
 
-export const createAuthToken = async (type: string) => {
-  let token: string = "";
-  if (type === "COLLEGE") {
-    token = signJwt({ collegeId: SEED_COLLEGE.id, role: "COLLEGE" });
-  } else if (type === "SCHOOL") {
-    token = signJwt({ schoolId: SEED_SCHOOL.id, role: "COLLEGE" });
-  } else if (type === "DEPARTMENT") {
-    token = signJwt({ departmentId: SEED_DEPARTMENT.id, role: "DEPARTMENT" });
-  } else if (type === "STUDENT") {
-    token = signJwt({ userId: SEED_STUDENT.id, role: "STUDENT" });
-  } else if (type === "INSTRUCTOR") {
-    token = signJwt({ userId: SEED_INSTRUCTOR.id, role: "INSTRUCTOR" });
-  }
-  return { Authorization: "Bearer " + token };
-};
-
 // Url can be:
 // /api/v1/college/signin
 // /api/v1/school/signin

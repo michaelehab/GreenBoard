@@ -2,14 +2,17 @@ import { CourseEnrollRequest, CreateCourseRequest } from "@greenboard/shared";
 import supertest from "supertest";
 import {
   SEED_COURSE,
+  SEED_INSTRUCTOR,
+  SEED_INSTRUCTOR_PASSWORD,
   SEED_STUDENT,
   SEED_STUDENT_PASSWORD,
 } from "../datastore/sqldb/seeds";
-import { createAuthToken, getAuthToken, getTestServer } from "./testUtils";
+import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("Course tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
   let studentAuthHeader: object;
+  let instructorAuthHeader: object;
 
   const course: CreateCourseRequest = {
     name: "Course1",
@@ -30,6 +33,12 @@ describe("Course tests", () => {
       SEED_STUDENT.email,
       SEED_STUDENT_PASSWORD
     );
+
+    instructorAuthHeader = await getAuthToken(
+      "/api/v1/instructor/signin",
+      SEED_INSTRUCTOR.email,
+      SEED_INSTRUCTOR_PASSWORD
+    );
   });
 
   describe("Creating Courses", () => {
@@ -46,7 +55,7 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/")
         .send(course)
-        .set(await createAuthToken("INSTRUCTOR"))
+        .set(instructorAuthHeader)
         .expect(200);
       expect(result.body.course).toBeDefined();
       expect(result.body.course.name).toEqual(course.name);
@@ -59,7 +68,7 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/")
         .send(course)
-        .set(await createAuthToken("INSTRUCTOR"))
+        .set(instructorAuthHeader)
         .expect(403);
       expect(result.body.course).toBeUndefined();
     });
@@ -68,7 +77,7 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/")
         .send({})
-        .set(await createAuthToken("INSTRUCTOR"))
+        .set(instructorAuthHeader)
         .expect(400);
       expect(result.body.course).toBeUndefined();
     });
@@ -88,7 +97,7 @@ describe("Course tests", () => {
           name: "Course1",
           password: "password",
         })
-        .set(await createAuthToken("INSTRUCTOR"))
+        .set(instructorAuthHeader)
         .expect(400);
       expect(result.body.course).toBeUndefined();
     });
@@ -99,7 +108,7 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/join")
         .send(enroll)
-        .set(await createAuthToken("INSTRUCTOR"))
+        .set(instructorAuthHeader)
         .expect(200);
     });
 
@@ -140,7 +149,7 @@ describe("Course tests", () => {
           courseId: "abcd",
           password: "pass",
         })
-        .set(await createAuthToken("INSTRUCTOR"))
+        .set(instructorAuthHeader)
         .expect(404);
     });
 
@@ -160,7 +169,7 @@ describe("Course tests", () => {
         .send({
           courseId: "abcd",
         })
-        .set(await createAuthToken("INSTRUCTOR"))
+        .set(instructorAuthHeader)
         .expect(400);
     });
 
