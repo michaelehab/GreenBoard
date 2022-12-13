@@ -5,7 +5,15 @@ import {
   Instructor,
   Student,
   Course,
+  Enrollment,
 } from "@greenboard/shared";
+
+// SEED_DEPARTMENT, SEED_DEPARTMENT2 belongs to SEED_SCHOOL
+// SEED_SCHOOL belongs to SEED_COLLEGE
+// SEED_INSTRUCTOR and SEED_STUDENT belong to SEED_DEPARTMENT
+// SEED_INSTRUCTOR2 and SEED_STUDENT2 belong to SEED_DEPARTMENT2
+// SEED_COURSE belongs to SEED_DEPARTMENT
+// SEED_INSTRUCTOR and SEED_STUDENT are enrolled in SEED_COURSE
 
 export const SEED_COLLEGE_PASSWORD = "SeedCollegeAdminPassword";
 
@@ -40,6 +48,14 @@ export const SEED_DEPARTMENT: Department = {
   schoolId: SEED_SCHOOL.id,
 };
 
+export const SEED_DEPARTMENT2: Department = {
+  id: "DEPT002",
+  name: "Department2",
+  email: "Email2",
+  adminPassword: "", // getPasswordHashed(SEED_DEPARTMENT_PASSWORD)
+  schoolId: SEED_SCHOOL.id,
+};
+
 export const SEED_INSTRUCTOR_PASSWORD = "SeedInstructorPassword";
 
 export const SEED_INSTRUCTOR: Instructor = {
@@ -51,6 +67,17 @@ export const SEED_INSTRUCTOR: Instructor = {
   password: "", // getPasswordHashed(SEED_INSTRUCTOR_PASSWORD)
   joinedAt: new Date(),
   departmentId: SEED_DEPARTMENT.id,
+};
+
+export const SEED_INSTRUCTOR2: Instructor = {
+  id: "INSTR002",
+  firstName: "FName2",
+  lastName: "LName2",
+  phone: "Phone2",
+  email: "Email2",
+  password: "", // getPasswordHashed(SEED_INSTRUCTOR_PASSWORD)
+  joinedAt: new Date(),
+  departmentId: SEED_DEPARTMENT2.id,
 };
 
 export const SEED_STUDENT_PASSWORD = "SeedStudentPassword";
@@ -67,6 +94,18 @@ export const SEED_STUDENT: Student = {
   level: 1,
 };
 
+export const SEED_STUDENT2: Student = {
+  id: "STD002",
+  firstName: "FName2",
+  lastName: "LName2",
+  phone: "Phone1234",
+  email: "Email1234",
+  password: "", // getPasswordHashed(SEED_STUDENT_PASSWORD)
+  joinedAt: new Date(),
+  departmentId: SEED_DEPARTMENT2.id,
+  level: 2,
+};
+
 export const SEED_COURSE_PASSWORD = "SeedCoursePassword";
 
 export const SEED_COURSE: Course = {
@@ -75,4 +114,16 @@ export const SEED_COURSE: Course = {
   courseCode: "COURSECODE1",
   password: "", // getPasswordHashed(SEED_COURSE_PASSWORD)
   departmentId: SEED_DEPARTMENT.id,
+};
+
+export const SEED_STUDENT_ENROLLMENT: Enrollment = {
+  userId: SEED_STUDENT.id,
+  courseId: SEED_COURSE.id,
+  id: "ENROLLMENT001",
+};
+
+export const SEED_INSTRUCTOR_ENROLLMENT: Enrollment = {
+  userId: SEED_INSTRUCTOR.id,
+  courseId: SEED_COURSE.id,
+  id: "ENROLLMENT002",
 };

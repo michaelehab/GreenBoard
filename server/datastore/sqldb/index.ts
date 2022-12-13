@@ -27,6 +27,9 @@ import {
   SEED_INSTRUCTOR_PASSWORD,
   SEED_STUDENT_PASSWORD,
   SEED_COURSE_PASSWORD,
+  SEED_INSTRUCTOR2,
+  SEED_STUDENT2,
+  SEED_DEPARTMENT2,
 } from "./seeds";
 
 export class SQLDataStore implements DataStore {
@@ -376,11 +379,22 @@ export class SQLDataStore implements DataStore {
     SEED_DEPARTMENT.adminPassword = getPasswordHashed(SEED_DEPARTMENT_PASSWORD);
     await this.createDepartment(SEED_DEPARTMENT);
 
+    SEED_DEPARTMENT2.adminPassword = getPasswordHashed(
+      SEED_DEPARTMENT_PASSWORD
+    );
+    await this.createDepartment(SEED_DEPARTMENT2);
+
     SEED_INSTRUCTOR.password = getPasswordHashed(SEED_INSTRUCTOR_PASSWORD);
     await this.createInstructor(SEED_INSTRUCTOR);
 
+    SEED_INSTRUCTOR2.password = getPasswordHashed(SEED_INSTRUCTOR_PASSWORD);
+    await this.createInstructor(SEED_INSTRUCTOR2);
+
     SEED_STUDENT.password = getPasswordHashed(SEED_STUDENT_PASSWORD);
     await this.createStudent(SEED_STUDENT);
+
+    SEED_STUDENT2.password = getPasswordHashed(SEED_STUDENT_PASSWORD);
+    await this.createStudent(SEED_STUDENT2);
 
     SEED_COURSE.password = getPasswordHashed(SEED_COURSE_PASSWORD);
     await this.createCourse(SEED_COURSE);

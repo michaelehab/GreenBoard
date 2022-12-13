@@ -17,6 +17,8 @@ describe("Course tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
   let studentAuthHeader: object;
   let instructorAuthHeader: object;
+  let coursePostId: string;
+  let studentQuestionId: string;
 
   const coursePost: CreatePostRequest = {
     title: "First Post title",
@@ -61,6 +63,8 @@ describe("Course tests", () => {
       expect(result.body.post.title).toEqual(coursePost.title);
       expect(result.body.post.url).toEqual(coursePost.url);
       expect(result.body.post.content).toEqual(coursePost.content);
+
+      coursePostId = result.body.post.id;
     });
 
     it("Send empty object as instructor -- POST /api/v1/course/:id/post returns 400", async () => {
@@ -92,6 +96,38 @@ describe("Course tests", () => {
         .expect(400);
       expect(result.body.post).toBeUndefined();
     });
+
+    it(
+      "Get Course Posts as student in course-- GET /api/v1/course/:id/post returns 200"
+    );
+    it(
+      "Get Course Posts as student not in course -- GET /api/v1/course/:id/post/:id returns 403"
+    );
+
+    it(
+      "Get Course Posts as instructor in course -- GET /api/v1/course/:id/post returns 200"
+    );
+    it(
+      "Get Course Posts as instructor not in course -- GET /api/v1/course/:id/post returns 403"
+    );
+
+    it(
+      "Get Specific Course Post as student in course -- GET /api/v1/course/:id/post/:id returns 200"
+    );
+    it(
+      "Get Specific Course Post as student not in course -- GET /api/v1/course/:id/post/:id returns 403"
+    );
+
+    it(
+      "Get Specific Course Post as instructor in course -- GET /api/v1/course/:id/post/:id returns 200"
+    );
+    it(
+      "Get Specific Course Post as instructor not in course -- GET /api/v1/course/:id/post/:id returns 403"
+    );
+
+    it(
+      "Get Specific Course Post as unauthorized -- GET /api/v1/course/:id/post/:id returns 401"
+    );
   });
 
   describe("Creating Students Questions", () => {
@@ -101,11 +137,13 @@ describe("Course tests", () => {
         .send(coursePost)
         .set(studentAuthHeader)
         .expect(200);
-      expect(result.body.post).toBeDefined();
-      expect(result.body.post.title).toEqual(coursePost.title);
-      expect(result.body.post.url).toEqual(coursePost.url);
-      expect(result.body.post.content).toEqual(coursePost.content);
+      expect(result.body.question).toBeDefined();
+      expect(result.body.question.title).toEqual(coursePost.title);
+      expect(result.body.question.url).toEqual(coursePost.url);
+      expect(result.body.question.content).toEqual(coursePost.content);
       expect(result.body.question).toBeUndefined();
+
+      studentQuestionId = result.body.question.id;
     });
 
     it("Create a new student question as instructor -- POST /api/v1/course/:id/question returns 403", async () => {
