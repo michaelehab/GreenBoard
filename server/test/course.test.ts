@@ -1,6 +1,11 @@
-import { CourseEnrollRequest, CreateCourseRequest } from "@greenboard/shared";
+import {
+  CourseEnrollRequest,
+  CreateCourseRequest,
+  CreatePostRequest,
+} from "@greenboard/shared";
 import supertest from "supertest";
 import {
+  SEED_COURSE,
   SEED_INSTRUCTOR,
   SEED_INSTRUCTOR_PASSWORD,
   SEED_STUDENT,
@@ -13,15 +18,11 @@ describe("Course tests", () => {
   let studentAuthHeader: object;
   let instructorAuthHeader: object;
 
-  const course: CreateCourseRequest = {
-    name: "Course1",
-    courseCode: "Code1",
-    password: "password",
-  };
-
-  const enroll: CourseEnrollRequest = {
-    courseId: "", // To be filled with the id after course creation
-    password: course.password,
+  const coursePost: CreatePostRequest = {
+    title: "First Post title",
+    url: "https://www.google.com",
+    content: "This is a post content",
+    courseId: SEED_COURSE.id,
   };
 
   beforeAll(async () => {
@@ -40,143 +41,110 @@ describe("Course tests", () => {
     );
   });
 
-  describe("Creating Courses", () => {
-    it("Create a new course as a student -- POST /api/v1/course returns 403", async () => {
+  describe("Creating Course Posts", () => {
+    it("Create a new course post as a student -- POST /api/v1/course/:id/post returns 403", async () => {
       const result = await client
-        .post("/api/v1/course/")
-        .send(course)
+        .post(`/api/v1/course/${SEED_COURSE.id}/post`)
+        .send(coursePost)
         .set(studentAuthHeader)
         .expect(403);
-      expect(result.body.course).toBeUndefined();
+      expect(result.body.post).toBeUndefined();
     });
 
-    it("Create a new course as instructor -- POST /api/v1/course/ returns 200", async () => {
+    it("Create a new course post as instructor -- POST /api/v1/course/:id/post returns 200", async () => {
       const result = await client
-        .post("/api/v1/course/")
-        .send(course)
+        .post(`/api/v1/course/${SEED_COURSE.id}/post`)
+        .send(coursePost)
         .set(instructorAuthHeader)
         .expect(200);
-      expect(result.body.course).toBeDefined();
-      expect(result.body.course.name).toEqual(course.name);
-      expect(result.body.course.courseCode).toEqual(course.courseCode);
-
-      enroll.courseId = result.body.course.id;
+      expect(result.body.post).toBeDefined();
+      expect(result.body.post.title).toEqual(coursePost.title);
+      expect(result.body.post.url).toEqual(coursePost.url);
+      expect(result.body.post.content).toEqual(coursePost.content);
     });
 
-    it("Create the same course again as instructor -- POST /api/v1/course returns 403", async () => {
+    it("Send empty object as instructor -- POST /api/v1/course/:id/post returns 400", async () => {
       const result = await client
-        .post("/api/v1/course/")
-        .send(course)
-        .set(instructorAuthHeader)
-        .expect(403);
-      expect(result.body.course).toBeUndefined();
-    });
-
-    it("Send empty object as instructor -- POST /api/v1/course/signup returns 400", async () => {
-      const result = await client
-        .post("/api/v1/course/")
+        .post(`/api/v1/course/${SEED_COURSE.id}/post`)
         .send({})
         .set(instructorAuthHeader)
         .expect(400);
-      expect(result.body.course).toBeUndefined();
+      expect(result.body.post).toBeUndefined();
     });
 
-    it("Create a new course as unauthorized -- POST /api/v1/course/ returns 401", async () => {
+    it("Create a new course post as unauthorized -- POST /api/v1/course/:id/post returns 401", async () => {
       const result = await client
-        .post("/api/v1/course/")
-        .send(course)
+        .post(`/api/v1/course/${SEED_COURSE.id}/post`)
+        .send(coursePost)
         .expect(401);
-      expect(result.body.course).toBeUndefined();
+      expect(result.body.post).toBeUndefined();
     });
 
-    it("Create a new course with missing field as instructor -- POST /api/v1/course/ returns 400", async () => {
+    it("Create a new course post with missing field as instructor -- POST /api/v1/course/:id/post returns 400", async () => {
       const result = await client
-        .post("/api/v1/course/")
+        .post(`/api/v1/course/${SEED_COURSE.id}/post`)
         .send({
-          name: "Course1",
-          password: "password",
+          title: "this is a title",
+          content: "content",
+          courseId: SEED_COURSE.id,
         })
         .set(instructorAuthHeader)
         .expect(400);
-      expect(result.body.course).toBeUndefined();
+      expect(result.body.post).toBeUndefined();
     });
   });
 
-  describe("Enroll in Course", () => {
-    it("Enroll in existing course as Instructor -- POST /api/v1/course/join returns 200", async () => {
+  describe("Creating Students Questions", () => {
+    it("Create a new student question as a student -- POST /api/v1/course/:id/question returns 200", async () => {
       const result = await client
-        .post("/api/v1/course/join")
-        .send(enroll)
-        .set(instructorAuthHeader)
-        .expect(200);
-    });
-
-    it("Enroll in existing course as Student wrong password -- POST /api/v1/course/join returns 400", async () => {
-      const result = await client
-        .post("/api/v1/course/join")
-        .send({
-          courseId: enroll.courseId,
-          password: "veryWrongLongPassword",
-        })
-        .set(studentAuthHeader)
-        .expect(400);
-    });
-
-    it("Enroll in existing course as Student -- POST /api/v1/course/join returns 200", async () => {
-      const result = await client
-        .post("/api/v1/course/join")
-        .send(enroll)
+        .post(`/api/v1/course/${SEED_COURSE.id}/question`)
+        .send(coursePost)
         .set(studentAuthHeader)
         .expect(200);
+      expect(result.body.post).toBeDefined();
+      expect(result.body.post.title).toEqual(coursePost.title);
+      expect(result.body.post.url).toEqual(coursePost.url);
+      expect(result.body.post.content).toEqual(coursePost.content);
+      expect(result.body.question).toBeUndefined();
     });
 
-    it("Try to enroll with invalid course as Student -- POST /api/v1/course/join returns 404", async () => {
+    it("Create a new student question as instructor -- POST /api/v1/course/:id/question returns 403", async () => {
       const result = await client
-        .post("/api/v1/course/join")
-        .send({
-          courseId: "abcd",
-          password: "pass",
-        })
-        .set(studentAuthHeader)
-        .expect(404);
-    });
-
-    it("Try to enroll with invalid course as Instructor -- POST /api/v1/course/join returns 404", async () => {
-      const result = await client
-        .post("/api/v1/course/join")
-        .send({
-          courseId: "abcd",
-          password: "pass",
-        })
+        .post(`/api/v1/course/${SEED_COURSE.id}/question`)
+        .send(coursePost)
         .set(instructorAuthHeader)
-        .expect(404);
+        .expect(403);
+      expect(result.body.question).toBeUndefined();
     });
 
-    it("Try to enroll with missing field as Student -- POST /api/v1/course/join returns 400", async () => {
+    it("Send empty object as student -- POST /api/v1/course/:id/question returns 400", async () => {
       const result = await client
-        .post("/api/v1/course/join")
-        .send({
-          courseId: "abcd",
-        })
+        .post(`/api/v1/course/${SEED_COURSE.id}/question`)
+        .send({})
         .set(studentAuthHeader)
         .expect(400);
+      expect(result.body.question).toBeUndefined();
     });
 
-    it("Try to enroll with missing field as Instructor -- POST /api/v1/course/join returns 400", async () => {
+    it("Create a new student question as unauthorized -- POST /api/v1/course/:id/question returns 401", async () => {
       const result = await client
-        .post("/api/v1/course/join")
-        .send({
-          courseId: "abcd",
-        })
-        .set(instructorAuthHeader)
-        .expect(400);
-    });
-
-    it("Try to enroll in a course unauthorized -- POST /api/v1/course/join returns 401", async () => {
-      const result = await client
-        .post("/api/v1/course/join")
-        .send(enroll)
+        .post(`/api/v1/course/${SEED_COURSE.id}/question`)
+        .send(coursePost)
         .expect(401);
+      expect(result.body.question).toBeUndefined();
+    });
+
+    it("Create a new student question with missing field as student -- POST /api/v1/course/:id/question returns 400", async () => {
+      const result = await client
+        .post(`/api/v1/course/${SEED_COURSE.id}/question`)
+        .send({
+          title: "this is a title",
+          content: "content",
+          courseId: SEED_COURSE.id,
+        })
+        .set(studentAuthHeader)
+        .expect(400);
+      expect(result.body.question).toBeUndefined();
     });
   });
 });
