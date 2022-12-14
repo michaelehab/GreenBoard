@@ -9,6 +9,7 @@ import {
   Enrollment,
   CoursePost,
   Post,
+  StudentQuestion,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -328,7 +329,29 @@ export class SQLDataStore implements DataStore {
       courseId
     );
   }
-
+  async createStuQuestion(StudentQuestion: StudentQuestion): Promise<void> {
+    await this.createStuQuestion(StudentQuestion);
+    await this.db.run(
+      "INSERT INTO students_questions(id) VALUES(?)",
+      StudentQuestion.id
+    );
+  }
+  async getstuQuestionById(
+    StudentQuestionid: string
+  ): Promise<StudentQuestion | undefined> {
+    return await this.db.get<CoursePost>(
+      "SELECT * FROM  JOIN StudentQuestion ON StudentQuestion.id = posts.id WHERE posts.id = ?",
+      StudentQuestionid
+    );
+  }
+  async listStuQuestionBycourseId(
+    courseId: string
+  ): Promise<StudentQuestion[]> {
+    return await this.db.all<StudentQuestion[]>(
+      "SELECT * FROM posts JOIN StudentQuestion ON StudentQuestion.id = posts.id WHERE posts.courseId = ?",
+      courseId
+    );
+  }
   private seedDb = async () => {
     SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);
     await this.createCollege(SEED_COLLEGE);
