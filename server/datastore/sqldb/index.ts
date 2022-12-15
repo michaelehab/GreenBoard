@@ -328,7 +328,7 @@ export class SQLDataStore implements DataStore {
   }
   async listCoursePostsByCourseId(courseId: string): Promise<CoursePost[]> {
     return await this.db.all<CoursePost[]>(
-      "SELECT * FROM posts JOIN course_posts ON course_posts.id = posts.id WHERE posts.courseId = ?",
+      "SELECT * FROM posts JOIN course_posts ON course_posts.id = posts.id WHERE posts.courseId = ? ORDER BY postedAt DESC",
       courseId
     );
   }
@@ -351,7 +351,7 @@ export class SQLDataStore implements DataStore {
     courseId: string
   ): Promise<StudentQuestion[]> {
     return await this.db.all<StudentQuestion[]>(
-      "SELECT * FROM posts JOIN students_questions ON students_questions.id = posts.id WHERE posts.courseId = ?",
+      "SELECT * FROM posts JOIN students_questions ON students_questions.id = posts.id WHERE posts.courseId = ? ORDER BY postedAt DESC",
       courseId
     );
   }
