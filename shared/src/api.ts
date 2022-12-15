@@ -6,9 +6,11 @@ import {
   Department,
   Instructor,
   Post,
+  PostComment,
   School,
   Student,
   StudentQuestion,
+  Comment,
 } from "./types";
 
 export interface SignInRequest {
@@ -192,4 +194,21 @@ export interface GetCourseStudentsQuestionsResponse {
 export interface GetCourseStudentQuestionRequest {} // Course Id will be a url param
 export interface GetCourseStudentQuestionResponse {
   question: StudentQuestion;
+}
+
+//comment APIs
+export type CreateCommentRequest = Pick<Comment, "comment">;
+
+export interface CreatePostCommentResponse {
+  postComment: PostComment;
+}
+
+export interface ListPostCommentRequest {} // post Id will be a url param
+export interface ListPostCommentResponse {
+  postComment: PostComment[];
+}
+
+export interface GetPostCommentsRequest {} // post Id will be a url param
+export interface GetPostCommentsResponse {
+  postComment: PostComment;
 }

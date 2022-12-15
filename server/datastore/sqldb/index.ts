@@ -10,6 +10,8 @@ import {
   CoursePost,
   Post,
   StudentQuestion,
+  Comment,
+  PostComment,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -35,6 +37,7 @@ import {
   SEED_DEPARTMENT2,
   SEED_STUDENT_ENROLLMENT,
   SEED_INSTRUCTOR_ENROLLMENT,
+  SEED_COURSE_POST,
 } from "./seeds";
 
 export class SQLDataStore implements DataStore {
@@ -352,6 +355,38 @@ export class SQLDataStore implements DataStore {
       courseId
     );
   }
+  async createComment(Comment: Comment): Promise<void> {
+    await this.db.run(
+      "INSERT INTO comments(id,comment,postedAt) VALUES (?,?,?) ",
+      Comment.id,
+      Comment.comment,
+      Comment.postedAt
+    );
+  }
+  async createPostComment(PostComment: PostComment): Promise<void> {
+    await this.createComment(PostComment);
+    await this.db.run(
+      "INSERT INTO post_comments(id,userId,postId) VALUES (?,?,?)",
+      PostComment.id,
+      PostComment.userId,
+      PostComment.postId
+    );
+  }
+  async getPostCommentById(
+    postCommentId: string
+  ): Promise<PostComment | undefined> {
+    return await this.db.get<PostComment>(
+      "SELECT * FROM comments JOIN post_comments ON post_comments.id = comments.id WHERE comments.id = ?",
+      postCommentId
+    );
+  }
+  async listPostCommentsByPostId(PostId: string): Promise<PostComment[]> {
+    return await this.db.all<PostComment[]>(
+      "SELECT * FROM comments JOIN post_comments ON post_comments.id = comments.id WHERE postId=?",
+      PostId
+    );
+  }
+
   private seedDb = async () => {
     SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);
     await this.createCollege(SEED_COLLEGE);
@@ -385,5 +420,7 @@ export class SQLDataStore implements DataStore {
     await this.createEnrollment(SEED_STUDENT_ENROLLMENT);
 
     await this.createEnrollment(SEED_INSTRUCTOR_ENROLLMENT);
+
+    await this.createCoursePost(SEED_COURSE_POST);
   };
 }
