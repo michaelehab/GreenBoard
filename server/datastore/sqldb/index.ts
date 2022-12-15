@@ -330,7 +330,7 @@ export class SQLDataStore implements DataStore {
     );
   }
   async createStuQuestion(StudentQuestion: StudentQuestion): Promise<void> {
-    await this.createStuQuestion(StudentQuestion);
+    await this.createPost(StudentQuestion);
     await this.db.run(
       "INSERT INTO students_questions(id) VALUES(?)",
       StudentQuestion.id
@@ -339,8 +339,8 @@ export class SQLDataStore implements DataStore {
   async getstuQuestionById(
     StudentQuestionid: string
   ): Promise<StudentQuestion | undefined> {
-    return await this.db.get<CoursePost>(
-      "SELECT * FROM  JOIN StudentQuestion ON StudentQuestion.id = posts.id WHERE posts.id = ?",
+    return await this.db.get<StudentQuestion>(
+      "SELECT * FROM posts JOIN students_questions ON students_questions.id = posts.id WHERE posts.id = ?",
       StudentQuestionid
     );
   }
@@ -348,7 +348,7 @@ export class SQLDataStore implements DataStore {
     courseId: string
   ): Promise<StudentQuestion[]> {
     return await this.db.all<StudentQuestion[]>(
-      "SELECT * FROM posts JOIN StudentQuestion ON StudentQuestion.id = posts.id WHERE posts.courseId = ?",
+      "SELECT * FROM posts JOIN students_questions ON students_questions.id = posts.id WHERE posts.courseId = ?",
       courseId
     );
   }

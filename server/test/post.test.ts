@@ -237,7 +237,6 @@ describe("Posts tests", () => {
       expect(result.body.question.title).toEqual(coursePost.title);
       expect(result.body.question.url).toEqual(coursePost.url);
       expect(result.body.question.content).toEqual(coursePost.content);
-      expect(result.body.question).toBeUndefined();
 
       studentQuestionId = result.body.question.id;
     });
@@ -245,7 +244,11 @@ describe("Posts tests", () => {
     it("Create a new student question as a student in course invalid url -- POST /api/v1/course/:id/question returns 400", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/question`)
-        .send(coursePost)
+        .send({
+          title: "First Post title",
+          url: "www.google",
+          content: "This is a post content",
+        })
         .set(studentAuthHeader)
         .expect(400);
       expect(result.body.question).toBeUndefined();
@@ -256,7 +259,7 @@ describe("Posts tests", () => {
         .post(`/api/v1/course/${SEED_COURSE.id}/question`)
         .send(coursePost)
         .set(studentNotInCourseAuthHeader)
-        .expect(200);
+        .expect(403);
       expect(result.body.question).toBeUndefined();
     });
 
@@ -319,7 +322,7 @@ describe("Posts tests", () => {
 
     it("Get Students Questions as student invalid course -- GET /api/v1/course/:id/question returns 404", async () => {
       const result = await client
-        .get(`/api/v1/course/${SEED_COURSE.id}/question`)
+        .get(`/api/v1/course/InvalidCourseId/question`)
         .set(studentNotInCourseAuthHeader)
         .expect(404);
       expect(result.body.questions).toBeUndefined();
@@ -344,7 +347,7 @@ describe("Posts tests", () => {
 
     it("Get Students Questions as instructor with invalid course -- GET /api/v1/course/:id/question returns 404", async () => {
       const result = await client
-        .get(`/api/v1/course/${SEED_COURSE.id}/question`)
+        .get(`/api/v1/course/InvalidCourseId/question`)
         .set(instructorAuthHeader)
         .expect(404);
       expect(result.body.questions).toBeUndefined();

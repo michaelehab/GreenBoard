@@ -15,6 +15,6 @@ router.post("/", CreateCourse);
 router.post("/join", JoinCourse);
 
 router.use(coursePost);
-router.use("/:courseId/question", studentQuestion);
+router.use(studentQuestion);
 
 export default router;
