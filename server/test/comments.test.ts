@@ -135,7 +135,7 @@ describe("Posts tests", () => {
         )
         .set(studentAuthHeader)
         .expect(200);
-      expect(result.body.postComment).toHaveLength(1);
+      expect(result.body.postComment).toHaveLength(2);
       expect(result.body.postComment[0].comment).toBe(postComment.comment);
     });
 
@@ -164,7 +164,7 @@ describe("Posts tests", () => {
         )
         .set(instructorAuthHeader)
         .expect(200);
-      expect(result.body.postComment).toHaveLength(1);
+      expect(result.body.postComment).toHaveLength(2);
       expect(result.body.postComment[0].comment).toBe(postComment.comment);
     });
 
@@ -189,7 +189,7 @@ describe("Posts tests", () => {
     it("Get Specific Post comment as student in course -- GET /api/v1/course/:courseId/post/:id/comment/:id returns 200", async () => {
       const result = await client
         .get(
-          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment/${postCommentId}`
         )
         .set(studentAuthHeader)
         .expect(200);
