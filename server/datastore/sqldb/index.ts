@@ -342,7 +342,6 @@ export class SQLDataStore implements DataStore {
   }
   async createPostComment(PostComment: PostComment): Promise<void> {
     await this.createComment(PostComment);
-    console.log(PostComment);
     await this.db.run(
       "INSERT INTO post_comments(id,userId,postId) VALUES (?,?,?)",
       PostComment.id,
