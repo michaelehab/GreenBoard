@@ -72,7 +72,7 @@ describe("Posts tests", () => {
     it("Create a new post comment as instructor -- POST /api/v1/course/:courseId/post/:id/comment returns 200", async () => {
       const result = await client
         .post(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .send(postComment)
         .set(instructorAuthHeader)
@@ -86,7 +86,7 @@ describe("Posts tests", () => {
     it("Create a new post comment as instructor not in course -- POST /api/v1/course/:courseId/post/:id/comment returns 403", async () => {
       const result = await client
         .post(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .send(postComment)
         .set(instructorNotInCourseAuthHeader)
@@ -97,7 +97,7 @@ describe("Posts tests", () => {
     it("Send empty object as instructor -- POST /api/v1/course/:courseId/post/:id/comment returns 400", async () => {
       const result = await client
         .post(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .send({})
         .set(instructorAuthHeader)
@@ -108,7 +108,7 @@ describe("Posts tests", () => {
     it("Create a new post comment as unauthorized -- POST /api/v1/course/:courseId/post/:id/comment returns 401", async () => {
       const result = await client
         .post(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .send(postComment)
         .expect(401);
@@ -118,7 +118,7 @@ describe("Posts tests", () => {
     it("Create a new post comment with missing field as instructor -- POST /api/v1/course/:courseId/post/:id/comment returns 400", async () => {
       const result = await client
         .post(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .send({
           postId: SEED_COURSE_POST.id,
@@ -131,7 +131,7 @@ describe("Posts tests", () => {
     it("Get Posts comments as student in course-- GET /api/v1/course/:courseId/post/:id/comment returns 200", async () => {
       const result = await client
         .get(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .set(studentAuthHeader)
         .expect(200);
@@ -142,7 +142,7 @@ describe("Posts tests", () => {
     it("Get Post commets as student not in course -- GET /api/v1/course/:courseId/post/:id/comment returns 403", async () => {
       const result = await client
         .get(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .set(studentNotInCourseAuthHeader)
         .expect(403);
@@ -160,7 +160,7 @@ describe("Posts tests", () => {
     it("Get Posts comments as instructor in course -- GET /api/v1/course/:courseId/post/:id/comment returns 200", async () => {
       const result = await client
         .get(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .set(instructorAuthHeader)
         .expect(200);
@@ -171,7 +171,7 @@ describe("Posts tests", () => {
     it("Get Posts comments as instructor not in course -- GET /api/v1/course/:courseId/post/:id/comment returns 403", async () => {
       const result = await client
         .get(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
@@ -189,7 +189,7 @@ describe("Posts tests", () => {
     it("Get Specific Post comment as student in course -- GET /api/v1/course/:courseId/post/:id/comment/:id returns 200", async () => {
       const result = await client
         .get(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .set(studentAuthHeader)
         .expect(200);
@@ -198,7 +198,7 @@ describe("Posts tests", () => {
     it("Get Specific Post comment as student not in course -- GET /api/v1/course/:courseId/post/:id/comment/:id returns 403", async () => {
       const result = await client
         .get(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment/${postCommentId}`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment/${postCommentId}`
         )
         .set(studentNotInCourseAuthHeader)
         .expect(403);
@@ -208,7 +208,7 @@ describe("Posts tests", () => {
     it("Get Specific Post comment as instructor in course -- GET /api/v1/course/:courseId/post/:id/comment/:id returns 200", async () => {
       const result = await client
         .get(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment/${postCommentId}`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment/${postCommentId}`
         )
         .set(instructorAuthHeader)
         .expect(200);
@@ -217,7 +217,7 @@ describe("Posts tests", () => {
     it("Get Specific Post comment as instructor not in course -- GET /api/v1/course/:courseId/post/:id/comment/:id returns 403", async () => {
       const result = await client
         .get(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment/${postCommentId}`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment/${postCommentId}`
         )
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
@@ -227,7 +227,7 @@ describe("Posts tests", () => {
     it("Get Specific Post comment as unauthorized -- GET /api/v1/course/:courseId/post/:id/comment/:id returns 401", async () => {
       const result = await client
         .get(
-          `api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment/${postCommentId}`
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment/${postCommentId}`
         )
         .expect(401);
       expect(result.body.postComment).toBeUndefined();
