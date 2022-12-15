@@ -200,15 +200,15 @@ export interface GetCourseStudentQuestionResponse {
 export type CreateCommentRequest = Pick<Comment, "comment">;
 
 export interface CreatePostCommentResponse {
-  Comment: PostComment;
+  postComment: PostComment;
 }
 
 export interface ListPostCommentRequest {} // post Id will be a url param
 export interface ListPostCommentResponse {
-  comment: PostComment[];
+  postComment: PostComment[];
 }
 
 export interface GetPostCommentsRequest {} // post Id will be a url param
 export interface GetPostCommentsResponse {
-  comment: PostComment;
+  postComment: PostComment;
 }
