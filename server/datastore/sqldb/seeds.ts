@@ -8,6 +8,7 @@ import {
   Enrollment,
   Post,
   CoursePost,
+  StudentQuestion,
 } from "@greenboard/shared";
 
 // SEED_DEPARTMENT, SEED_DEPARTMENT2 belongs to SEED_SCHOOL
@@ -135,6 +136,15 @@ export const SEED_COURSE_POST: CoursePost = {
   title: "Second Post title",
   url: "https://www.google.com",
   content: "This is a post content",
+  postedAt: 2022,
+  courseId: SEED_COURSE.id,
+};
+
+export const SEED_STUDENT_QUESTION: StudentQuestion = {
+  id: "STUDENTQUESTION001",
+  title: "student question title",
+  url: "https://www.google.com",
+  content: "This is a question content",
   postedAt: 2022,
   courseId: SEED_COURSE.id,
 };

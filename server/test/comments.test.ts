@@ -368,7 +368,7 @@ describe("Posts tests", () => {
         )
         .set(studentAuthHeader)
         .expect(200);
-      expect(result.body.instructorAnswer).toHaveLength(2);
+      expect(result.body.instructorAnswer).toHaveLength(1);
       expect(result.body.instructorAnswer[0].comment).toBe(
         instructorAnswer.comment
       );
@@ -401,7 +401,7 @@ describe("Posts tests", () => {
         )
         .set(instructorAuthHeader)
         .expect(200);
-      expect(result.body.instructorAnswer).toHaveLength(2);
+      expect(result.body.instructorAnswer).toHaveLength(1);
       expect(result.body.instructorAnswer[0].comment).toBe(
         instructorAnswer.comment
       );
@@ -496,7 +496,7 @@ describe("Posts tests", () => {
         .expect(404);
       expect(result.body.instructorAnswer).toBeUndefined();
     });
-    it("Get Specific instructor answer as instructor in course (wrong post) -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 404", async () => {
+    it("Get Specific instructor answer as instructor in course (wrong question) -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 404", async () => {
       const result = await client
         .get(
           `/api/v1/course/${SEED_COURSE.id}/question/invalidQuestionId/answer/${instructorAnswerId}`
@@ -505,7 +505,7 @@ describe("Posts tests", () => {
         .expect(404);
       expect(result.body.instructorAnswer).toBeUndefined();
     });
-    it("Get Specific instructor answer as instructor in course (wrong comment) -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 404", async () => {
+    it("Get Specific instructor answer as instructor in course (wrong answer) -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 404", async () => {
       const result = await client
         .get(
           `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer/invalidAnswerId`
