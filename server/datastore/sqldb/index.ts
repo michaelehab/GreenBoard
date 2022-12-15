@@ -342,6 +342,7 @@ export class SQLDataStore implements DataStore {
   }
   async createPostComment(PostComment: PostComment): Promise<void> {
     await this.createComment(PostComment);
+    console.log(PostComment);
     await this.db.run(
       "INSERT INTO post_comments(id,userId,postId) VALUES (?,?,?)",
       PostComment.id,
@@ -359,7 +360,7 @@ export class SQLDataStore implements DataStore {
   }
   async listPostCommentsByPostId(PostId: string): Promise<PostComment[]> {
     return await this.db.all<PostComment[]>(
-      "SELECT * FROM comments JOIN post_comments ON post_comments.id = comments.id WHERE postId=? = ?",
+      "SELECT * FROM comments JOIN post_comments ON post_comments.id = comments.id WHERE postId=?",
       PostId
     );
   }

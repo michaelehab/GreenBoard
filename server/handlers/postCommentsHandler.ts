@@ -16,6 +16,7 @@ export const ListPostComments: ExpressHandlerWithParams<
   ListPostCommentRequest,
   ListPostCommentResponse
 > = async (req, res) => {
+  console.log(req.params.postId);
   if (!req.params.postId) {
     return res.status(400).send({ error: "postId is required" });
   }
@@ -83,13 +84,14 @@ export const CreatePostComment: ExpressHandlerWithParams<
     return res.status(404).send({ error: "Post not found" });
   }
 
-  const existingInstructor = await db.getInstructorById(res.locals.userId);
-  if (!existingInstructor) {
-    return res.status(403).send({ error: "Instructor is not valid" });
+  const existingUser = await db.getUserById(res.locals.userId);
+  console.log("hamada");
+  if (!existingUser) {
+    return res.status(403).send({ error: "user is not valid" });
   }
 
   const existingEnrollment = await db.checkEnrollment(
-    existingInstructor.id,
+    existingUser.id,
     req.params.courseId
   );
 

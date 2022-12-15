@@ -13,8 +13,8 @@ const router = Router();
 
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
-router.post("/comment", CreatePostComment);
-router.get("/comment", ListPostComments);
-router.get("/comment/:comment", GetPostComment);
+router.post("/:courseId/post/:postId/comment", CreatePostComment);
+router.get("/:courseId/post/:postId/comment", ListPostComments);
+router.get("/:courseId/post/:postId/comment/:comment", GetPostComment);
 
 export default router;

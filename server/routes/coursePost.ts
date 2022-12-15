@@ -8,15 +8,15 @@ import {
   parseJwtMiddleware,
   requireJwtMiddleware,
 } from "../middlewares/authMiddleware";
-import postComment from "./postComment";
+import post_comment from "./post_comment";
 
 const router = Router();
 
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
+router.use(post_comment);
 router.post("/:courseId/post", CreateCoursePost);
 router.get("/:courseId/post", ListCoursePosts);
-router.use("/:courseId/post/:postId", postComment);
 router.get("/:courseId/post/:postId", GetCoursePost);
 
 export default router;
