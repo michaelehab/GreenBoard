@@ -12,6 +12,7 @@ import {
   StudentQuestion,
   Comment,
   PostComment,
+  InstructorAnswer,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -387,7 +388,33 @@ export class SQLDataStore implements DataStore {
       PostId
     );
   }
-
+  async createInstructorAnswer(
+    InstructorAnswer: InstructorAnswer
+  ): Promise<void> {
+    await this.createComment(InstructorAnswer);
+    await this.db.run(
+      "INSERT INTO instructors_answers VALUES(id,instructorId,questionId) (?,?,?)",
+      InstructorAnswer.id,
+      InstructorAnswer.instructorId,
+      InstructorAnswer.questionId
+    );
+  }
+  async getInstructorAnsweById(
+    InstructorAnswerId: string
+  ): Promise<InstructorAnswer | undefined> {
+    return await this.db.get<InstructorAnswer>(
+      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE comments.id = ?",
+      InstructorAnswerId
+    );
+  }
+  async listInstructorAnswerByPostId(
+    PostId: string
+  ): Promise<InstructorAnswer[]> {
+    return await this.db.all<InstructorAnswer[]>(
+      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE postId=?",
+      PostId
+    );
+  }
   private seedDb = async () => {
     SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);
     await this.createCollege(SEED_COLLEGE);

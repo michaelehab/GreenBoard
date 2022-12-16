@@ -337,7 +337,6 @@ describe("Posts tests", () => {
         .send({})
         .set(instructorAuthHeader)
         .expect(400);
-      expect(result.body.instructorAnswer).toBeUndefined();
     });
 
     it("Send empty object as student in course -- POST /api/v1/course/:courseId/question/:id/answer returns 400", async () => {
