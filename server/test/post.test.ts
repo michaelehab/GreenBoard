@@ -307,7 +307,7 @@ describe("Posts tests", () => {
         .get(`/api/v1/course/${SEED_COURSE.id}/question`)
         .set(studentAuthHeader)
         .expect(200);
-      expect(result.body.questions).toHaveLength(1);
+      expect(result.body.questions).toHaveLength(2);
       expect(result.body.questions[0].title).toBe(coursePost.title);
       expect(result.body.questions[0].url).toBe(coursePost.url);
     });
@@ -333,7 +333,7 @@ describe("Posts tests", () => {
         .get(`/api/v1/course/${SEED_COURSE.id}/question`)
         .set(instructorAuthHeader)
         .expect(200);
-      expect(result.body.questions).toHaveLength(1);
+      expect(result.body.questions).toHaveLength(2);
       expect(result.body.questions[0].title).toBe(coursePost.title);
       expect(result.body.questions[0].url).toBe(coursePost.url);
     });
