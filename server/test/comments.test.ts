@@ -2,6 +2,7 @@ import {
   CourseEnrollRequest,
   CreateCommentRequest,
   CreateCourseRequest,
+  CreateInstructorAnswerRequest,
 } from "@greenboard/shared";
 import supertest from "supertest";
 import {
@@ -23,9 +24,13 @@ describe("Posts tests", () => {
   let studentNotInCourseAuthHeader: object;
   let instructorNotInCourseAuthHeader: object;
   let postCommentId: string;
+  let instructorAnswerId: string;
 
   const postComment: CreateCommentRequest = {
     comment: "This is a post comment",
+  };
+  const instructorAnswer: CreateInstructorAnswerRequest = {
+    comment: "This is an instructor answer",
   };
 
   beforeAll(async () => {
@@ -94,13 +99,24 @@ describe("Posts tests", () => {
       expect(result.body.postComment).toBeUndefined();
     });
 
-    it("Send empty object as instructor -- POST /api/v1/course/:courseId/post/:id/comment returns 400", async () => {
+    it("Send empty object as instructor in course -- POST /api/v1/course/:courseId/post/:id/comment returns 400", async () => {
       const result = await client
         .post(
           `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
         )
         .send({})
         .set(instructorAuthHeader)
+        .expect(400);
+      expect(result.body.postComment).toBeUndefined();
+    });
+
+    it("Send empty object as student in course -- POST /api/v1/course/:courseId/post/:id/comment returns 400", async () => {
+      const result = await client
+        .post(
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
+        )
+        .send({})
+        .set(studentAuthHeader)
         .expect(400);
       expect(result.body.postComment).toBeUndefined();
     });
@@ -112,19 +128,6 @@ describe("Posts tests", () => {
         )
         .send(postComment)
         .expect(401);
-      expect(result.body.postComment).toBeUndefined();
-    });
-
-    it("Create a new post comment with missing field as instructor -- POST /api/v1/course/:courseId/post/:id/comment returns 400", async () => {
-      const result = await client
-        .post(
-          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment`
-        )
-        .send({
-          postId: SEED_COURSE_POST.id,
-        })
-        .set(instructorAuthHeader)
-        .expect(400);
       expect(result.body.postComment).toBeUndefined();
     });
 
@@ -181,7 +184,33 @@ describe("Posts tests", () => {
     it("Get Posts comments as instructor invalid post -- GET /api/v1/course/:courseId/post/:id/comment returns 404", async () => {
       const result = await client
         .get(`/api/v1/course/${SEED_COURSE.id}/post/InvalidPostId/comment`)
-        .set(instructorNotInCourseAuthHeader)
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.postComment).toBeUndefined();
+    });
+    it("Get Posts comments as instructor invalid course -- GET /api/v1/course/:courseId/post/:id/comment returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/invalidCourseId/post/${SEED_COURSE_POST.id}/comment`
+        )
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.postComment).toBeUndefined();
+    });
+
+    it("Get Posts comments as student invalid post -- GET /api/v1/course/:courseId/post/:id/comment returns 404", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/post/InvalidPostId/comment`)
+        .set(studentAuthHeader)
+        .expect(404);
+      expect(result.body.postComment).toBeUndefined();
+    });
+    it("Get Posts comments as student invalid course -- GET /api/v1/course/:courseId/post/:id/comment returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/invalidCourseId/post/${SEED_COURSE_POST.id}/comment`
+        )
+        .set(studentAuthHeader)
         .expect(404);
       expect(result.body.postComment).toBeUndefined();
     });
@@ -214,6 +243,33 @@ describe("Posts tests", () => {
         .expect(200);
       expect(result.body.postComment.comment).toBe(postComment.comment);
     });
+    it("Get Specific Post comment as instructor in course (wrong course) -- GET /api/v1/course/:courseId/post/:id/comment/:id returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/InvalidCourseId/post/${SEED_COURSE_POST.id}/comment/${postCommentId}`
+        )
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.postComment).toBeUndefined();
+    });
+    it("Get Specific Post comment as instructor in course (wrong post) -- GET /api/v1/course/:courseId/post/:id/comment/:id returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/post/InvalidPostId/comment/${postCommentId}`
+        )
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.postComment).toBeUndefined();
+    });
+    it("Get Specific Post comment as instructor in course (wrong comment) -- GET /api/v1/course/:courseId/post/:id/comment/:id returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/post/${SEED_COURSE_POST.id}/comment/invalidCommentId`
+        )
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.postComment).toBeUndefined();
+    });
     it("Get Specific Post comment as instructor not in course -- GET /api/v1/course/:courseId/post/:id/comment/:id returns 403", async () => {
       const result = await client
         .get(
@@ -231,6 +287,250 @@ describe("Posts tests", () => {
         )
         .expect(401);
       expect(result.body.postComment).toBeUndefined();
+    });
+  });
+
+  describe("Creating Instructor Answers", () => {
+    it("Create a new instructor answer as a student -- POST /api/v1/course/:courseId/question/:id/answer returns 403", async () => {
+      const result = await client
+        .post(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .send(instructorAnswer)
+        .set(studentAuthHeader)
+        .expect(403);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Create a new instructor answer as instructor -- POST /api/v1/course/:courseId/question/:id/answer returns 200", async () => {
+      const result = await client
+        .post(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .send(instructorAnswer)
+        .set(instructorAuthHeader)
+        .expect(200);
+      expect(result.body.instructorAnswer).toBeDefined();
+      expect(result.body.instructorAnswer.comment).toEqual(
+        instructorAnswer.comment
+      );
+
+      instructorAnswerId = result.body.instructorAnswer.id;
+    });
+
+    it("Create a new instructor answer as instructor not in course -- POST /api/v1/course/:courseId/question/:id/answer returns 403", async () => {
+      const result = await client
+        .post(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .send(instructorAnswer)
+        .set(instructorNotInCourseAuthHeader)
+        .expect(403);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Send empty object as instructor in course -- POST /api/v1/course/:courseId/question/:id/answer returns 400", async () => {
+      const result = await client
+        .post(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .send({})
+        .set(instructorAuthHeader)
+        .expect(400);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Send empty object as student in course -- POST /api/v1/course/:courseId/question/:id/answer returns 400", async () => {
+      const result = await client
+        .post(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .send({})
+        .set(studentAuthHeader)
+        .expect(400);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Create a new instructor answer as unauthorized -- POST /api/v1/course/:courseId/question/:id/answer returns 401", async () => {
+      const result = await client
+        .post(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .send(instructorAnswer)
+        .expect(401);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Get instructor answers student in course-- GET /api/v1/course/:courseId/question/:id/answer returns 200", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .set(studentAuthHeader)
+        .expect(200);
+      expect(result.body.instructorAnswer).toHaveLength(1);
+      expect(result.body.instructorAnswer[0].comment).toBe(
+        instructorAnswer.comment
+      );
+    });
+
+    it("Get instructor answer as student not in course -- GET /api/v1/course/:courseId/question/:id/answer returns 403", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .set(studentNotInCourseAuthHeader)
+        .expect(403);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Get instructor answer as student invalid post -- GET /api/v1/course/:courseId/question/:id/answer returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/invalidQuestionId/answer`
+        )
+        .set(studentAuthHeader)
+        .expect(404);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Get instructor answer as instructor in course -- GET /api/v1/course/:courseId/question/:id/answer returns 200", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .set(instructorAuthHeader)
+        .expect(200);
+      expect(result.body.instructorAnswer).toHaveLength(1);
+      expect(result.body.instructorAnswer[0].comment).toBe(
+        instructorAnswer.comment
+      );
+    });
+
+    it("Get instructor answer as instructor not in course -- GET /api/v1/course/:courseId/question/:id/answer returns 403", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .set(instructorNotInCourseAuthHeader)
+        .expect(403);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Get instructor answer as instructor invalid post -- GET /api/v1/course/:courseId/question/:id/answer returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/invalidQuestionId/answer`
+        )
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+    it("Get instructor answer as instructor invalid course -- GET /api/v1/course/:courseId/question/:id/answer returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/invalidCourseId/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Get instructor answer as student invalid post -- GET /api/v1/course/:courseId/question/:id/answer returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/invalidQuestionId/answer`
+        )
+        .set(studentAuthHeader)
+        .expect(404);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+    it("Get instructor answer as student invalid course -- GET /api/v1/course/:courseId/question/:id/answer returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/invalidCourseId/question/${SEED_COURSE_POST.id}/answer`
+        )
+        .set(studentAuthHeader)
+        .expect(404);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Get Specific instructor answer as student in course -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 200", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer/${instructorAnswerId}`
+        )
+        .set(studentAuthHeader)
+        .expect(200);
+      expect(result.body.instructorAnswer.comment).toBe(
+        instructorAnswer.comment
+      );
+    });
+    it("Get Specific instructor answer as student not in course -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 403", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer/${instructorAnswerId}`
+        )
+        .set(studentNotInCourseAuthHeader)
+        .expect(403);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Get Specific instructor answer as instructor in course -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 200", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer/${instructorAnswerId}`
+        )
+        .set(instructorAuthHeader)
+        .expect(200);
+      expect(result.body.instructorAnswer.comment).toBe(
+        instructorAnswer.comment
+      );
+    });
+    it("Get Specific instructor answer as instructor in course (wrong course) -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/invalidCourseId/question/${SEED_COURSE_POST.id}/answer/${instructorAnswerId}`
+        )
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+    it("Get Specific instructor answer as instructor in course (wrong question) -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/invalidQuestionId/answer/${instructorAnswerId}`
+        )
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+    it("Get Specific instructor answer as instructor in course (wrong answer) -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 404", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer/invalidAnswerId`
+        )
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+    it("Get Specific instructor answer as instructor not in course -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 403", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer/${instructorAnswerId}`
+        )
+        .set(instructorNotInCourseAuthHeader)
+        .expect(403);
+      expect(result.body.instructorAnswer).toBeUndefined();
+    });
+
+    it("Get Specific instructor answer as unauthorized -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 401", async () => {
+      const result = await client
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer/${instructorAnswerId}`
+        )
+        .expect(401);
+      expect(result.body.instructorAnswer).toBeUndefined();
     });
   });
 });
