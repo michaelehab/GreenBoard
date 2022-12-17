@@ -14,6 +14,7 @@ import {
   SEED_STUDENT,
   SEED_STUDENT2,
   SEED_STUDENT_PASSWORD,
+  SEED_STUDENT_QUESTION,
 } from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
@@ -478,7 +479,7 @@ describe("Posts tests", () => {
     it("Get Specific instructor answer as instructor in course -- GET /api/v1/course/:courseId/question/:id/answer/:id returns 200", async () => {
       const result = await client
         .get(
-          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_COURSE_POST.id}/answer/${instructorAnswerId}`
+          `/api/v1/course/${SEED_COURSE.id}/question/${SEED_STUDENT_QUESTION.id}/answer/${instructorAnswerId}`
         )
         .set(instructorAuthHeader)
         .expect(200);

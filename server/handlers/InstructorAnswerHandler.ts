@@ -25,16 +25,14 @@ export const ListInstructorAnswer: ExpressHandlerWithParams<
   }
   const existingPost = await db.getstuQuestionById(req.params.questionId);
   if (!existingPost) {
-    return res.status(404).send({ error: "questionId not found" });
+    return res.status(404).send({ error: "question not found" });
   }
   const existingCourse = await db.getCourseById(req.params.courseId);
   if (!existingCourse) {
     return res.status(404).send({ error: "course not found" });
   }
 
-  const existingInstructor = await db.getInstructorById(
-    res.locals.instructorId
-  );
+  const existingInstructor = await db.getUserById(res.locals.userId);
   if (!existingInstructor) {
     return res.status(404).send({ error: "User is not found" });
   }
