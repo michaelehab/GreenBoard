@@ -92,44 +92,53 @@ describe("Quiz and Quiz's Question tests", () => {
         .send(quiz1)
         .set(instructorAuthHeader)
         .expect(200);
-      expect(result.body.quiz1).toBeDefined();
-      expect(result.body.quiz1.quiz.name).toEqual(quiz1.quiz.name);
-      expect(result.body.quiz1.quiz.isActive).toEqual(quiz1.quiz.isActive);
-      expect(result.body.quiz1.quiz.quizDate).toEqual(quiz1.quiz.quizDate);
+      expect(result.body).toBeDefined();
+      expect(result.body.quiz.name).toEqual(quiz1.quiz.name);
+      expect(result.body.quiz.isActive).toEqual(quiz1.quiz.isActive);
+      expect(result.body.quiz.quizDate).toEqual(quiz1.quiz.quizDate);
       for (let i = 0; i < quiz1.questions.length; i++) {
-        expect(result.body.quiz1.questions[i].question_number).toEqual(
+        expect(result.body.questions[i].question_number).toEqual(
           quiz1.questions[i].question_number
         );
-        expect(result.body.quiz1.questions[i].question).toEqual(
+        expect(result.body.questions[i].question).toEqual(
           quiz1.questions[i].question
         );
-        expect(result.body.quiz1.questions[i].choiceA).toEqual(
+        expect(result.body.questions[i].choiceA).toEqual(
           quiz1.questions[i].choiceA
         );
-        expect(result.body.quiz1.questions[i].choiceB).toEqual(
+        expect(result.body.questions[i].choiceB).toEqual(
           quiz1.questions[i].choiceB
         );
-        expect(result.body.quiz1.questions[i].choiceC).toEqual(
+        expect(result.body.questions[i].choiceC).toEqual(
           quiz1.questions[i].choiceC
         );
-        expect(result.body.quiz1.questions[i].choiceD).toEqual(
+        expect(result.body.questions[i].choiceD).toEqual(
           quiz1.questions[i].choiceD
         );
-        expect(result.body.quiz1.questions[i].rightChoice).toEqual(
+        expect(result.body.questions[i].rightChoice).toEqual(
           quiz1.questions[i].rightChoice
         );
-        expect(result.body.quiz1.questions[i].weight).toEqual(
+        expect(result.body.questions[i].weight).toEqual(
           quiz1.questions[i].weight
         );
       }
     });
+    it("create a new quiz as an instructor in invalid course Id -- POST /api/v1/course/:courseId/quiz returns 404", async () => {
+      const result = await client
+        .post(`/api/v1/course/invalidCourseId/quiz`)
+        .send(quiz1)
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body).toBeUndefined();
+    });
+
     it("create a new quiz as an instructor not in course -- POST /api/v1/course/:courseId/quiz returns 403", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz`)
         .send(quiz1)
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
-      expect(result.body.quiz1).toBeUndefined();
+      expect(result.body).toBeUndefined();
     });
     it("create a new quiz as a student -- POST /api/v1/course/:courseId/quiz returns 403", async () => {
       const result = await client
@@ -137,7 +146,7 @@ describe("Quiz and Quiz's Question tests", () => {
         .send(quiz1)
         .set(studentAuthHeader)
         .expect(403);
-      expect(result.body.quiz1).toBeUndefined();
+      expect(result.body).toBeUndefined();
     });
     it("Send empty object as instructor in course -- POST /api/v1/course/:courseId/quiz returns 400", async () => {
       const result = await client
@@ -145,20 +154,24 @@ describe("Quiz and Quiz's Question tests", () => {
         .send({})
         .set(instructorAuthHeader)
         .expect(400);
-      expect(result.body.quiz1).toBeUndefined();
+      expect(result.body).toBeUndefined();
     });
     it("create a new quiz as unauthorized -- POST /api/v1/course/:courseId/quiz returns 401", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz`)
         .send(quiz1)
         .expect(401);
-      expect(result.body.quiz1).toBeUndefined();
+      expect(result.body).toBeUndefined();
     });
     it("create a new quiz as an instructor in course with missing field in a question-- POST /api/v1/course/:courseId/quiz returns 400", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz`)
         .send({
-          quiz: { name: "MidTerm Quiz", isActive: false },
+          quiz: {
+            name: "MidTerm Quiz",
+            isActive: false,
+            quizDate: new Date("2023-03-07"),
+          },
           questions: [
             {
               question: "How are you?",
@@ -173,7 +186,21 @@ describe("Quiz and Quiz's Question tests", () => {
         })
         .set(instructorAuthHeader)
         .expect(400);
-      expect(result.body.quiz1).toBeUndefined();
+      expect(result.body).toBeUndefined();
+    });
+    it("create a new quiz as an instructor in course with missing field -- POST /api/v1/course/:courseId/quiz returns 400", async () => {
+      const result = await client
+        .post(`/api/v1/course/${SEED_COURSE.id}/quiz`)
+        .send({
+          quiz: {
+            name: "MidTerm Quiz",
+            isActive: false,
+            quizDate: new Date("2023-03-07"),
+          },
+        })
+        .set(instructorAuthHeader)
+        .expect(400);
+      expect(result.body).toBeUndefined();
     });
     it("create a new quiz as an instructor in course with missing field in a quiz-- POST /api/v1/course/:courseId/quiz returns 400", async () => {
       const result = await client
@@ -195,7 +222,7 @@ describe("Quiz and Quiz's Question tests", () => {
         })
         .set(instructorAuthHeader)
         .expect(400);
-      expect(result.body.quiz1).toBeUndefined();
+      expect(result.body).toBeUndefined();
     });
   });
 });
