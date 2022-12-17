@@ -71,7 +71,7 @@ CREATE TABLE `posts` (
 );
 
 CREATE TABLE `students_questions` (
-  `id` varchar(255) NOT NULL,
+  `id` varchar(255)  NOT NULL PRIMARY KEY,
   FOREIGN KEY (`id`) REFERENCES `posts` (`id`)
 );
 

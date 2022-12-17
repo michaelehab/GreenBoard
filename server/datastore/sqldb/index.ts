@@ -12,6 +12,7 @@ import {
   StudentQuestion,
   Comment,
   PostComment,
+  InstructorAnswer,
   Quiz,
   QuizQuestion,
 } from "@greenboard/shared";
@@ -390,6 +391,60 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async createInstructorAnswer(
+    InstructorAnswer: InstructorAnswer
+  ): Promise<void> {
+    await this.createComment(InstructorAnswer);
+    await this.db.run(
+      "INSERT INTO instructors_answers(id,instructorId,questionId) VALUES (?,?,?)",
+      InstructorAnswer.id,
+      InstructorAnswer.instructorId,
+      InstructorAnswer.questionId
+    );
+  }
+  async getInstructorAnsweById(
+    AnswerId: string
+  ): Promise<InstructorAnswer | undefined> {
+    return await this.db.get<InstructorAnswer>(
+      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE comments.id = ?",
+      AnswerId
+    );
+  }
+  async listInstructorAnswerByPostId(
+    questionId: string
+  ): Promise<InstructorAnswer[]> {
+    return await this.db.all<InstructorAnswer[]>(
+      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE questionId=?",
+      questionId
+    );
+  }
+  async createInstructorAnswer(
+    InstructorAnswer: InstructorAnswer
+  ): Promise<void> {
+    await this.createComment(InstructorAnswer);
+    await this.db.run(
+      "INSERT INTO instructors_answers(id,instructorId,questionId) VALUES (?,?,?)",
+      InstructorAnswer.id,
+      InstructorAnswer.instructorId,
+      InstructorAnswer.questionId
+    );
+  }
+  async getInstructorAnsweById(
+    AnswerId: string
+  ): Promise<InstructorAnswer | undefined> {
+    return await this.db.get<InstructorAnswer>(
+      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE comments.id = ?",
+      AnswerId
+    );
+  }
+  async listInstructorAnswerByPostId(
+    questionId: string
+  ): Promise<InstructorAnswer[]> {
+    return await this.db.all<InstructorAnswer[]>(
+      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE questionId=?",
+      questionId
+    );
+  }
   async createQuiz(quiz: Quiz): Promise<void> {
     await this.db.run(
       "INSERT INTO quizzes(id,name,quizDate,isActive,courseId) VALUES(?,?,?,?,?)",
