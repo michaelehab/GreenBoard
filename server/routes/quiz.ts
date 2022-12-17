@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CreateQuiz } from "../handlers/quizHandler";
+import { CreateQuiz, getQuiz } from "../handlers/quizHandler";
 import {
   parseJwtMiddleware,
   requireJwtMiddleware,
@@ -10,5 +10,6 @@ const router = Router();
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
 router.post("/:courseId/quiz", CreateQuiz);
+router.get("/:courseId/quiz/:quizId", getQuiz);
 
 export default router;

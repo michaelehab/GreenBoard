@@ -4,6 +4,8 @@ import {
   CreateQuizResponse,
   Quiz,
   QuizQuestion,
+  GetQuizRequest,
+  GetQuizResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -18,7 +20,7 @@ export const CreateQuiz: ExpressHandlerWithParams<
     return res.status(400).send({ error: "All fields are required" });
   }
 
-  if (!quiz.name || !quiz.quizDate) {
+  if (!quiz.name || !quiz.quizDate || quiz.isActive === undefined) {
     return res.status(400).send({ error: "All fields are required" });
   }
 
@@ -91,5 +93,65 @@ export const CreateQuiz: ExpressHandlerWithParams<
   return res.status(200).send({
     quiz: quiz1,
     questions: questionsArr,
+  });
+};
+
+export const getQuiz: ExpressHandlerWithParams<
+  { courseId: string; quizId: string },
+  GetQuizRequest,
+  GetQuizResponse
+> = async (req, res) => {
+  if (!req.params.courseId) {
+    return res.status(400).send({ error: "CourseId is required" });
+  }
+
+  if (!req.params.quizId) {
+    return res.status(400).send({ error: "quizId is required" });
+  }
+
+  const existingCourse = await db.getCourseById(req.params.courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
+  }
+
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "User is not found" });
+  }
+
+  const existingEnrollment = await db.checkEnrollment(
+    existingUser.id,
+    req.params.courseId
+  );
+
+  if (!existingEnrollment) {
+    return res.status(403).send({ error: "Not enrolled in this course" });
+  }
+
+  const quiz1 = await db.getQuizById(req.params.quizId);
+  if (!quiz1) {
+    return res.status(404).send({ error: "Quiz not found" });
+  }
+
+  if (await db.getStudentById(existingUser.id)) {
+    if (!quiz1.isActive) {
+      return res.status(403).send({ error: "Quiz isn't active" });
+    }
+    const grade = await db.getGrades(existingUser.id, req.params.quizId);
+    if (grade) {
+      return res
+        .status(403)
+        .send({ error: "Student has taken this quiz before" });
+    }
+  }
+
+  const questions = await db.getQuizQuestionsByQuizId(req.params.quizId);
+  if (!questions) {
+    return res.status(404).send({ error: "Quiz Questions not found" });
+  }
+
+  return res.send({
+    quiz: quiz1,
+    questions: questions,
   });
 };

@@ -253,3 +253,9 @@ export interface CreateQuizResponse {
   quiz: Quiz;
   questions: QuizQuestion[];
 }
+
+export interface GetQuizRequest {}
+export interface GetQuizResponse {
+  quiz: Quiz;
+  questions: QuizQuestion[];
+}
