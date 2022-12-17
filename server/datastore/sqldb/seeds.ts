@@ -9,6 +9,8 @@ import {
   Post,
   CoursePost,
   StudentQuestion,
+  Quiz,
+  QuizQuestion,
 } from "@greenboard/shared";
 
 // SEED_DEPARTMENT, SEED_DEPARTMENT2 belongs to SEED_SCHOOL
@@ -148,3 +150,47 @@ export const SEED_STUDENT_QUESTION: StudentQuestion = {
   postedAt: 2022,
   courseId: SEED_COURSE.id,
 };
+
+export const SEED_QUIZ: Quiz = {
+  id: "Quiz0001",
+  name: "Final Quiz",
+  isActive: false,
+  quizDate: new Date("2023-03-08"),
+  courseId: SEED_COURSE.id,
+};
+
+export const SEED_QUIZ_QUESTIONS: QuizQuestion[] = [
+  {
+    quizId: SEED_QUIZ.id,
+    question: "How are you?",
+    choiceA: "happy",
+    choiceB: "Very happy",
+    choiceC: "Extremely happy",
+    choiceD: "So happy",
+    rightChoice: "A",
+    question_number: 1,
+    weight: 1,
+  },
+  {
+    quizId: SEED_QUIZ.id,
+    question: "How are you?",
+    choiceA: "happy",
+    choiceB: "Very happy",
+    choiceC: "Extremely happy",
+    choiceD: "So happy",
+    rightChoice: "A",
+    question_number: 2,
+    weight: 2,
+  },
+  {
+    quizId: SEED_QUIZ.id,
+    question: "How are you?",
+    choiceA: "happy",
+    choiceB: "Very happy",
+    choiceC: "Extremely happy",
+    choiceD: "So happy",
+    rightChoice: "A",
+    question_number: 3,
+    weight: 3,
+  },
+];

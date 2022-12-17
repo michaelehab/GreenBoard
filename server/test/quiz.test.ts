@@ -22,7 +22,7 @@ describe("Quiz and Quiz's Question tests", () => {
   const quiz1: CreateQuizRequest = {
     quiz: {
       name: "MidTerm Quiz",
-      isActive: false,
+      isActive: true,
       quizDate: new Date("2023-03-07"),
     },
     questions: [

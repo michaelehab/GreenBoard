@@ -41,6 +41,8 @@ import {
   SEED_INSTRUCTOR_ENROLLMENT,
   SEED_COURSE_POST,
   SEED_STUDENT_QUESTION,
+  SEED_QUIZ,
+  SEED_QUIZ_QUESTIONS,
 } from "./seeds";
 
 export class SQLDataStore implements DataStore {
@@ -466,5 +468,11 @@ export class SQLDataStore implements DataStore {
     await this.createCoursePost(SEED_COURSE_POST);
 
     await this.createStuQuestion(SEED_STUDENT_QUESTION);
+
+    await this.createQuiz(SEED_QUIZ);
+
+    for (let i = 0; i < SEED_QUIZ_QUESTIONS.length; i++) {
+      await this.createQuizQuestion(SEED_QUIZ_QUESTIONS[i]);
+    }
   };
 }
