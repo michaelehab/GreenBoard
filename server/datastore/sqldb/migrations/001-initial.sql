@@ -57,7 +57,6 @@ CREATE TABLE `quizzes_questions` (
   `rightChoice` char NOT NULL,
   `quizId` varchar(255),
   `weight` int,
-  `isMCQ` boolean,
   FOREIGN KEY (`quizId`) REFERENCES `quizzes` (`id`)
 );
 
