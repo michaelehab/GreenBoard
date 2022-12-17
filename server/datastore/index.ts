@@ -14,6 +14,8 @@ import { StuQuestionDao } from "./dao/stuQuestionDao";
 import { CommentDao } from "./dao/commentDao";
 import { PostCommentDao } from "./dao/postCommentDao";
 import { instructorAnswerDao } from "./dao/InstructorAnswerDao";
+import { QuizDao } from "./dao/quizDao";
+import { quizQuestionsDao } from "./dao/quizQuestionsDao";
 export interface DataStore
   extends UserDao,
     StudentDao,
@@ -28,7 +30,9 @@ export interface DataStore
     StuQuestionDao,
     CommentDao,
     PostCommentDao,
-    instructorAnswerDao {}
+    instructorAnswerDao,
+    quizQuestionsDao,
+    QuizDao {}
 
 export let db: DataStore;
 

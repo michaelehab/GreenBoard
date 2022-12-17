@@ -13,6 +13,8 @@ import {
   Comment,
   PostComment,
   InstructorAnswer,
+  Quiz,
+  QuizQuestion,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -388,6 +390,7 @@ export class SQLDataStore implements DataStore {
       PostId
     );
   }
+
   async createInstructorAnswer(
     InstructorAnswer: InstructorAnswer
   ): Promise<void> {
@@ -415,6 +418,59 @@ export class SQLDataStore implements DataStore {
       questionId
     );
   }
+  async createInstructorAnswer(
+    InstructorAnswer: InstructorAnswer
+  ): Promise<void> {
+    await this.createComment(InstructorAnswer);
+    await this.db.run(
+      "INSERT INTO instructors_answers(id,instructorId,questionId) VALUES (?,?,?)",
+      InstructorAnswer.id,
+      InstructorAnswer.instructorId,
+      InstructorAnswer.questionId
+    );
+  }
+  async getInstructorAnsweById(
+    AnswerId: string
+  ): Promise<InstructorAnswer | undefined> {
+    return await this.db.get<InstructorAnswer>(
+      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE comments.id = ?",
+      AnswerId
+    );
+  }
+  async listInstructorAnswerByPostId(
+    questionId: string
+  ): Promise<InstructorAnswer[]> {
+    return await this.db.all<InstructorAnswer[]>(
+      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE questionId=?",
+      questionId
+    );
+  }
+  async createQuiz(quiz: Quiz): Promise<void> {
+    await this.db.run(
+      "INSERT INTO quizzes(id,name,quizDate,isActive,courseId) VALUES(?,?,?,?,?)",
+      quiz.id,
+      quiz.name,
+      quiz.quizDate,
+      quiz.isActive,
+      quiz.courseId
+    );
+  }
+
+  async createQuizQuestion(quizQuestion: QuizQuestion): Promise<void> {
+    await this.db.run(
+      "INSERT INTO quizzes_questions(question_number,question,choiceA,choiceB,choiceC,choiceD,rightChoice,quizId,weight) VALUES (?,?,?,?,?,?,?,?,?)",
+      quizQuestion.question_number,
+      quizQuestion.question,
+      quizQuestion.choiceA,
+      quizQuestion.choiceB,
+      quizQuestion.choiceC,
+      quizQuestion.choiceD,
+      quizQuestion.rightChoice,
+      quizQuestion.quizId,
+      quizQuestion.weight
+    );
+  }
+
   private seedDb = async () => {
     SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);
     await this.createCollege(SEED_COLLEGE);

@@ -102,4 +102,5 @@ export interface QuizQuestion {
   choiceD: string;
   rightChoice: string;
   quizId: string;
+  weight: number;
 }
