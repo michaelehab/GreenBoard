@@ -3,7 +3,7 @@ import { InstructorAnswer } from "@greenboard/shared";
 export interface instructorAnswerDao {
   createInstructorAnswer(InstructorAnswer: InstructorAnswer): Promise<void>;
   getInstructorAnsweById(
-    InstructorAnswerId: string
+    AnswerId: string
   ): Promise<InstructorAnswer | undefined>;
-  listInstructorAnswerByPostId(PostId: string): Promise<InstructorAnswer[]>;
+  listInstructorAnswerByPostId(questionId: string): Promise<InstructorAnswer[]>;
 }

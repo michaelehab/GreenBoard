@@ -12,43 +12,47 @@ import { db } from "../datastore";
 import crypto from "crypto";
 
 export const ListInstructorAnswer: ExpressHandlerWithParams<
-  { postId: string; courseId: string },
+  { courseId: string; questionId: string },
   ListInstructorsAnswersRequest,
   ListInstructorsAnswersResponse
 > = async (req, res) => {
-  if (!req.params.postId) {
-    return res.status(400).send({ error: "postId is required" });
+  if (!req.params.questionId) {
+    return res.status(400).send({ error: "questionId is required" });
   }
   if (!req.params.courseId) {
-    console.log("Missing stdudentQuestionId!");
-    return res.status(400).send({ error: "stdudentQuestionId is required" });
+    console.log("Missing courseId!");
+    return res.status(400).send({ error: "courseId is required" });
   }
-  const existingPost = await db.getstuQuestionById(req.params.postId);
+  const existingPost = await db.getstuQuestionById(req.params.questionId);
   if (!existingPost) {
-    return res.status(404).send({ error: "Post not found" });
+    return res.status(404).send({ error: "questionId not found" });
   }
   const existingCourse = await db.getCourseById(req.params.courseId);
   if (!existingCourse) {
-    return res.status(404).send({ error: "stdudentQuestion not found" });
+    return res.status(404).send({ error: "course not found" });
   }
 
-  const existingUser = await db.getInstructorById(res.locals.instructorId);
-  if (!existingUser) {
+  const existingInstructor = await db.getInstructorById(
+    res.locals.instructorId
+  );
+  if (!existingInstructor) {
     return res.status(404).send({ error: "User is not found" });
   }
   const existingEnrollment = await db.checkEnrollment(
-    existingUser.id,
+    existingInstructor.id,
     req.params.courseId
   );
   if (!existingEnrollment) {
     return res.status(403).send({ error: "Not enrolled in this course" });
   }
   return res.send({
-    instructorAnswer: await db.listInstructorAnswerByPostId(req.params.postId),
+    instructorAnswer: await db.listInstructorAnswerByPostId(
+      req.params.questionId
+    ),
   });
 };
 export const createInstructorAnswer: ExpressHandlerWithParams<
-  { courseId: string; postId: string },
+  { courseId: string; questionId: string },
   CreateCommentRequest,
   CreateInstructorAnswerResponse
 > = async (req, res) => {
@@ -57,20 +61,22 @@ export const createInstructorAnswer: ExpressHandlerWithParams<
     return res.status(400).send({ error: "All fields are required" });
   }
 
-  const existingInstructor = await db.getInstructorById(res.locals.userId);
+  const existingInstructor = await db.getInstructorById(
+    res.locals.instructorId
+  );
   if (!existingInstructor) {
     return res.status(403).send({ error: "Instructor is not valid" });
   }
 
-  //if (!req.params.courseId) {
-  //console.log("Missing CourseId!");
-  //return res.status(400).send({ error: "CourseId is required" });
-  //}
+  if (!req.params.courseId) {
+    console.log("Missing CourseId!");
+    return res.status(400).send({ error: "CourseId is required" });
+  }
 
-  //if (!req.params.postId) {
-  //console.log("Missing PostId!");
-  //return res.status(400).send({ error: "PostId is required" });
-  //}
+  if (!req.params.questionId) {
+    console.log("Missing questionId!");
+    return res.status(400).send({ error: "questionId is required" });
+  }
 
   const existingCourse = await db.getCourseById(req.params.courseId);
   if (!existingCourse) {
@@ -78,7 +84,7 @@ export const createInstructorAnswer: ExpressHandlerWithParams<
   }
 
   const existingstudentQuestion = await db.getstuQuestionById(
-    req.params.postId
+    req.params.questionId
   );
   if (!existingstudentQuestion) {
     return res.status(404).send({ error: "Question not found" });
@@ -96,7 +102,7 @@ export const createInstructorAnswer: ExpressHandlerWithParams<
     comment,
     postedAt: Date.now(),
     instructorId: res.locals.instructorId,
-    questionId: req.params.postId,
+    questionId: req.params.questionId,
   };
   await db.createInstructorAnswer(instructorAnswer);
   return res.status(200).send({
@@ -110,39 +116,40 @@ export const createInstructorAnswer: ExpressHandlerWithParams<
   });
 };
 export const getInstructorAnswer: ExpressHandlerWithParams<
-  { courseId: string; postId: string; commentId: string },
+  { courseId: string; questionId: string; AnswerId: string },
   GetInstructorAnswerRequest,
   GetInstructorAnswerResponse
 > = async (req, res) => {
-  if (!req.params.postId) {
-    return res.status(400).send({ error: "PostId is required" });
+  if (!req.params.questionId) {
+    return res.status(400).send({ error: "questionId is required" });
   }
 
   if (!req.params.courseId) {
     return res.status(400).send({ error: "CourseId is required" });
   }
+  const existingInstructor = await db.getInstructorById(
+    res.locals.instructorId
+  );
+  if (!existingInstructor) {
+    return res.status(404).send({ error: "instructor is not found" });
+  }
 
-  if (!req.params.commentId) {
-    return res.status(400).send({ error: "CommentId is required" });
+  if (!req.params.AnswerId) {
+    return res.status(400).send({ error: "insructorAnswerid is required" });
   }
   const existingCourse = await db.getCourseById(req.params.courseId);
   if (!existingCourse) {
     return res.status(404).send({ error: "Course not found" });
   }
   const existingstudentQuestion = await db.getstuQuestionById(
-    req.params.postId
+    req.params.questionId
   );
   if (!existingstudentQuestion) {
     return res.status(404).send({ error: "Question not found" });
   }
 
-  const existingUser = await db.getInstructorById(res.locals.instructorId);
-  if (!existingUser) {
-    return res.status(404).send({ error: "instructor is not found" });
-  }
-
   const existingEnrollment = await db.checkEnrollment(
-    existingUser.id,
+    existingInstructor.id,
     req.params.courseId
   );
 
@@ -150,7 +157,7 @@ export const getInstructorAnswer: ExpressHandlerWithParams<
     return res.status(403).send({ error: "Not enrolled in this course" });
   }
 
-  const comment = await db.getInstructorAnsweById(req.params.commentId);
+  const comment = await db.getInstructorAnsweById(req.params.AnswerId);
   if (!comment) {
     return res.sendStatus(404);
   }

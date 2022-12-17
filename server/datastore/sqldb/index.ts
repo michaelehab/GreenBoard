@@ -400,19 +400,19 @@ export class SQLDataStore implements DataStore {
     );
   }
   async getInstructorAnsweById(
-    InstructorAnswerId: string
+    AnswerId: string
   ): Promise<InstructorAnswer | undefined> {
     return await this.db.get<InstructorAnswer>(
       "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE comments.id = ?",
-      InstructorAnswerId
+      AnswerId
     );
   }
   async listInstructorAnswerByPostId(
-    PostId: string
+    questionId: string
   ): Promise<InstructorAnswer[]> {
     return await this.db.all<InstructorAnswer[]>(
-      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE postId=?",
-      PostId
+      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE questionId=?",
+      questionId
     );
   }
   private seedDb = async () => {
