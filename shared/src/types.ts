@@ -104,3 +104,9 @@ export interface QuizQuestion {
   quizId: string;
   weight: number;
 }
+
+export interface Grade {
+  grade: number;
+  studentId: string;
+  quizId: string;
+}
