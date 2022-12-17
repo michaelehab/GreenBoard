@@ -416,6 +416,19 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async getQuizById(id: string): Promise<Quiz | undefined> {
+    return await this.db.get<Quiz>("SELECT * FROM quizzes where id= ?", id);
+  }
+
+  async getQuizQuestionsByQuizId(
+    QuizId: string
+  ): Promise<QuizQuestion[] | undefined> {
+    return await this.db.all<QuizQuestion[]>(
+      "SELECT * FROM quizzes_questions where quizId=?",
+      QuizId
+    );
+  }
+
   private seedDb = async () => {
     SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);
     await this.createCollege(SEED_COLLEGE);

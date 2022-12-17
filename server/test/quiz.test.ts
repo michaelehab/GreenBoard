@@ -17,6 +17,7 @@ describe("Quiz and Quiz's Question tests", () => {
   let instructorAuthHeader: object;
   let studentNotInCourseAuthHeader: object;
   let instructorNotInCourseAuthHeader: object;
+  let quizId: string;
 
   const quiz1: CreateQuizRequest = {
     quiz: {
@@ -85,7 +86,7 @@ describe("Quiz and Quiz's Question tests", () => {
       SEED_INSTRUCTOR_PASSWORD
     );
   });
-  describe("Quiz tests", () => {
+  describe("Create Quiz tests", () => {
     it("create a new quiz as an instructor in course -- POST /api/v1/course/:courseId/quiz returns 200", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz`)
@@ -124,6 +125,7 @@ describe("Quiz and Quiz's Question tests", () => {
           quiz1.questions[i].weight
         );
       }
+      quizId = result.body.quiz.id;
     });
     it("create a new quiz as an instructor in invalid course Id -- POST /api/v1/course/:courseId/quiz returns 404", async () => {
       const result = await client
@@ -231,6 +233,148 @@ describe("Quiz and Quiz's Question tests", () => {
         })
         .set(instructorAuthHeader)
         .expect(400);
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
+    });
+  });
+
+  describe("Get Quiz tests", () => {
+    it("Get a quiz as an instructor in course -- Get /api/v1/course/:courseId/quiz/:quizId returns 200", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${quizId}`)
+        .set(instructorAuthHeader)
+        .expect(200);
+      expect(result.body).toBeDefined();
+      expect(result.body.quiz.name).toEqual(quiz1.quiz.name);
+      expect(result.body.quiz.isActive).toEqual(+quiz1.quiz.isActive);
+      expect(result.body.quiz.quizDate).toEqual(
+        quiz1.quiz.quizDate.toISOString()
+      );
+      for (let i = 0; i < quiz1.questions.length; i++) {
+        expect(result.body.questions[i].question_number).toEqual(
+          quiz1.questions[i].question_number
+        );
+        expect(result.body.questions[i].question).toEqual(
+          quiz1.questions[i].question
+        );
+        expect(result.body.questions[i].choiceA).toEqual(
+          quiz1.questions[i].choiceA
+        );
+        expect(result.body.questions[i].choiceB).toEqual(
+          quiz1.questions[i].choiceB
+        );
+        expect(result.body.questions[i].choiceC).toEqual(
+          quiz1.questions[i].choiceC
+        );
+        expect(result.body.questions[i].choiceD).toEqual(
+          quiz1.questions[i].choiceD
+        );
+        expect(result.body.questions[i].rightChoice).toEqual(
+          quiz1.questions[i].rightChoice
+        );
+        expect(result.body.questions[i].weight).toEqual(
+          quiz1.questions[i].weight
+        );
+      }
+    });
+
+    it("get a quiz as a student in course -- Get /api/v1/course/:courseId/quiz/:quizId returns 200", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${quizId}`)
+        .set(studentAuthHeader)
+        .expect(200);
+      expect(result.body).toBeDefined();
+      expect(result.body.quiz.name).toEqual(quiz1.quiz.name);
+      expect(result.body.quiz.isActive).toEqual(+quiz1.quiz.isActive);
+      expect(result.body.quiz.quizDate).toEqual(
+        quiz1.quiz.quizDate.toISOString()
+      );
+      for (let i = 0; i < quiz1.questions.length; i++) {
+        expect(result.body.questions[i].question_number).toEqual(
+          quiz1.questions[i].question_number
+        );
+        expect(result.body.questions[i].question).toEqual(
+          quiz1.questions[i].question
+        );
+        expect(result.body.questions[i].choiceA).toEqual(
+          quiz1.questions[i].choiceA
+        );
+        expect(result.body.questions[i].choiceB).toEqual(
+          quiz1.questions[i].choiceB
+        );
+        expect(result.body.questions[i].choiceC).toEqual(
+          quiz1.questions[i].choiceC
+        );
+        expect(result.body.questions[i].choiceD).toEqual(
+          quiz1.questions[i].choiceD
+        );
+        expect(result.body.questions[i].rightChoice).toEqual(
+          quiz1.questions[i].rightChoice
+        );
+        expect(result.body.questions[i].weight).toEqual(
+          quiz1.questions[i].weight
+        );
+      }
+    });
+
+    it("get a quiz as an instructor in invalid course Id -- Get /api/v1/course/:courseId/quiz/:quizId returns 404", async () => {
+      const result = await client
+        .get(`/api/v1/course/invalidCourseId/quiz/${quizId}`)
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
+    });
+
+    it("get a quiz as an instructor in invalid quiz Id -- Get /api/v1/course/:courseId/quiz/:quizId returns 404", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/InvalidQuizId`)
+        .set(instructorAuthHeader)
+        .expect(404);
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
+    });
+
+    it("get a quiz as a student in invalid course Id -- Get /api/v1/course/:courseId/quiz/:quizId returns 404", async () => {
+      const result = await client
+        .get(`/api/v1/course/invalidCourseId/quiz/${quizId}`)
+        .set(studentAuthHeader)
+        .expect(404);
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
+    });
+
+    it("get a quiz as an student in invalid quiz Id -- Get /api/v1/course/:courseId/quiz/:quizId returns 404", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/InvalidQuizId`)
+        .set(studentAuthHeader)
+        .expect(404);
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
+    });
+
+    it("get a quiz as unauthorized -- Get /api/v1/course/:courseId/quiz/:quizId returns 401", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${quizId}`)
+        .expect(401);
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
+    });
+
+    it("get a quiz as an instructor not in course -- Get /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${quizId}`)
+        .set(instructorNotInCourseAuthHeader)
+        .expect(403);
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
+    });
+
+    it("get a quiz as a student not in course -- Get /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${quizId}`)
+        .set(studentNotInCourseAuthHeader)
+        .expect(403);
       expect(result.body.quiz).toBeUndefined();
       expect(result.body.questions).toBeUndefined();
     });
