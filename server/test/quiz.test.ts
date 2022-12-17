@@ -5,6 +5,7 @@ import {
   SEED_INSTRUCTOR,
   SEED_INSTRUCTOR2,
   SEED_INSTRUCTOR_PASSWORD,
+  SEED_QUIZ,
   SEED_STUDENT,
   SEED_STUDENT2,
   SEED_STUDENT_PASSWORD,
@@ -315,6 +316,24 @@ describe("Quiz and Quiz's Question tests", () => {
           quiz1.questions[i].weight
         );
       }
+    });
+
+    it("get a quiz as a student in course but quiz is inactive-- Get /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ.id}`)
+        .set(studentAuthHeader)
+        .expect(403);
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
+    });
+
+    it("get a quiz as a instructor in course but quiz is inactive-- Get /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ.id}`)
+        .set(instructorAuthHeader)
+        .expect(403);
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
     });
 
     it("get a quiz as an instructor in invalid course Id -- Get /api/v1/course/:courseId/quiz/:quizId returns 404", async () => {

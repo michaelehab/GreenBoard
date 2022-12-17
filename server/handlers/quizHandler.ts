@@ -133,6 +133,10 @@ export const getQuiz: ExpressHandlerWithParams<
     return res.status(404).send({ error: "Quiz not found" });
   }
 
+  if (!quiz1.isActive) {
+    return res.status(403).send({ error: "Quiz isn't active" });
+  }
+
   const questions = await db.getQuizQuestionsByQuizId(req.params.quizId);
   if (!questions) {
     return res.status(404).send({ error: "Quiz Questions not found" });
