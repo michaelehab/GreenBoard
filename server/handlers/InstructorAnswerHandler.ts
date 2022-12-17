@@ -59,9 +59,7 @@ export const createInstructorAnswer: ExpressHandlerWithParams<
     return res.status(400).send({ error: "All fields are required" });
   }
 
-  const existingInstructor = await db.getInstructorById(
-    res.locals.instructorId
-  );
+  const existingInstructor = await db.getInstructorById(res.locals.userId);
   if (!existingInstructor) {
     return res.status(403).send({ error: "Instructor is not valid" });
   }
@@ -99,7 +97,7 @@ export const createInstructorAnswer: ExpressHandlerWithParams<
     id: crypto.randomBytes(20).toString("hex"),
     comment,
     postedAt: Date.now(),
-    instructorId: res.locals.instructorId,
+    instructorId: res.locals.userId,
     questionId: req.params.questionId,
   };
   await db.createInstructorAnswer(instructorAnswer);
@@ -125,9 +123,7 @@ export const getInstructorAnswer: ExpressHandlerWithParams<
   if (!req.params.courseId) {
     return res.status(400).send({ error: "CourseId is required" });
   }
-  const existingInstructor = await db.getInstructorById(
-    res.locals.instructorId
-  );
+  const existingInstructor = await db.getInstructorById(res.locals.userId);
   if (!existingInstructor) {
     return res.status(404).send({ error: "instructor is not found" });
   }
