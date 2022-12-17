@@ -18,7 +18,7 @@ export const CreateQuiz: ExpressHandlerWithParams<
     return res.status(400).send({ error: "All fields are required" });
   }
 
-  if (!quiz.name || !quiz.isActive || !quiz.quizDate) {
+  if (!quiz.name || !quiz.quizDate) {
     return res.status(400).send({ error: "All fields are required" });
   }
 

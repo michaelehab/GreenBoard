@@ -95,7 +95,9 @@ describe("Quiz and Quiz's Question tests", () => {
       expect(result.body).toBeDefined();
       expect(result.body.quiz.name).toEqual(quiz1.quiz.name);
       expect(result.body.quiz.isActive).toEqual(quiz1.quiz.isActive);
-      expect(result.body.quiz.quizDate).toEqual(quiz1.quiz.quizDate);
+      expect(result.body.quiz.quizDate).toEqual(
+        quiz1.quiz.quizDate.toISOString()
+      );
       for (let i = 0; i < quiz1.questions.length; i++) {
         expect(result.body.questions[i].question_number).toEqual(
           quiz1.questions[i].question_number
@@ -129,7 +131,8 @@ describe("Quiz and Quiz's Question tests", () => {
         .send(quiz1)
         .set(instructorAuthHeader)
         .expect(404);
-      expect(result.body).toBeUndefined();
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
     });
 
     it("create a new quiz as an instructor not in course -- POST /api/v1/course/:courseId/quiz returns 403", async () => {
@@ -138,7 +141,8 @@ describe("Quiz and Quiz's Question tests", () => {
         .send(quiz1)
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
-      expect(result.body).toBeUndefined();
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
     });
     it("create a new quiz as a student -- POST /api/v1/course/:courseId/quiz returns 403", async () => {
       const result = await client
@@ -146,7 +150,8 @@ describe("Quiz and Quiz's Question tests", () => {
         .send(quiz1)
         .set(studentAuthHeader)
         .expect(403);
-      expect(result.body).toBeUndefined();
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
     });
     it("Send empty object as instructor in course -- POST /api/v1/course/:courseId/quiz returns 400", async () => {
       const result = await client
@@ -154,14 +159,16 @@ describe("Quiz and Quiz's Question tests", () => {
         .send({})
         .set(instructorAuthHeader)
         .expect(400);
-      expect(result.body).toBeUndefined();
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
     });
     it("create a new quiz as unauthorized -- POST /api/v1/course/:courseId/quiz returns 401", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz`)
         .send(quiz1)
         .expect(401);
-      expect(result.body).toBeUndefined();
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
     });
     it("create a new quiz as an instructor in course with missing field in a question-- POST /api/v1/course/:courseId/quiz returns 400", async () => {
       const result = await client
@@ -186,7 +193,8 @@ describe("Quiz and Quiz's Question tests", () => {
         })
         .set(instructorAuthHeader)
         .expect(400);
-      expect(result.body).toBeUndefined();
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
     });
     it("create a new quiz as an instructor in course with missing field -- POST /api/v1/course/:courseId/quiz returns 400", async () => {
       const result = await client
@@ -200,7 +208,8 @@ describe("Quiz and Quiz's Question tests", () => {
         })
         .set(instructorAuthHeader)
         .expect(400);
-      expect(result.body).toBeUndefined();
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
     });
     it("create a new quiz as an instructor in course with missing field in a quiz-- POST /api/v1/course/:courseId/quiz returns 400", async () => {
       const result = await client
@@ -222,7 +231,8 @@ describe("Quiz and Quiz's Question tests", () => {
         })
         .set(instructorAuthHeader)
         .expect(400);
-      expect(result.body).toBeUndefined();
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
     });
   });
 });

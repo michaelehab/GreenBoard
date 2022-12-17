@@ -6,6 +6,7 @@ import {
 } from "../middlewares/authMiddleware";
 import coursePost from "./coursePost";
 import studentQuestion from "./studentQuestion";
+import quiz from "./quiz";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.post("/join", JoinCourse);
 
 router.use(coursePost);
 router.use(studentQuestion);
+router.use(quiz);
 
 export default router;
