@@ -6,6 +6,7 @@ import {
   SEED_INSTRUCTOR2,
   SEED_INSTRUCTOR_PASSWORD,
   SEED_QUIZ,
+  SEED_QUIZ_QUESTIONS,
   SEED_QUIZ_TAKEN,
   SEED_STUDENT,
   SEED_STUDENT2,
@@ -328,13 +329,40 @@ describe("Quiz and Quiz's Question tests", () => {
       expect(result.body.questions).toBeUndefined();
     });
 
-    it("get a quiz as a instructor in course but quiz is inactive-- Get /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
+    it("get a quiz as a instructor in course but quiz is inactive-- Get /api/v1/course/:courseId/quiz/:quizId returns 200", async () => {
       const result = await client
         .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ.id}`)
         .set(instructorAuthHeader)
-        .expect(403);
-      expect(result.body.quiz).toBeUndefined();
-      expect(result.body.questions).toBeUndefined();
+        .expect(200);
+      expect(result.body).toBeDefined();
+      expect(result.body.quiz.name).toEqual(SEED_QUIZ.name);
+      expect(result.body.quiz.isActive).toEqual(+SEED_QUIZ.isActive);
+      for (let i = 0; i < quiz1.questions.length; i++) {
+        expect(result.body.questions[i].question_number).toEqual(
+          SEED_QUIZ_QUESTIONS[i].question_number
+        );
+        expect(result.body.questions[i].question).toEqual(
+          SEED_QUIZ_QUESTIONS[i].question
+        );
+        expect(result.body.questions[i].choiceA).toEqual(
+          SEED_QUIZ_QUESTIONS[i].choiceA
+        );
+        expect(result.body.questions[i].choiceB).toEqual(
+          SEED_QUIZ_QUESTIONS[i].choiceB
+        );
+        expect(result.body.questions[i].choiceC).toEqual(
+          SEED_QUIZ_QUESTIONS[i].choiceC
+        );
+        expect(result.body.questions[i].choiceD).toEqual(
+          SEED_QUIZ_QUESTIONS[i].choiceD
+        );
+        expect(result.body.questions[i].rightChoice).toEqual(
+          SEED_QUIZ_QUESTIONS[i].rightChoice
+        );
+        expect(result.body.questions[i].weight).toEqual(
+          SEED_QUIZ_QUESTIONS[i].weight
+        );
+      }
     });
 
     it("get a quiz as a student in course but student has taken it before-- Get /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
