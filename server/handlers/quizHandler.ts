@@ -137,6 +137,15 @@ export const getQuiz: ExpressHandlerWithParams<
     return res.status(403).send({ error: "Quiz isn't active" });
   }
 
+  if (await db.getStudentById(existingUser.id)) {
+    const grade = await db.getGrades(existingUser.id, req.params.quizId);
+    if (grade) {
+      return res
+        .status(403)
+        .send({ error: "Student has taken this quiz before" });
+    }
+  }
+
   const questions = await db.getQuizQuestionsByQuizId(req.params.quizId);
   if (!questions) {
     return res.status(404).send({ error: "Quiz Questions not found" });

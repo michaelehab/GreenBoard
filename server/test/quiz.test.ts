@@ -6,6 +6,7 @@ import {
   SEED_INSTRUCTOR2,
   SEED_INSTRUCTOR_PASSWORD,
   SEED_QUIZ,
+  SEED_QUIZ_TAKEN,
   SEED_STUDENT,
   SEED_STUDENT2,
   SEED_STUDENT_PASSWORD,
@@ -331,6 +332,15 @@ describe("Quiz and Quiz's Question tests", () => {
       const result = await client
         .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ.id}`)
         .set(instructorAuthHeader)
+        .expect(403);
+      expect(result.body.quiz).toBeUndefined();
+      expect(result.body.questions).toBeUndefined();
+    });
+
+    it("get a quiz as a student in course but student has taken it before-- Get /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_TAKEN.id}`)
+        .set(studentAuthHeader)
         .expect(403);
       expect(result.body.quiz).toBeUndefined();
       expect(result.body.questions).toBeUndefined();

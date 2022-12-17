@@ -444,6 +444,14 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async getGrades(studentId: string, quizId: string) {
+    return await this.db.get<Grade>(
+      "SELECT * FROM grades where studentId= ? and quizId=?",
+      studentId,
+      quizId
+    );
+  }
+
   private seedDb = async () => {
     SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);
     await this.createCollege(SEED_COLLEGE);
