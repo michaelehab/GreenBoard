@@ -11,6 +11,7 @@ import {
   StudentQuestion,
   Quiz,
   QuizQuestion,
+  Grade,
 } from "@greenboard/shared";
 
 // SEED_DEPARTMENT, SEED_DEPARTMENT2 belongs to SEED_SCHOOL
@@ -151,6 +152,7 @@ export const SEED_STUDENT_QUESTION: StudentQuestion = {
   courseId: SEED_COURSE.id,
 };
 
+//SEED_QUIZ AND SEED_QUIZ_QUESTIONS are for testing if the quiz is inactive
 export const SEED_QUIZ: Quiz = {
   id: "Quiz0001",
   name: "Final Quiz",
@@ -194,3 +196,54 @@ export const SEED_QUIZ_QUESTIONS: QuizQuestion[] = [
     weight: 3,
   },
 ];
+
+//SEED_QUIZ_TAKEN AND SEED_QUIZ_QUESTIONS_TAKEN are for testing if the quiz is taken by a student before
+export const SEED_QUIZ_TAKEN: Quiz = {
+  id: "Quiz0003",
+  name: " Quiz 1",
+  isActive: false,
+  quizDate: new Date("2023-03-08"),
+  courseId: SEED_COURSE.id,
+};
+
+export const SEED_QUIZ_QUESTIONS_TAKEN: QuizQuestion[] = [
+  {
+    quizId: SEED_QUIZ_TAKEN.id,
+    question: "How are you?",
+    choiceA: "happy",
+    choiceB: "Very happy",
+    choiceC: "Extremely happy",
+    choiceD: "So happy",
+    rightChoice: "A",
+    question_number: 1,
+    weight: 1,
+  },
+  {
+    quizId: SEED_QUIZ_TAKEN.id,
+    question: "How are you?",
+    choiceA: "happy",
+    choiceB: "Very happy",
+    choiceC: "Extremely happy",
+    choiceD: "So happy",
+    rightChoice: "A",
+    question_number: 2,
+    weight: 2,
+  },
+  {
+    quizId: SEED_QUIZ_TAKEN.id,
+    question: "How are you?",
+    choiceA: "happy",
+    choiceB: "Very happy",
+    choiceC: "Extremely happy",
+    choiceD: "So happy",
+    rightChoice: "A",
+    question_number: 3,
+    weight: 3,
+  },
+];
+
+export const SEED_GRADE_STUDENT: Grade = {
+  studentId: SEED_STUDENT.id,
+  quizId: SEED_QUIZ_TAKEN.id,
+  grade: 8.7,
+};

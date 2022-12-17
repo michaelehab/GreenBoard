@@ -14,6 +14,7 @@ import {
   PostComment,
   Quiz,
   QuizQuestion,
+  Grade,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -43,6 +44,9 @@ import {
   SEED_STUDENT_QUESTION,
   SEED_QUIZ,
   SEED_QUIZ_QUESTIONS,
+  SEED_QUIZ_TAKEN,
+  SEED_QUIZ_QUESTIONS_TAKEN,
+  SEED_GRADE_STUDENT,
 } from "./seeds";
 
 export class SQLDataStore implements DataStore {
@@ -431,6 +435,15 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async createGrade(grade: Grade): Promise<void> {
+    await this.db.run(
+      "INSERT INTO grades(grade,studentId,quizId) VALUES(?,?,?)",
+      grade.grade,
+      grade.studentId,
+      grade.quizId
+    );
+  }
+
   private seedDb = async () => {
     SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);
     await this.createCollege(SEED_COLLEGE);
@@ -474,5 +487,12 @@ export class SQLDataStore implements DataStore {
     for (let i = 0; i < SEED_QUIZ_QUESTIONS.length; i++) {
       await this.createQuizQuestion(SEED_QUIZ_QUESTIONS[i]);
     }
+
+    await this.createQuiz(SEED_QUIZ_TAKEN);
+
+    for (let i = 0; i < SEED_QUIZ_QUESTIONS_TAKEN.length; i++) {
+      await this.createQuizQuestion(SEED_QUIZ_QUESTIONS_TAKEN[i]);
+    }
+    await this.createGrade(SEED_GRADE_STUDENT);
   };
 }
