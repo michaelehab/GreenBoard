@@ -23,7 +23,7 @@ export const ListInstructorAnswer: ExpressHandlerWithParams<
     console.log("Missing courseId!");
     return res.status(400).send({ error: "courseId is required" });
   }
-  const existingPost = await db.getstuQuestionById(req.params.questionId);
+  const existingPost = await db.getStdQuestionById(req.params.questionId);
   if (!existingPost) {
     return res.status(404).send({ error: "question not found" });
   }
@@ -74,7 +74,7 @@ export const createInstructorAnswer: ExpressHandlerWithParams<
     return res.status(404).send({ error: "Course not found" });
   }
 
-  const existingstudentQuestion = await db.getstuQuestionById(
+  const existingstudentQuestion = await db.getStdQuestionById(
     req.params.questionId
   );
   if (!existingstudentQuestion) {
@@ -131,7 +131,7 @@ export const getInstructorAnswer: ExpressHandlerWithParams<
   if (!existingCourse) {
     return res.status(404).send({ error: "Course not found" });
   }
-  const existingstudentQuestion = await db.getstuQuestionById(
+  const existingstudentQuestion = await db.getStdQuestionById(
     req.params.questionId
   );
   if (!existingstudentQuestion) {
@@ -150,7 +150,7 @@ export const getInstructorAnswer: ExpressHandlerWithParams<
     return res.status(403).send({ error: "Not enrolled in this course" });
   }
 
-  const comment = await db.getInstructorAnsweById(req.params.answerId);
+  const comment = await db.getInstructorAnswerById(req.params.answerId);
   if (!comment) {
     return res.sendStatus(404);
   }

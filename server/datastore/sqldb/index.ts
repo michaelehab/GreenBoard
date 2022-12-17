@@ -343,15 +343,15 @@ export class SQLDataStore implements DataStore {
       StudentQuestion.id
     );
   }
-  async getstuQuestionById(
-    StudentQuestionid: string
+  async getStdQuestionById(
+    StudentQuestionId: string
   ): Promise<StudentQuestion | undefined> {
     return await this.db.get<StudentQuestion>(
       "SELECT * FROM posts JOIN students_questions ON students_questions.id = posts.id WHERE posts.id = ?",
-      StudentQuestionid
+      StudentQuestionId
     );
   }
-  async listStuQuestionBycourseId(
+  async listStuQuestionByCourseId(
     courseId: string
   ): Promise<StudentQuestion[]> {
     return await this.db.all<StudentQuestion[]>(
@@ -401,7 +401,7 @@ export class SQLDataStore implements DataStore {
       InstructorAnswer.questionId
     );
   }
-  async getInstructorAnsweById(
+  async getInstructorAnswerById(
     AnswerId: string
   ): Promise<InstructorAnswer | undefined> {
     return await this.db.get<InstructorAnswer>(

@@ -1,8 +1,8 @@
 import { StudentQuestion } from "@greenboard/shared";
 export interface StuQuestionDao {
   createStuQuestion(StudentQuestion: StudentQuestion): Promise<void>;
-  getstuQuestionById(
-    StudentQuestionid: string
+  getStdQuestionById(
+    StudentQuestionId: string
   ): Promise<StudentQuestion | undefined>;
-  listStuQuestionBycourseId(courseId: string): Promise<StudentQuestion[]>;
+  listStuQuestionByCourseId(courseId: string): Promise<StudentQuestion[]>;
 }
