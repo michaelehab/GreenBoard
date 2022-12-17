@@ -38,11 +38,11 @@ export const ListStudentQuestions: ExpressHandlerWithParams<
     return res.status(403).send({ error: "Not enrolled in this course" });
   }
   return res.send({
-    questions: await db.listStuQuestionBycourseId(req.params.courseId),
+    questions: await db.listStuQuestionByCourseId(req.params.courseId),
   });
 };
 
-export const CreateStuQuestion: ExpressHandlerWithParams<
+export const CreateStudentQuestion: ExpressHandlerWithParams<
   { courseId: string },
   CreatePostRequest,
   CreateStudentQuestionResponse
@@ -63,12 +63,12 @@ export const CreateStuQuestion: ExpressHandlerWithParams<
   if (!existingCourse) {
     return res.status(404).send({ error: "Course not found" });
   }
-  const existingstudent = await db.getStudentById(res.locals.userId);
-  if (!existingstudent) {
+  const existingStudent = await db.getStudentById(res.locals.userId);
+  if (!existingStudent) {
     return res.status(403).send({ error: "Student is not valid" });
   }
   const existingEnrollment = await db.checkEnrollment(
-    existingstudent.id,
+    existingStudent.id,
     req.params.courseId
   );
   if (!existingEnrollment) {
@@ -122,7 +122,7 @@ export const GetStudentQuestion: ExpressHandlerWithParams<
   if (!existingEnrollment) {
     return res.status(403).send({ error: "Not enrolled in this course" });
   }
-  const question = await db.getstuQuestionById(req.params.studentQuestionId);
+  const question = await db.getStdQuestionById(req.params.studentQuestionId);
   if (!question) {
     return res.sendStatus(404);
   }

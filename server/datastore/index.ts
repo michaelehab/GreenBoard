@@ -4,15 +4,15 @@ import { CollegeDao } from "./dao/collegeDao";
 import { SchoolDao } from "./dao/schoolDao";
 import { DepartmentDao } from "./dao/departmentDao";
 import { SQLDataStore } from "./sqldb";
-import { Instructor } from "@greenboard/shared";
 import { InstructorDao } from "./dao/InstructorDao";
 import { CourseDao } from "./dao/courseDao";
 import { EnrollmentDao } from "./dao/enrollmentDao";
 import { PostDao } from "./dao/postDao";
 import { CoursePostDao } from "./dao/coursePostDao";
-import { StuQuestionDao } from "./dao/stuQuestionDao";
+import { StuQuestionDao } from "./dao/stdQuestionDao";
 import { CommentDao } from "./dao/commentDao";
 import { PostCommentDao } from "./dao/postCommentDao";
+import { instructorAnswerDao } from "./dao/InstructorAnswerDao";
 import { QuizDao } from "./dao/quizDao";
 import { quizQuestionsDao } from "./dao/quizQuestionsDao";
 import { GradesDao } from "./dao/gradesDao";
@@ -31,6 +31,7 @@ export interface DataStore
     StuQuestionDao,
     CommentDao,
     PostCommentDao,
+    instructorAnswerDao,
     quizQuestionsDao,
     QuizDao,
     GradesDao {}

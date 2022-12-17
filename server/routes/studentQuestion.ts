@@ -1,19 +1,20 @@
 import { Router } from "express";
 import {
-  CreateStuQuestion,
-  GetStudentQuestion,
+  CreateStudentQuestion,
   ListStudentQuestions,
-} from "../handlers/stuQuestionHandler";
+  GetStudentQuestion
+} from "../handlers/stdQuestionHandler";
 import {
   parseJwtMiddleware,
   requireJwtMiddleware,
 } from "../middlewares/authMiddleware";
-
+import instructorAnswer from "./instructorAnswer";
 const router = Router();
 
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
-router.post("/:courseId/question", CreateStuQuestion);
+router.use(instructorAnswer);
+router.post("/:courseId/question", CreateStudentQuestion);
 router.get("/:courseId/question", ListStudentQuestions);
 router.get("/:courseId/question/:studentQuestionId", GetStudentQuestion);
 
