@@ -12,6 +12,8 @@ import {
   StudentQuestion,
   Comment,
   PostComment,
+  Quiz,
+  QuizQuestion,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -385,6 +387,32 @@ export class SQLDataStore implements DataStore {
     return await this.db.all<PostComment[]>(
       "SELECT * FROM comments JOIN post_comments ON post_comments.id = comments.id WHERE postId=?",
       PostId
+    );
+  }
+
+  async createQuiz(quiz: Quiz): Promise<void> {
+    await this.db.run(
+      "INSERT INTO quizzes(id,name,quizDate,isActive,courseId) VALUES(?,?,?,?,?)",
+      quiz.id,
+      quiz.name,
+      quiz.quizDate,
+      quiz.isActive,
+      quiz.courseId
+    );
+  }
+
+  async createQuizQuestion(quizQuestion: QuizQuestion): Promise<void> {
+    await this.db.run(
+      "INSERT INTO quizzes_questions(question_number,question,choiceA,choiceB,choiceC,choiceD,rightChoice,quizId,weight) VALUES (?,?,?,?,?,?,?,?,?)",
+      quizQuestion.question_number,
+      quizQuestion.question,
+      quizQuestion.choiceA,
+      quizQuestion.choiceB,
+      quizQuestion.choiceC,
+      quizQuestion.choiceD,
+      quizQuestion.rightChoice,
+      quizQuestion.quizId,
+      quizQuestion.weight
     );
   }
 
