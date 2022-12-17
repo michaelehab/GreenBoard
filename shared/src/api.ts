@@ -12,6 +12,8 @@ import {
   StudentQuestion,
   Comment,
   InstructorAnswer,
+  Quiz,
+  QuizQuestion,
 } from "./types";
 
 export interface SignInRequest {
@@ -229,4 +231,25 @@ export interface ListInstructorsAnswersResponse {
 export interface GetInstructorAnswerRequest {} // post Id will be a url param
 export interface GetInstructorAnswerResponse {
   instructorAnswer: InstructorAnswer;
+}
+
+//Quiz API
+export interface CreateQuizRequest {
+  quiz: Pick<Quiz, "name" | "isActive" | "quizDate">;
+  questions: Pick<
+    QuizQuestion,
+    | "question_number"
+    | "question"
+    | "choiceA"
+    | "choiceB"
+    | "choiceC"
+    | "choiceD"
+    | "rightChoice"
+    | "weight"
+  >[];
+}
+
+export interface CreateQuizResponse {
+  quiz: Quiz;
+  questions: QuizQuestion[];
 }
