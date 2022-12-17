@@ -393,7 +393,7 @@ export class SQLDataStore implements DataStore {
   ): Promise<void> {
     await this.createComment(InstructorAnswer);
     await this.db.run(
-      "INSERT INTO instructors_answers VALUES(id,instructorId,questionId) (?,?,?)",
+      "INSERT INTO instructors_answers(id,instructorId,questionId) VALUES (?,?,?)",
       InstructorAnswer.id,
       InstructorAnswer.instructorId,
       InstructorAnswer.questionId

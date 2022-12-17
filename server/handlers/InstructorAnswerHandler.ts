@@ -32,12 +32,12 @@ export const ListInstructorAnswer: ExpressHandlerWithParams<
     return res.status(404).send({ error: "course not found" });
   }
 
-  const existingInstructor = await db.getUserById(res.locals.userId);
-  if (!existingInstructor) {
+  const existingUserId = await db.getUserById(res.locals.userId);
+  if (!existingUserId) {
     return res.status(404).send({ error: "User is not found" });
   }
   const existingEnrollment = await db.checkEnrollment(
-    existingInstructor.id,
+    existingUserId.id,
     req.params.courseId
   );
   if (!existingEnrollment) {
@@ -57,11 +57,6 @@ export const createInstructorAnswer: ExpressHandlerWithParams<
   const { comment } = req.body;
   if (!comment) {
     return res.status(400).send({ error: "All fields are required" });
-  }
-
-  const existingInstructor = await db.getInstructorById(res.locals.userId);
-  if (!existingInstructor) {
-    return res.status(403).send({ error: "Instructor is not valid" });
   }
 
   if (!req.params.courseId) {
@@ -85,6 +80,11 @@ export const createInstructorAnswer: ExpressHandlerWithParams<
   if (!existingstudentQuestion) {
     return res.status(404).send({ error: "Question not found" });
   }
+  const existingInstructor = await db.getInstructorById(res.locals.userId);
+  if (!existingInstructor) {
+    return res.status(403).send({ error: "Instructor is not found" });
+  }
+
   const existingEnrollment = await db.checkEnrollment(
     existingInstructor.id,
     req.params.courseId
@@ -112,7 +112,7 @@ export const createInstructorAnswer: ExpressHandlerWithParams<
   });
 };
 export const getInstructorAnswer: ExpressHandlerWithParams<
-  { courseId: string; questionId: string; AnswerId: string },
+  { courseId: string; questionId: string; answerId: string },
   GetInstructorAnswerRequest,
   GetInstructorAnswerResponse
 > = async (req, res) => {
@@ -123,12 +123,8 @@ export const getInstructorAnswer: ExpressHandlerWithParams<
   if (!req.params.courseId) {
     return res.status(400).send({ error: "CourseId is required" });
   }
-  const existingInstructor = await db.getInstructorById(res.locals.userId);
-  if (!existingInstructor) {
-    return res.status(404).send({ error: "instructor is not found" });
-  }
 
-  if (!req.params.AnswerId) {
+  if (!req.params.answerId) {
     return res.status(400).send({ error: "insructorAnswerid is required" });
   }
   const existingCourse = await db.getCourseById(req.params.courseId);
@@ -141,9 +137,12 @@ export const getInstructorAnswer: ExpressHandlerWithParams<
   if (!existingstudentQuestion) {
     return res.status(404).send({ error: "Question not found" });
   }
-
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "user is not found" });
+  }
   const existingEnrollment = await db.checkEnrollment(
-    existingInstructor.id,
+    existingUser.id,
     req.params.courseId
   );
 
@@ -151,7 +150,7 @@ export const getInstructorAnswer: ExpressHandlerWithParams<
     return res.status(403).send({ error: "Not enrolled in this course" });
   }
 
-  const comment = await db.getInstructorAnsweById(req.params.AnswerId);
+  const comment = await db.getInstructorAnsweById(req.params.answerId);
   if (!comment) {
     return res.sendStatus(404);
   }
