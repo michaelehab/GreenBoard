@@ -196,6 +196,26 @@ describe("Quiz Grades tests", () => {
       expect(result.body.grade).toBeUndefined();
     });
 
+    it("Submit quiz as an student in invalid course Id -- POST /api/v1/course/:courseId/quiz/:quizId returns 404", async () => {
+      const result = await client
+        .post(`/api/v1/course/invalidCourseId/quiz/${SEED_QUIZ_OPEN.id}`)
+        .send(asnwer1)
+        .set(studentAuthHeader)
+        .expect(404);
+
+      expect(result.body.grade).toBeUndefined();
+    });
+
+    it("Submit quiz as an student in invalid quiz Id -- POST /api/v1/course/:courseId/quiz/:quizId returns 404", async () => {
+      const result = await client
+        .post(`/api/v1/course/${SEED_COURSE.id}/quiz/InvalidQuizId`)
+        .send(asnwer1)
+        .set(studentAuthHeader)
+        .expect(404);
+
+      expect(result.body.grade).toBeUndefined();
+    });
+
     it("Submit inactivated quiz as a student in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ.id}`)

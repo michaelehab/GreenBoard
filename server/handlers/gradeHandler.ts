@@ -20,9 +20,18 @@ export const SubmitQuiz: ExpressHandlerWithParams<
     return res.status(400).send({ error: "quizId is required" });
   }
 
+  if (res.locals.role !== "STUDENT") {
+    return res.status(403).send({ error: "Must be a student" });
+  }
+
   const { answers } = req.body;
   if (!answers) {
     return res.status(400).send({ error: "All fields are required" });
+  }
+
+  const existingCourse = await db.getCourseById(req.params.courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
   }
 
   const existingQuiz = await db.getQuizById(req.params.quizId);
@@ -41,10 +50,6 @@ export const SubmitQuiz: ExpressHandlerWithParams<
 
   if (answers.length !== questions.length) {
     return res.status(400).send({ error: "All questions must be answered" });
-  }
-
-  if (res.locals.role !== "STUDENT") {
-    return res.status(403).send({ error: "Must be a student" });
   }
 
   const existingStudent = await db.getStudentById(res.locals.userId);
