@@ -1,6 +1,8 @@
 import { ExpressHandlerWithParams } from "../types";
 import {
   Grade,
+  ListGradesRequest,
+  ListGradesResponse,
   SubmitQuizRequest,
   SubmitQuizResponse,
 } from "@greenboard/shared";
@@ -89,5 +91,47 @@ export const SubmitQuiz: ExpressHandlerWithParams<
 
   return res.status(200).send({
     grade: score,
+  });
+};
+
+export const ListGrades: ExpressHandlerWithParams<
+  { courseId: string },
+  ListGradesRequest,
+  ListGradesResponse
+> = async (req, res) => {
+  if (!req.params.courseId) {
+    return res.status(400).send({ error: "CourseId is required" });
+  }
+
+  if (res.locals.role !== "STUDENT") {
+    return res.status(403).send({ error: "Must be a student" });
+  }
+
+  const existingCourse = await db.getCourseById(req.params.courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
+  }
+
+  const existingStudent = await db.getStudentById(res.locals.userId);
+  if (!existingStudent) {
+    return res.status(404).send({ error: "Student not valid" });
+  }
+
+  const existingEnrollment = await db.checkEnrollment(
+    existingStudent.id,
+    req.params.courseId
+  );
+
+  if (!existingEnrollment) {
+    return res.status(403).send({ error: "Not enrolled in this course" });
+  }
+
+  const existingGrades = await db.getStudentGradesByCourseId(
+    res.locals.userId,
+    req.params.courseId
+  );
+
+  return res.status(200).send({
+    grades: existingGrades,
   });
 };
