@@ -16,6 +16,7 @@ import {
   Quiz,
   QuizQuestion,
   Grade,
+  GradeWithName,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -478,6 +479,23 @@ export class SQLDataStore implements DataStore {
     return await this.db.get<Grade>(
       "SELECT * FROM grades where studentId= ? and quizId=?",
       studentId,
+      quizId
+    );
+  }
+
+  async getStudentGradesByCourseId(
+    studentId: string,
+    courseId: string
+  ): Promise<GradeWithName[]> {
+    return await this.db.all<GradeWithName[]>(
+      "SELECT grades.grade, quizzes.name, grades.takenAt from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.studentId = ? AND quizzes.courseId = ?",
+      studentId,
+      courseId
+    );
+  }
+  async getQuizGradesById(quizId: string): Promise<GradeWithName[]> {
+    return await this.db.all<GradeWithName[]>(
+      "SELECT grades.grade, quizzes.name, grades.takenAt from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.quizId = ?",
       quizId
     );
   }

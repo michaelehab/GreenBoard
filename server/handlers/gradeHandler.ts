@@ -5,7 +5,6 @@ import {
   SubmitQuizResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
-import crypto from "crypto";
 
 export const SubmitQuiz: ExpressHandlerWithParams<
   { courseId: string; quizId: string },
