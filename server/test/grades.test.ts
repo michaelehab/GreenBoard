@@ -2,6 +2,7 @@ import { SubmitQuizRequest } from "@greenboard/shared";
 import supertest from "supertest";
 import {
   SEED_COURSE,
+  SEED_GRADE_STUDENT,
   SEED_INSTRUCTOR,
   SEED_INSTRUCTOR2,
   SEED_INSTRUCTOR_PASSWORD,
@@ -253,5 +254,104 @@ describe("Quiz Grades tests", () => {
         .expect(400);
       expect(result.body.grade).toBeUndefined();
     });
+  });
+
+  describe("View Grades", () => {
+    it("View all grades as a student in course -- GET /api/v1/course/:courseId/grades returns 200", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/grades`)
+        .set(studentAuthHeader)
+        .expect(200);
+      // 1 Seed grade + 7 test grades sorted by date ASC
+      expect(result.body.grades).toHaveLength(8);
+      expect(result.body.grades[0].grade).toBeCloseTo(SEED_GRADE_STUDENT.grade);
+      expect(result.body.grades[1].grade).toBeCloseTo(16.67);
+      expect(result.body.grades[2].grade).toBeCloseTo(33.33);
+      expect(result.body.grades[3].grade).toEqual(50);
+      expect(result.body.grades[4].grade).toEqual(50);
+      expect(result.body.grades[5].grade).toBeCloseTo(83.33);
+      expect(result.body.grades[6].grade).toBeCloseTo(66.67);
+      expect(result.body.grades[7].grade).toEqual(100);
+    });
+    it("View all grades as a student not in course -- GET /api/v1/course/:courseId/grades returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/grades`)
+        .set(studentNotInCourseAuthHeader)
+        .expect(403);
+
+      expect(result.body.grades).toBeUndefined();
+    });
+    it("View all grades as a student in invalid course -- GET /api/v1/course/:courseId/grades returns 404", async () => {
+      const result = await client
+        .get(`/api/v1/course/InvalidCourseId/grades`)
+        .set(studentAuthHeader)
+        .expect(404);
+
+      expect(result.body.grades).toBeUndefined();
+    });
+    it("View all grades as a unauthenticated in course -- GET /api/v1/course/:courseId/grades returns 401", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/grades`)
+        .expect(401);
+
+      expect(result.body.grades).toBeUndefined();
+    });
+    it("View all grades as a instructor in course -- GET /api/v1/course/:courseId/grades returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/grades`)
+        .set(instructorAuthHeader)
+        .expect(403);
+
+      expect(result.body.grades).toBeUndefined();
+    });
+    it("View all grades as a instructor not in course -- GET /api/v1/course/:courseId/grades returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}/grades`)
+        .set(instructorNotInCourseAuthHeader)
+        .expect(403);
+
+      expect(result.body.grades).toBeUndefined();
+    });
+    it("View all grades as a instructor in invalid course -- GET /api/v1/course/:courseId/grades returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/InvalidCourseId/grades`)
+        .set(instructorAuthHeader)
+        .expect(403);
+
+      expect(result.body.grades).toBeUndefined();
+    });
+    it(
+      "View a specific quiz grade as a student in course -- GET /api/v1/course/:courseId/quiz/:quizId returns 200"
+    );
+    it(
+      "View a specific quiz grade as a student not in course -- GET /api/v1/course/:courseId/quiz/:quizId returns 403"
+    );
+    it(
+      "View a specific quiz grade as a student in wrong course -- GET /api/v1/course/:courseId/quiz/:quizId returns 404"
+    );
+    it(
+      "View a specific quiz grade as a student in course wrong grade -- GET /api/v1/course/:courseId/quiz/:quizId returns 404"
+    );
+    it(
+      "View a specific quiz grade as a unauthenticated in course -- GET /api/v1/course/:courseId/quiz/:quizId returns 401"
+    );
+    it(
+      "View all students grades in a specific quiz as instructor in course -- GET /api/v1/course/:courseId/quiz/:quizId returns 200"
+    );
+    it(
+      "View all students grades in a specific quiz as instructor not in course -- GET /api/v1/course/:courseId/quiz/:quizId returns 403"
+    );
+    it(
+      "View all students grades in a specific quiz as instructor in wrong course -- GET /api/v1/course/:courseId/quiz/:quizId returns 404"
+    );
+    it(
+      "View all students grades in a specific quiz as instructor in course wrong quiz -- GET /api/v1/course/:courseId/quiz/:quizId returns 404"
+    );
+    it(
+      "View a specific student grades as instructor in course -- GET /api/v1/course/:courseId/quiz/:quizId returns 200"
+    );
+    it(
+      "View a specific wrong student grades as instructor in course -- GET /api/v1/course/:courseId/quiz/:quizId returns 200 (empty)"
+    );
   });
 });
