@@ -137,7 +137,7 @@ export const getQuiz: ExpressHandlerWithParams<
     if (!quiz1.isActive) {
       return res.status(403).send({ error: "Quiz isn't active" });
     }
-    const grade = await db.getGrades(existingUser.id, req.params.quizId);
+    const grade = await db.getGrade(existingUser.id, req.params.quizId);
     if (grade) {
       return res
         .status(403)

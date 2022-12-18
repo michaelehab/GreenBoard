@@ -48,6 +48,8 @@ import {
   SEED_QUIZ_TAKEN,
   SEED_QUIZ_QUESTIONS_TAKEN,
   SEED_GRADE_STUDENT,
+  SEED_QUIZ_OPEN,
+  SEED_QUIZ_OPEN_QUESTIONS,
 } from "./seeds";
 
 export class SQLDataStore implements DataStore {
@@ -471,7 +473,7 @@ export class SQLDataStore implements DataStore {
     );
   }
 
-  async getGrades(studentId: string, quizId: string) {
+  async getGrade(studentId: string, quizId: string) {
     return await this.db.get<Grade>(
       "SELECT * FROM grades where studentId= ? and quizId=?",
       studentId,
@@ -528,6 +530,13 @@ export class SQLDataStore implements DataStore {
     for (let i = 0; i < SEED_QUIZ_QUESTIONS_TAKEN.length; i++) {
       await this.createQuizQuestion(SEED_QUIZ_QUESTIONS_TAKEN[i]);
     }
+
     await this.createGrade(SEED_GRADE_STUDENT);
+
+    await this.createQuiz(SEED_QUIZ_OPEN);
+
+    for (let i = 0; i < SEED_QUIZ_OPEN_QUESTIONS.length; i++) {
+      await this.createQuizQuestion(SEED_QUIZ_OPEN_QUESTIONS[i]);
+    }
   };
 }

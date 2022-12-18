@@ -13,10 +13,8 @@ import {
 let client: request.SuperTest<request.Test>;
 
 export async function getTestServer() {
-  if (!client) {
-    const server = await createServer(":memory:", false);
-    client = request(server);
-  }
+  const server = await createServer(":memory:", false);
+  client = request(server);
 
   return client;
 }

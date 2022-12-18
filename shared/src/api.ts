@@ -259,3 +259,11 @@ export interface GetQuizResponse {
   quiz: Quiz;
   questions: QuizQuestion[];
 }
+
+export interface SubmitQuizRequest {
+  answers: string[]
+}
+
+export interface SubmitQuizResponse {
+  grade: number
+}

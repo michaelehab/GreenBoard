@@ -247,3 +247,49 @@ export const SEED_GRADE_STUDENT: Grade = {
   quizId: SEED_QUIZ_TAKEN.id,
   grade: 8.7,
 };
+
+// SEED_QUIZ_OPEN and SEED_QUIZ_OPEN_QUESTIONS are used
+// to test a student's ability to take the quiz and get a grade
+export const SEED_QUIZ_OPEN: Quiz = {
+  id: "Quiz0005",
+  name: "Quiz 2",
+  isActive: true,
+  quizDate: new Date("2023-03-08"),
+  courseId: SEED_COURSE.id,
+};
+
+export const SEED_QUIZ_OPEN_QUESTIONS: QuizQuestion[] = [
+  {
+    quizId: SEED_QUIZ_OPEN.id,
+    question: "How are you?",
+    choiceA: "happy",
+    choiceB: "Very happy",
+    choiceC: "Extremely happy",
+    choiceD: "So happy",
+    rightChoice: "A",
+    question_number: 1,
+    weight: 1,
+  },
+  {
+    quizId: SEED_QUIZ_OPEN.id,
+    question: "How are you?",
+    choiceA: "happy",
+    choiceB: "Very happy",
+    choiceC: "Extremely happy",
+    choiceD: "So happy",
+    rightChoice: "A",
+    question_number: 2,
+    weight: 2,
+  },
+  {
+    quizId: SEED_QUIZ_OPEN.id,
+    question: "How are you?",
+    choiceA: "happy",
+    choiceB: "Very happy",
+    choiceC: "Extremely happy",
+    choiceD: "So happy",
+    rightChoice: "A",
+    question_number: 3,
+    weight: 3,
+  },
+];
