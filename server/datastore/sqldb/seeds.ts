@@ -246,6 +246,7 @@ export const SEED_GRADE_STUDENT: Grade = {
   studentId: SEED_STUDENT.id,
   quizId: SEED_QUIZ_TAKEN.id,
   grade: 8.7,
+  takenAt: new Date(),
 };
 
 // SEED_QUIZ_OPEN and SEED_QUIZ_OPEN_QUESTIONS are used

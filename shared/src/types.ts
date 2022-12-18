@@ -109,4 +109,10 @@ export interface Grade {
   grade: number;
   studentId: string;
   quizId: string;
+  takenAt: Date;
+}
+
+export interface GradeWithName {
+  grade: number;
+  quizName: string;
 }

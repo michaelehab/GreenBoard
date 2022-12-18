@@ -14,6 +14,8 @@ import {
   InstructorAnswer,
   Quiz,
   QuizQuestion,
+  Grade,
+  GradeWithName,
 } from "./types";
 
 export interface SignInRequest {
@@ -261,9 +263,14 @@ export interface GetQuizResponse {
 }
 
 export interface SubmitQuizRequest {
-  answers: string[]
+  answers: string[];
 }
 
 export interface SubmitQuizResponse {
-  grade: number
+  grade: number;
+}
+
+export interface ListGradesRequest {}
+export interface ListGradesResponse {
+  grades: GradeWithName[];
 }

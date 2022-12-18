@@ -466,10 +466,11 @@ export class SQLDataStore implements DataStore {
 
   async createGrade(grade: Grade): Promise<void> {
     await this.db.run(
-      "INSERT INTO grades(grade,studentId,quizId) VALUES(?,?,?)",
+      "INSERT INTO grades(grade,studentId,quizId,takenAt) VALUES(?,?,?,?)",
       grade.grade,
       grade.studentId,
-      grade.quizId
+      grade.quizId,
+      grade.takenAt
     );
   }
 
