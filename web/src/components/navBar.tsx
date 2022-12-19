@@ -66,7 +66,7 @@ export const NavBar = () => {
           />
           <HStack spacing={8} alignItems={"center"}>
             <Link to={"/"}>
-              <h1>GreenBoard</h1>
+              <Image src={Logo} height={10} />
             </Link>
             <HStack
               as={"nav"}
@@ -96,7 +96,9 @@ export const NavBar = () => {
                   variant={"link"}
                   cursor={"pointer"}
                   minW={0}
-                ></MenuButton>
+                >
+                  <Avatar size={"sm"} src={UserAvatar} />
+                </MenuButton>
                 <MenuList>
                   <Link to={`/`}>
                     <MenuItem>My Profile</MenuItem>

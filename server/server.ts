@@ -4,6 +4,7 @@ import { loggerMiddleWare } from "./middlewares/loggerMiddleware";
 import routes from "./routes";
 import { initDb } from "./datastore";
 import path from "path";
+import cors from "cors";
 
 export const createServer = async (dbPath: string, logRequests: boolean) => {
   dotenv.config({ path: path.join(__dirname, ".env") });
@@ -12,6 +13,7 @@ export const createServer = async (dbPath: string, logRequests: boolean) => {
 
   const app: Application = express();
   app.use(express.json());
+  app.use(cors());
   if (logRequests) app.use(loggerMiddleWare);
 
   app.get("/healthz", (req: Request, res: Response, next: NextFunction) => {
