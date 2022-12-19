@@ -278,7 +278,12 @@ export interface CreateAnnouncementResponse {
 
 export interface ListAnnouncementsRequest {}
 export interface ListAnnouncementsResponse {
-  announcement: Announcement[];
+  collegeName: string;
+  schoolName: string;
+  departmentName: string;
+  collegeAnnouncements: Announcement[];
+  schoolAnnouncements: Announcement[];
+  departmentAnnouncements: Announcement[];
 }
 
 export interface GetAnnouncementRequest {} // post Id will be a url param

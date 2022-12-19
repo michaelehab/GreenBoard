@@ -120,3 +120,11 @@ export interface Announcement {
   schoolId: string;
   collegeId: string;
 }
+
+export interface UserRegistrationData {
+  collegeId: string;
+  schoolId: string;
+  departmentName: string;
+  schoolName: string;
+  collegeName: string;
+}

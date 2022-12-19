@@ -17,6 +17,7 @@ import {
   QuizQuestion,
   Grade,
   Announcement,
+  UserRegistrationData,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -530,9 +531,14 @@ export class SQLDataStore implements DataStore {
     );
   }
 
-  /*async getCollegeIdAndSchoolIdAndDepartmentIdByUserId(id: string): Promise<any> {
-    return
-  }*/
+  async getUserRegistrationDatabyDepartmentId(
+    departmentId: string
+  ): Promise<UserRegistrationData | undefined> {
+    return await this.db.get<UserRegistrationData>(
+      "SELECT colleges.Id,schools.id,departments.name,schools.name,colleges.name FROM schools,colleges,departments,users WHERE users.departmentId=departments.id and schoolId=schools.id and collegeId=colleges.id and departmentId=?",
+      departmentId
+    );
+  }
 
   private seedDb = async () => {
     SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);

@@ -66,7 +66,42 @@ export const ListAnnouncements: ExpressHandlerWithParams<
   {},
   ListAnnouncementsRequest,
   ListAnnouncementsResponse
-> = async (req, res) => {};
+> = async (req, res) => {
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "User is not found" });
+  }
+
+  const userData = await db.getUserRegistrationDatabyDepartmentId(
+    existingUser.departmentId
+  );
+
+  if (!userData) {
+    return res.status(404).send({ error: "User Data is not found" });
+  }
+
+  const collegeAnnouncements = await db.listAnnouncementsOfCollegeByCollegeId(
+    userData.collegeId
+  );
+
+  const schoolAnnouncements = await db.listAnnouncementsOfSchoolBySchoolId(
+    userData.schoolId
+  );
+
+  const departmentAnnouncements =
+    await db.listAnnouncementsOfDepartmentByDepartmentId(
+      existingUser.departmentId
+    );
+
+  return res.send({
+    collegeName: userData.collegeName,
+    schoolName: userData.schoolName,
+    departmentName: userData.departmentName,
+    collegeAnnouncements: collegeAnnouncements,
+    schoolAnnouncements: schoolAnnouncements,
+    departmentAnnouncements: departmentAnnouncements,
+  });
+};
 
 export const getAnnouncementById: ExpressHandlerWithParams<
   { announcementId: string },
