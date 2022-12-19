@@ -219,14 +219,34 @@ describe("Announcements tests", () => {
       expect(result.body.announcement.content).toBe(announcement.content);
     });
 
-    it("Get Specific announcement as unauthorized -- GET /api/v1/announcements returns 401", async () => {
+    it("Get Specific announcement as student -- GET /api/v1/announcements/:id  returns 200", async () => {
+      const result = await client
+        .get(`/api/v1/announcements/${announcementId}`)
+        .set(studentAuthHeader)
+        .expect(200);
+      expect(result.body.announcement).toBeDefined();
+      expect(result.body.announcement.content).toEqual(announcement.content);
+      expect(result.body.announcement.title).toEqual(announcement.title);
+    });
+
+    it("Get Specific announcement as instructor -- GET /api/v1/announcements/:id returns 200", async () => {
+      const result = await client
+        .get(`/api/v1/announcements/${announcementId}`)
+        .set(instructorAuthHeader)
+        .expect(200);
+      expect(result.body.announcement).toBeDefined();
+      expect(result.body.announcement.content).toEqual(announcement.content);
+      expect(result.body.announcement.title).toEqual(announcement.title);
+    });
+
+    it("Get Specific announcement as unauthorized -- GET /api/v1/announcements/:id  returns 401", async () => {
       const result = await client
         .get(`/api/v1/announcements/${announcementId}`)
         .expect(401);
       expect(result.body.announcement).toBeUndefined();
     });
 
-    it("Get specific announcement as student invalid announcementId -- GET /api/v1/announcements returns 404", async () => {
+    it("Get specific announcement as student invalid announcementId/:id  -- GET /api/v1/announcements returns 404", async () => {
       const result = await client
         .get(`/api/v1/announcements/invalidAnnouncementId`)
         .set(studentAuthHeader)

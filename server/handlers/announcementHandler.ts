@@ -72,4 +72,22 @@ export const getAnnouncementById: ExpressHandlerWithParams<
   { announcementId: string },
   GetAnnouncementRequest,
   GetAnnouncementResponse
-> = async (req, res) => {};
+> = async (req, res) => {
+  if (!req.params.announcementId) {
+    return res.status(400).send({ error: "announcementId is required" });
+  }
+
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "User is not found" });
+  }
+
+  const announcement = await db.getAnnouncementById(req.params.announcementId);
+  if (!announcement) {
+    return res.status(404).send({ error: "Announcement not found" });
+  }
+
+  return res.status(200).send({
+    announcement: announcement,
+  });
+};
