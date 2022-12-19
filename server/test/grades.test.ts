@@ -22,31 +22,31 @@ describe("Quiz Grades tests", () => {
   let studentNotInCourseAuthHeader: object;
   let instructorNotInCourseAuthHeader: object;
 
-  const asnwer1: SubmitQuizRequest = {
+  const answer1: SubmitQuizRequest = {
     answers: ["A", "B", "C"],
   }; // Grade should be 1/6 * 100 = 16.67%
 
-  const asnwer2: SubmitQuizRequest = {
+  const answer2: SubmitQuizRequest = {
     answers: ["B", "A", "C"],
   }; // Grade should be 2/6 * 100 = 33.33%
 
-  const asnwer3: SubmitQuizRequest = {
+  const answer3: SubmitQuizRequest = {
     answers: ["B", "C", "A"],
   }; // Grade should be 3/6 * 100 = 50%
 
-  const asnwer4: SubmitQuizRequest = {
+  const answer4: SubmitQuizRequest = {
     answers: ["A", "A", "C"],
   }; // Grade should be 3/6 * 100 = 50%
 
-  const asnwer5: SubmitQuizRequest = {
+  const answer5: SubmitQuizRequest = {
     answers: ["B", "A", "A"],
   }; // Grade should be 5/6 * 100 = 83.33%
 
-  const asnwer6: SubmitQuizRequest = {
+  const answer6: SubmitQuizRequest = {
     answers: ["A", "B", "A"],
   }; // Grade should be 4/6 * 100 = 66.67%
 
-  const asnwer7: SubmitQuizRequest = {
+  const answer7: SubmitQuizRequest = {
     answers: ["A", "A", "A"],
   }; // Grade should be 6/6 * 100 = 100%
 
@@ -93,7 +93,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as an instructor in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer1)
+        .send(answer1)
         .set(instructorAuthHeader)
         .expect(403);
       expect(result.body.grade).toBeUndefined();
@@ -102,7 +102,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as an instructor in invalid course Id -- POST /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
       const result = await client
         .post(`/api/v1/course/invalidCourseId/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer1)
+        .send(answer1)
         .set(instructorAuthHeader)
         .expect(403);
 
@@ -112,7 +112,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as an instructor not in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer1)
+        .send(answer1)
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
       expect(result.body.grade).toBeUndefined();
@@ -121,7 +121,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as a student in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 200", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer1)
+        .send(answer1)
         .set(studentAuthHeader)
         .expect(200);
 
@@ -132,7 +132,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as a student in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 200", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer2)
+        .send(answer2)
         .set(studentAuthHeader)
         .expect(200);
 
@@ -143,7 +143,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as a student in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 200", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer3)
+        .send(answer3)
         .set(studentAuthHeader)
         .expect(200);
 
@@ -154,7 +154,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as a student in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 200", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer4)
+        .send(answer4)
         .set(studentAuthHeader)
         .expect(200);
 
@@ -165,7 +165,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as a student in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 200", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer5)
+        .send(answer5)
         .set(studentAuthHeader)
         .expect(200);
 
@@ -176,7 +176,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as a student in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 200", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer6)
+        .send(answer6)
         .set(studentAuthHeader)
         .expect(200);
 
@@ -187,7 +187,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as a student in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 200", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer7)
+        .send(answer7)
         .set(studentAuthHeader)
         .expect(200);
 
@@ -198,7 +198,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as a student not in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer7)
+        .send(answer7)
         .set(studentNotInCourseAuthHeader)
         .expect(403);
 
@@ -208,7 +208,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as an student in invalid course Id -- POST /api/v1/course/:courseId/quiz/:quizId returns 404", async () => {
       const result = await client
         .post(`/api/v1/course/invalidCourseId/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer1)
+        .send(answer1)
         .set(studentAuthHeader)
         .expect(404);
 
@@ -218,7 +218,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as an student in invalid quiz Id -- POST /api/v1/course/:courseId/quiz/:quizId returns 404", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/InvalidQuizId`)
-        .send(asnwer1)
+        .send(answer1)
         .set(studentAuthHeader)
         .expect(404);
 
@@ -228,7 +228,7 @@ describe("Quiz Grades tests", () => {
     it("Submit inactivated quiz as a student in course -- POST /api/v1/course/:courseId/quiz/:quizId returns 403", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ.id}`)
-        .send(asnwer7)
+        .send(answer7)
         .set(studentAuthHeader)
         .expect(403);
 
@@ -247,7 +247,7 @@ describe("Quiz Grades tests", () => {
     it("Submit quiz as unauthorized -- POST /api/v1/course/:courseId/quiz/:quizId returns 401", async () => {
       const result = await client
         .post(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}`)
-        .send(asnwer1)
+        .send(answer1)
         .expect(401);
       expect(result.body.grade).toBeUndefined();
     });
