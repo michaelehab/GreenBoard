@@ -16,6 +16,7 @@ import {
   Quiz,
   QuizQuestion,
   Grade,
+  GradeWithName,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -466,10 +467,11 @@ export class SQLDataStore implements DataStore {
 
   async createGrade(grade: Grade): Promise<void> {
     await this.db.run(
-      "INSERT INTO grades(grade,studentId,quizId) VALUES(?,?,?)",
+      "INSERT INTO grades(grade,studentId,quizId,takenAt) VALUES(?,?,?,?)",
       grade.grade,
       grade.studentId,
-      grade.quizId
+      grade.quizId,
+      grade.takenAt
     );
   }
 
@@ -478,6 +480,34 @@ export class SQLDataStore implements DataStore {
       "SELECT * FROM grades where studentId= ? and quizId=?",
       studentId,
       quizId
+    );
+  }
+
+  async getStudentGradesWithNameByCourseId(
+    studentId: string,
+    courseId: string
+  ): Promise<GradeWithName[]> {
+    return await this.db.all<GradeWithName[]>(
+      "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, grades.studentId from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.studentId = ? AND quizzes.courseId = ?",
+      studentId,
+      courseId
+    );
+  }
+  async getQuizGradesWithNameById(quizId: string): Promise<GradeWithName[]> {
+    return await this.db.all<GradeWithName[]>(
+      "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, grades.studentId from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.quizId = ?",
+      quizId
+    );
+  }
+
+  async getStudentGradeWithName(
+    studentId: string,
+    quizId: string
+  ): Promise<GradeWithName | undefined> {
+    return await this.db.get<GradeWithName>(
+      "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, grades.studentId from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.quizId = ? AND grades.studentId = ?",
+      quizId,
+      studentId
     );
   }
 

@@ -1,11 +1,17 @@
 import { ExpressHandlerWithParams } from "../types";
 import {
+  GetQuizGradesRequest,
+  GetQuizGradesResponse,
+  GetStudentGradeRequest,
+  GetStudentGradeResponse,
   Grade,
+  GradeWithName,
+  ListGradesRequest,
+  ListGradesResponse,
   SubmitQuizRequest,
   SubmitQuizResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
-import crypto from "crypto";
 
 export const SubmitQuiz: ExpressHandlerWithParams<
   { courseId: string; quizId: string },
@@ -83,11 +89,174 @@ export const SubmitQuiz: ExpressHandlerWithParams<
     studentId: existingStudent.id,
     quizId: req.params.quizId,
     grade: score,
+    takenAt: new Date(),
   };
 
   await db.createGrade(grade);
 
   return res.status(200).send({
     grade: score,
+  });
+};
+
+export const ListCourseGrades: ExpressHandlerWithParams<
+  { courseId: string },
+  ListGradesRequest,
+  ListGradesResponse
+> = async (req, res) => {
+  if (!req.params.courseId) {
+    return res.status(400).send({ error: "CourseId is required" });
+  }
+
+  if (res.locals.role !== "STUDENT") {
+    return res.status(403).send({ error: "Must be a student" });
+  }
+
+  const existingCourse = await db.getCourseById(req.params.courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
+  }
+
+  const existingStudent = await db.getStudentById(res.locals.userId);
+  if (!existingStudent) {
+    return res.status(404).send({ error: "Student not valid" });
+  }
+
+  const existingEnrollment = await db.checkEnrollment(
+    existingStudent.id,
+    req.params.courseId
+  );
+
+  if (!existingEnrollment) {
+    return res.status(403).send({ error: "Not enrolled in this course" });
+  }
+
+  const existingGrades = await db.getStudentGradesWithNameByCourseId(
+    res.locals.userId,
+    req.params.courseId
+  );
+
+  return res.status(200).send({
+    grades: existingGrades,
+  });
+};
+
+export const GetQuizGrades: ExpressHandlerWithParams<
+  { courseId: string; quizId: string },
+  GetQuizGradesRequest,
+  GetQuizGradesResponse
+> = async (req, res) => {
+  if (!req.params.courseId) {
+    return res.status(400).send({ error: "CourseId is required" });
+  }
+
+  if (!req.params.quizId) {
+    return res.status(400).send({ error: "QuizId is required" });
+  }
+
+  const existingCourse = await db.getCourseById(req.params.courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
+  }
+
+  const existingQuiz = await db.getQuizById(req.params.quizId);
+  if (!existingQuiz) {
+    return res.status(404).send({ error: "Quiz not found" });
+  }
+
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "User not valid" });
+  }
+
+  const existingEnrollment = await db.checkEnrollment(
+    existingUser.id,
+    req.params.courseId
+  );
+
+  if (!existingEnrollment) {
+    return res.status(403).send({ error: "Not enrolled in this course" });
+  }
+
+  let gradesArray: GradeWithName[] = [];
+
+  if (res.locals.role === "STUDENT") {
+    const existingGrade = await db.getStudentGradeWithName(
+      res.locals.userId,
+      req.params.quizId
+    );
+
+    if (!existingGrade) {
+      return res.status(404).send({ error: "Grade not found" });
+    }
+
+    gradesArray.push(existingGrade);
+  } else if (res.locals.role === "INSTRUCTOR") {
+    gradesArray = await db.getQuizGradesWithNameById(req.params.quizId);
+  } else {
+    return res.sendStatus(403);
+  }
+
+  return res.status(200).send({
+    grades: gradesArray,
+  });
+};
+
+export const GetStudentGrade: ExpressHandlerWithParams<
+  { courseId: string; quizId: string; studentId: string },
+  GetStudentGradeRequest,
+  GetStudentGradeResponse
+> = async (req, res) => {
+  if (!req.params.courseId) {
+    return res.status(400).send({ error: "CourseId is required" });
+  }
+
+  if (!req.params.quizId) {
+    return res.status(400).send({ error: "QuizId is required" });
+  }
+
+  if (!req.params.studentId) {
+    return res.status(400).send({ error: "StudentId is required" });
+  }
+
+  if (res.locals.role !== "INSTRUCTOR") {
+    return res.status(403).send({ error: "Must be an instructor" });
+  }
+
+  const existingCourse = await db.getCourseById(req.params.courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
+  }
+
+  const existingQuiz = await db.getQuizById(req.params.quizId);
+  if (!existingQuiz) {
+    return res.status(404).send({ error: "Quiz not found" });
+  }
+
+  const existingStudent = await db.getStudentById(req.params.studentId);
+  if (!existingStudent) {
+    return res.status(404).send({ error: "Student not valid" });
+  }
+
+  const existingEnrollment = await db.checkEnrollment(
+    res.locals.userId,
+    req.params.courseId
+  );
+
+  if (!existingEnrollment) {
+    return res.status(403).send({ error: "Not enrolled in this course" });
+  }
+
+  const existingGrades = await db.getStudentGradesWithNameByCourseId(
+    req.params.studentId,
+    req.params.courseId
+  );
+
+  if (!existingGrades) {
+    return res.status(404).send({ error: "No Grades not found" });
+  }
+
+  return res.status(200).send({
+    grades: existingGrades,
   });
 };
