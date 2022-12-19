@@ -279,3 +279,8 @@ export interface GetQuizGradesRequest {}
 export interface GetQuizGradesResponse {
   grades: GradeWithName[]; // A single grade in case of student request
 }
+
+export interface GetStudentGradeRequest {}
+export interface GetStudentGradeResponse {
+  grades: GradeWithName[];
+}

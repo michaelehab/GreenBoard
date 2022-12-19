@@ -6,6 +6,7 @@ import {
 } from "../middlewares/authMiddleware";
 import {
   GetQuizGrades,
+  GetStudentGrade,
   ListCourseGrades,
   SubmitQuiz,
 } from "../handlers/gradeHandler";
@@ -19,5 +20,9 @@ router.get("/:courseId/quiz/:quizId", getQuiz);
 router.post("/:courseId/quiz/:quizId", SubmitQuiz);
 router.get("/:courseId/grades", ListCourseGrades);
 router.get("/:courseId/quiz/:quizId/grades", GetQuizGrades);
+router.get(
+  "/:courseId/quiz/:quizId/student/:studentId/grades",
+  GetStudentGrade
+);
 
 export default router;
