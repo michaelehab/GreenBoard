@@ -2,6 +2,7 @@ import {
   CollegeSignInResponse,
   CollegeSignUpRequest,
   CollegeSignUpResponse,
+  SchoolSignInResponse,
   SignInRequest,
 } from "@greenboard/shared";
 
@@ -9,6 +10,8 @@ import { callEndpoint } from "./callEndpoint";
 
 export const LOCAL_STORAGE_JWT = "jwtToken";
 export const LOCAL_STORAGE_CollegeID = "signedincollegeid";
+export const LOCAL_STORAGE_SchoolID = "signedinschoolid";
+export const LOCAL_STORAGE_ROLE = "role";
 
 export const getLocalStorageJWT = (): string => {
   return localStorage.getItem(LOCAL_STORAGE_JWT) || "";
@@ -35,6 +38,22 @@ export async function collegeSignIn(email: string, password: string) {
   );
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
   localStorage.setItem(LOCAL_STORAGE_CollegeID, res.college.id);
+  localStorage.setItem(LOCAL_STORAGE_ROLE, "COLLEGE");
+}
+
+export async function schoolSignIn(email: string, password: string) {
+  const res = await callEndpoint<SignInRequest, SchoolSignInResponse>(
+    "/school/signin",
+    "POST",
+    false,
+    {
+      email,
+      password,
+    }
+  );
+  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+  localStorage.setItem(LOCAL_STORAGE_SchoolID, res.school.id);
+  localStorage.setItem(LOCAL_STORAGE_ROLE, "SCHOOL");
 }
 
 export const collegeSignUp = async (
