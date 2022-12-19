@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "SET NODE_ENV=dev && nodemon app.ts",
     "test": "SET NODE_ENV=test && jest --runInBand --detectOpenHandles --forceExit --no-cache",
-    "test:watch": " SET NODE_ENV=test && jest --watch"
+    "test:watch": " SET NODE_ENV=test && jest --watch",
+    "coverage": "SET NODE_ENV=test && jest --coverage"
   },
   "author": "",
   "license": "ISC",
