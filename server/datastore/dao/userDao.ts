@@ -5,4 +5,5 @@ export interface UserDao {
   getUserById(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByPhoneNumber(phone: string): Promise<User | undefined>;
+  // getCollegeIdAndSchoolIdAndDepartmentIdByUserId(id: string): Promise<any>;
 }

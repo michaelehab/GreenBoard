@@ -110,3 +110,13 @@ export interface Grade {
   studentId: string;
   quizId: string;
 }
+
+export interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  postedAt: number;
+  departmentId: string;
+  schoolId: string;
+  collegeId: string;
+}

@@ -1,4 +1,4 @@
-import { School } from "@greenboard/shared";
+import { Department, School } from "@greenboard/shared";
 
 export interface SchoolDao {
   createSchool(school: School): Promise<void>;

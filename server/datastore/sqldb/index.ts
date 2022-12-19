@@ -16,6 +16,7 @@ import {
   Quiz,
   QuizQuestion,
   Grade,
+  Announcement,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -480,6 +481,58 @@ export class SQLDataStore implements DataStore {
       quizId
     );
   }
+
+  async createAnnouncement(announcement: Announcement): Promise<void> {
+    await this.db.run(
+      "INSERT INTO announcements(id,title,content,postedAt,departmentId,schoolId,collegeId) VALUES(?,?,?,?,?,?,?)",
+      announcement.id,
+      announcement.title,
+      announcement.content,
+      announcement.postedAt,
+      announcement.departmentId,
+      announcement.schoolId,
+      announcement.collegeId
+    );
+  }
+
+  async getAnnouncementById(
+    announcementId: string
+  ): Promise<Announcement | undefined> {
+    return await this.db.get<Announcement>(
+      "SELECT * FROM announcements where id=? ",
+      announcementId
+    );
+  }
+
+  async listAnnouncementsOfCollegeByCollegeId(
+    collegeId: string
+  ): Promise<Announcement[]> {
+    return await this.db.all<Announcement[]>(
+      "SELECT * FROM announcements WHERE schoolId IS NULL AND departmentId IS NULL and collegeId=?",
+      collegeId
+    );
+  }
+  async listAnnouncementsOfSchoolBySchoolId(
+    schoolId: string
+  ): Promise<Announcement[]> {
+    return await this.db.all<Announcement[]>(
+      "SELECT * FROM announcements WHERE schoolId=? AND departmentId IS NULL",
+      schoolId
+    );
+  }
+
+  async listAnnouncementsOfDepartmentByDepartmentId(
+    departmentId: string
+  ): Promise<Announcement[]> {
+    return await this.db.all<Announcement[]>(
+      "SELECT * FROM announcements WHERE departmentId=?",
+      departmentId
+    );
+  }
+
+  /*async getCollegeIdAndSchoolIdAndDepartmentIdByUserId(id: string): Promise<any> {
+    return
+  }*/
 
   private seedDb = async () => {
     SEED_COLLEGE.adminPassword = getPasswordHashed(SEED_COLLEGE_PASSWORD);

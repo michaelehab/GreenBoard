@@ -14,6 +14,7 @@ import {
   InstructorAnswer,
   Quiz,
   QuizQuestion,
+  Announcement,
 } from "./types";
 
 export interface SignInRequest {
@@ -261,9 +262,26 @@ export interface GetQuizResponse {
 }
 
 export interface SubmitQuizRequest {
-  answers: string[]
+  answers: string[];
 }
 
 export interface SubmitQuizResponse {
-  grade: number
+  grade: number;
+}
+
+//Announcement API
+export type CreateAnnouncementRequest = Pick<Announcement, "title" | "content">;
+
+export interface CreateAnnouncementResponse {
+  announcement: Announcement;
+}
+
+export interface ListAnnouncementsRequest {}
+export interface ListAnnouncementsResponse {
+  announcement: Announcement[];
+}
+
+export interface GetAnnouncementRequest {} // post Id will be a url param
+export interface GetAnnouncementResponse {
+  announcement: Announcement;
 }
