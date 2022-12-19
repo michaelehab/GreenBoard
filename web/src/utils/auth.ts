@@ -23,11 +23,15 @@ export const isLoggedIn = (): boolean => {
   return !!jwt;
 };
 
-export async function collegeSignIn(login: string, password: string) {
+export async function collegeSignIn(email: string, password: string) {
   const res = await callEndpoint<SignInRequest, CollegeSignInResponse>(
     "/college/signin",
-    "post",
-    false
+    "POST",
+    false,
+    {
+      email,
+      password,
+    }
   );
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
   localStorage.setItem(LOCAL_STORAGE_CollegeID, res.college.id);

@@ -1,6 +1,7 @@
+import { ApiError } from "./apiError";
 import { getLocalStorageJWT, isLoggedIn, signOut } from "./auth";
 
-const HOST = "http://localhost:3000";
+const HOST = "http://localhost:3001/api/v1";
 
 export const replaceParams = (
   endpoint: string,
@@ -28,6 +29,7 @@ export async function callEndpoint<Request, Response>(
   request?: Request
 ): Promise<Response> {
   const requestBody = request ? JSON.stringify(request) : undefined;
+  console.log(requestBody);
   const response = await fetch(`${HOST}${endpoint}`, {
     method: method,
     headers: {
@@ -44,7 +46,7 @@ export async function callEndpoint<Request, Response>(
       signOut();
       window.location.reload();
     }
-    //throw new ApiError(response.status, msg);
+    throw new ApiError(response.status, msg);
   }
   const isJson = response.headers
     .get("content-type")
