@@ -1,4 +1,4 @@
-import { SubmitQuizRequest } from "@greenboard/shared";
+import { GradeWithName, SubmitQuizRequest } from "@greenboard/shared";
 import supertest from "supertest";
 import {
   SEED_COURSE,
@@ -49,6 +49,13 @@ describe("Quiz Grades tests", () => {
   const asnwer7: SubmitQuizRequest = {
     answers: ["A", "A", "A"],
   }; // Grade should be 6/6 * 100 = 100%
+
+  const seedGradeWithName: GradeWithName = {
+    quizName: SEED_QUIZ_TAKEN.name,
+    takenAt: SEED_GRADE_STUDENT.takenAt,
+    grade: SEED_GRADE_STUDENT.grade,
+    studentId: SEED_STUDENT.id,
+  };
 
   beforeAll(async () => {
     client = await getTestServer();
@@ -316,16 +323,26 @@ describe("Quiz Grades tests", () => {
     });
     it("View a specific quiz grade as a student in course -- GET /api/v1/course/:courseId/quiz/:quizId/grades returns 200", async () => {
       const result = await client
-        .get(`/api/v1/course/${SEED_COURSE}/quiz/${SEED_QUIZ_TAKEN.id}/grades`)
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_TAKEN.id}/grades`
+        )
         .set(studentAuthHeader)
         .expect(200);
 
       expect(result.body.grades).toBeDefined();
-      expect(result.body.grades[0]).toEqual(SEED_GRADE_STUDENT.grade);
+      expect(result.body.grades[0].quizName).toEqual(
+        seedGradeWithName.quizName
+      );
+      expect(result.body.grades[0].grade).toBeCloseTo(seedGradeWithName.grade);
+      expect(result.body.grades[0].studentId).toEqual(
+        seedGradeWithName.studentId
+      );
     });
     it("View a specific quiz grade as a student not in course -- GET /api/v1/course/:courseId/quiz/:quizId/grades returns 403", async () => {
       const result = await client
-        .get(`/api/v1/course/${SEED_COURSE}/quiz/${SEED_QUIZ_TAKEN.id}/grades`)
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_TAKEN.id}/grades`
+        )
         .set(studentNotInCourseAuthHeader)
         .expect(403);
 
@@ -341,7 +358,7 @@ describe("Quiz Grades tests", () => {
     });
     it("View a specific quiz grade as a student in course wrong grade -- GET /api/v1/course/:courseId/quiz/:quizId/grades returns 404", async () => {
       const result = await client
-        .get(`/api/v1/course/${SEED_COURSE}/quiz/InvalidGradeId/grades`)
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/InvalidGradeId/grades`)
         .set(studentAuthHeader)
         .expect(404);
 
@@ -349,29 +366,33 @@ describe("Quiz Grades tests", () => {
     });
     it("View a specific quiz grade as a unauthenticated in course -- GET /api/v1/course/:courseId/quiz/:quizId/grades returns 401", async () => {
       const result = await client
-        .get(`/api/v1/course/${SEED_COURSE}/quiz/${SEED_QUIZ_TAKEN.id}/grades`)
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_TAKEN.id}/grades`
+        )
         .expect(401);
 
       expect(result.body.grades).toBeUndefined();
     });
     it("View all students grades in a specific quiz as instructor in course -- GET /api/v1/course/:courseId/quiz/:quizId/grades returns 200", async () => {
       const result = await client
-        .get(`/api/v1/course/${SEED_COURSE}/quiz/${SEED_QUIZ_OPEN.id}/grades`)
+        .get(
+          `/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_TAKEN.id}/grades`
+        )
         .set(instructorAuthHeader)
         .expect(200);
 
-      expect(result.body.grades).toHaveLength(7);
-      expect(result.body.grades[0].grade).toBeCloseTo(16.67);
-      expect(result.body.grades[1].grade).toBeCloseTo(33.33);
-      expect(result.body.grades[2].grade).toEqual(50);
-      expect(result.body.grades[3].grade).toEqual(50);
-      expect(result.body.grades[4].grade).toBeCloseTo(83.33);
-      expect(result.body.grades[5].grade).toBeCloseTo(66.67);
-      expect(result.body.grades[6].grade).toEqual(100);
+      expect(result.body.grades).toHaveLength(1);
+      expect(result.body.grades[0].quizName).toEqual(
+        seedGradeWithName.quizName
+      );
+      expect(result.body.grades[0].grade).toBeCloseTo(seedGradeWithName.grade);
+      expect(result.body.grades[0].studentId).toEqual(
+        seedGradeWithName.studentId
+      );
     });
     it("View all students grades in a specific quiz as instructor not in course -- GET /api/v1/course/:courseId/quiz/:quizId/grades returns 403", async () => {
       const result = await client
-        .get(`/api/v1/course/${SEED_COURSE}/quiz/${SEED_QUIZ.id}/grades`)
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ.id}/grades`)
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
 
@@ -387,7 +408,7 @@ describe("Quiz Grades tests", () => {
     });
     it("View all students grades in a specific quiz as instructor in course wrong quiz -- GET /api/v1/course/:courseId/quiz/:quizId/grades returns 404", async () => {
       const result = await client
-        .get(`/api/v1/course/${SEED_COURSE}/quiz/InvalidQuizId/grades`)
+        .get(`/api/v1/course/${SEED_COURSE.id}/quiz/InvalidQuizId/grades`)
         .set(instructorAuthHeader)
         .expect(404);
 
@@ -396,35 +417,22 @@ describe("Quiz Grades tests", () => {
     it("View a specific student grades as instructor in course -- GET /api/v1/course/:courseId/quiz/:quizId/student/:studentId returns 200", async () => {
       const result = await client
         .get(
-          `/api/v1/course/${SEED_COURSE}/quiz/${SEED_QUIZ_TAKEN.id}/student/${SEED_STUDENT.id}/grades`
+          `/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_TAKEN.id}/student/${SEED_STUDENT.id}/grades`
         )
         .set(instructorAuthHeader)
         .expect(200);
 
       expect(result.body.grades).toHaveLength(1);
-      expect(result.body.grades[0].grade).toEqual(SEED_GRADE_STUDENT.grade);
-    });
-    it("View a specific student grades as instructor in course -- GET /api/v1/course/:courseId/quiz/:quizId/student/:studentId returns 200", async () => {
-      const result = await client
-        .get(
-          `/api/v1/course/${SEED_COURSE}/quiz/${SEED_QUIZ_OPEN.id}/student/${SEED_STUDENT.id}/grades`
-        )
-        .set(instructorAuthHeader)
-        .expect(200);
-
-      expect(result.body.grades).toHaveLength(7);
-      expect(result.body.grades[0].grade).toBeCloseTo(16.67);
-      expect(result.body.grades[1].grade).toBeCloseTo(33.33);
-      expect(result.body.grades[2].grade).toEqual(50);
-      expect(result.body.grades[3].grade).toEqual(50);
-      expect(result.body.grades[4].grade).toBeCloseTo(83.33);
-      expect(result.body.grades[5].grade).toBeCloseTo(66.67);
-      expect(result.body.grades[6].grade).toEqual(100);
+      expect(result.body.grades[0].name).toEqual(seedGradeWithName.quizName);
+      expect(result.body.grades[0].grade).toBeCloseTo(seedGradeWithName.grade);
+      expect(result.body.grades[0].studentId).toEqual(
+        seedGradeWithName.studentId
+      );
     });
     it("View a specific wrong student grades as instructor in course -- GET /api/v1/course/:courseId/quiz/:quizId/student/:studentId returns 200 (empty)", async () => {
       const result = await client
         .get(
-          `/api/v1/course/${SEED_COURSE}/quiz/${SEED_QUIZ_OPEN.id}/student/InvalidStudentId`
+          `/api/v1/course/${SEED_COURSE.id}/quiz/${SEED_QUIZ_OPEN.id}/student/InvalidStudentId`
         )
         .set(instructorAuthHeader)
         .expect(200);

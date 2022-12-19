@@ -1,6 +1,9 @@
 import { ExpressHandlerWithParams } from "../types";
 import {
+  GetQuizGradesRequest,
+  GetQuizGradesResponse,
   Grade,
+  GradeWithName,
   ListGradesRequest,
   ListGradesResponse,
   SubmitQuizRequest,
@@ -94,7 +97,7 @@ export const SubmitQuiz: ExpressHandlerWithParams<
   });
 };
 
-export const ListGrades: ExpressHandlerWithParams<
+export const ListCourseGrades: ExpressHandlerWithParams<
   { courseId: string },
   ListGradesRequest,
   ListGradesResponse
@@ -126,12 +129,73 @@ export const ListGrades: ExpressHandlerWithParams<
     return res.status(403).send({ error: "Not enrolled in this course" });
   }
 
-  const existingGrades = await db.getStudentGradesByCourseId(
+  const existingGrades = await db.getStudentGradesWithNameByCourseId(
     res.locals.userId,
     req.params.courseId
   );
 
   return res.status(200).send({
     grades: existingGrades,
+  });
+};
+
+export const GetQuizGrades: ExpressHandlerWithParams<
+  { courseId: string; quizId: string },
+  GetQuizGradesRequest,
+  GetQuizGradesResponse
+> = async (req, res) => {
+  if (!req.params.courseId) {
+    return res.status(400).send({ error: "CourseId is required" });
+  }
+
+  if (!req.params.quizId) {
+    return res.status(400).send({ error: "CourseId is required" });
+  }
+
+  const existingCourse = await db.getCourseById(req.params.courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
+  }
+
+  const existingQuiz = await db.getQuizById(req.params.quizId);
+  if (!existingQuiz) {
+    return res.status(404).send({ error: "Quiz not found" });
+  }
+
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "User not valid" });
+  }
+
+  const existingEnrollment = await db.checkEnrollment(
+    existingUser.id,
+    req.params.courseId
+  );
+
+  if (!existingEnrollment) {
+    return res.status(403).send({ error: "Not enrolled in this course" });
+  }
+
+  let gradesArray: GradeWithName[] = [];
+
+  if (res.locals.role === "STUDENT") {
+    const existingGrade = await db.getStudentGradeWithName(
+      res.locals.userId,
+      req.params.quizId
+    );
+
+    if (!existingGrade) {
+      return res.status(404).send({ error: "Grade not found" });
+    }
+
+    gradesArray.push(existingGrade);
+  } else if (res.locals.role === "INSTRUCTOR") {
+    gradesArray = await db.getQuizGradesWithNameById(req.params.quizId);
+  } else {
+    return res.sendStatus(403);
+  }
+
+  return res.status(200).send({
+    grades: gradesArray,
   });
 };

@@ -483,20 +483,31 @@ export class SQLDataStore implements DataStore {
     );
   }
 
-  async getStudentGradesByCourseId(
+  async getStudentGradesWithNameByCourseId(
     studentId: string,
     courseId: string
   ): Promise<GradeWithName[]> {
     return await this.db.all<GradeWithName[]>(
-      "SELECT grades.grade, quizzes.name, grades.takenAt from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.studentId = ? AND quizzes.courseId = ?",
+      "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, grades.studentId from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.studentId = ? AND quizzes.courseId = ?",
       studentId,
       courseId
     );
   }
-  async getQuizGradesById(quizId: string): Promise<GradeWithName[]> {
+  async getQuizGradesWithNameById(quizId: string): Promise<GradeWithName[]> {
     return await this.db.all<GradeWithName[]>(
-      "SELECT grades.grade, quizzes.name, grades.takenAt from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.quizId = ?",
+      "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, grades.studentId from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.quizId = ?",
       quizId
+    );
+  }
+
+  async getStudentGradeWithName(
+    studentId: string,
+    quizId: string
+  ): Promise<GradeWithName | undefined> {
+    return await this.db.get<GradeWithName>(
+      "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, grades.studentId from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.quizId = ? AND grades.studentId = ?",
+      quizId,
+      studentId
     );
   }
 

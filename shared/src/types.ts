@@ -116,4 +116,5 @@ export interface GradeWithName {
   grade: number;
   quizName: string;
   takenAt: Date;
+  studentId: string;
 }

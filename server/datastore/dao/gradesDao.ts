@@ -3,9 +3,13 @@ import { Grade, GradeWithName } from "@greenboard/shared";
 export interface GradesDao {
   createGrade(grade: Grade): Promise<void>;
   getGrade(studentId: string, quizId: string): Promise<Grade | undefined>;
-  getStudentGradesByCourseId(
+  getStudentGradesWithNameByCourseId(
     studentId: string,
     courseId: string
   ): Promise<GradeWithName[]>;
-  getQuizGradesById(quizId: string): Promise<GradeWithName[]>;
+  getQuizGradesWithNameById(quizId: string): Promise<GradeWithName[]>;
+  getStudentGradeWithName(
+    studentId: string,
+    quizId: string
+  ): Promise<GradeWithName | undefined>;
 }
