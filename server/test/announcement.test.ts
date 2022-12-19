@@ -27,18 +27,18 @@ describe("Announcements tests", () => {
   let collegeAnnouncementId: string;
 
   const departmentAnnouncement: CreateAnnouncementRequest = {
-    title: "First Department Announcement title",
-    content: "This is an announcement content",
+    title: "Department Announcement title",
+    content: "Department announcement content",
   };
 
   const schoolAnnouncement: CreateAnnouncementRequest = {
-    title: "First school Announcement title",
-    content: "This is an announcement content",
+    title: "School Announcement title",
+    content: "School announcement content",
   };
 
   const collegeAnnouncement: CreateAnnouncementRequest = {
-    title: "First college Announcement title",
-    content: "This is an announcement content",
+    title: "College Announcement title",
+    content: "College announcement content",
   };
 
   beforeAll(async () => {
@@ -204,10 +204,29 @@ describe("Announcements tests", () => {
         .get(`/api/v1/announcements`)
         .set(studentAuthHeader)
         .expect(200);
-      expect(result.body.announcement).toHaveLength(3);
-      expect(result.body.announcement[0].title).toBe(collegeAnnouncement.title);
-      expect(result.body.announcement[0].content).toBe(
+      expect(result.body.collegeAnnouncements).toHaveLength(1);
+      expect(result.body.schoolAnnouncements).toHaveLength(1);
+      expect(result.body.departmentAnnouncements).toHaveLength(1);
+      expect(result.body.collegeName).toBe(SEED_COLLEGE.name);
+      expect(result.body.schoolName).toBe(SEED_SCHOOL.name);
+      expect(result.body.departmentName).toBe(SEED_DEPARTMENT.name);
+      expect(result.body.collegeAnnouncements[0].title).toBe(
+        collegeAnnouncement.title
+      );
+      expect(result.body.collegeAnnouncements[0].content).toBe(
         collegeAnnouncement.content
+      );
+      expect(result.body.schoolAnnouncements[0].title).toBe(
+        schoolAnnouncement.title
+      );
+      expect(result.body.schoolAnnouncements[0].content).toBe(
+        schoolAnnouncement.content
+      );
+      expect(result.body.departmentAnnouncements[0].title).toBe(
+        departmentAnnouncement.title
+      );
+      expect(result.body.departmentAnnouncements[0].content).toBe(
+        departmentAnnouncement.content
       );
     });
     it("Get announcements as instructor in college-- GET /api/v1/announcements returns 200", async () => {
@@ -215,14 +234,43 @@ describe("Announcements tests", () => {
         .get(`/api/v1/announcements`)
         .set(instructorAuthHeader)
         .expect(200);
-      expect(result.body.announcement).toHaveLength(3);
-      expect(result.body.announcement[0].title).toBe(collegeAnnouncement.title);
-      expect(result.body.announcement[0].content).toBe(
+      expect(result.body.collegeAnnouncements).toHaveLength(1);
+      expect(result.body.schoolAnnouncements).toHaveLength(1);
+      expect(result.body.departmentAnnouncements).toHaveLength(1);
+      expect(result.body.collegeName).toBe(SEED_COLLEGE.name);
+      expect(result.body.schoolName).toBe(SEED_SCHOOL.name);
+      expect(result.body.departmentName).toBe(SEED_DEPARTMENT.name);
+      expect(result.body.collegeAnnouncements[0].title).toBe(
+        collegeAnnouncement.title
+      );
+      expect(result.body.collegeAnnouncements[0].content).toBe(
         collegeAnnouncement.content
+      );
+      expect(result.body.schoolAnnouncements[0].title).toBe(
+        schoolAnnouncement.title
+      );
+      expect(result.body.schoolAnnouncements[0].content).toBe(
+        schoolAnnouncement.content
+      );
+      expect(result.body.departmentAnnouncements[0].title).toBe(
+        departmentAnnouncement.title
+      );
+      expect(result.body.departmentAnnouncements[0].content).toBe(
+        departmentAnnouncement.content
       );
     });
 
-    it("Get announcements as instructor in college-- GET /api/v1/announcements returns 200", async () => {
+    it("Get announcements as unauthorized -- GET /api/v1/announcements/  returns 401", async () => {
+      const result = await client.get(`/api/v1/announcements`).expect(401);
+      expect(result.body.collegeAnnouncement).toBeUndefined();
+      expect(result.body.departmentAnnouncement).toBeUndefined();
+      expect(result.body.schoolAnnouncement).toBeUndefined();
+      expect(result.body.schoolName).toBeUndefined();
+      expect(result.body.collegeName).toBeUndefined();
+      expect(result.body.departmentName).toBeUndefined();
+    });
+
+    it("Get Specific college announcements as instructor in college-- GET /api/v1/announcements/:id returns 200", async () => {
       const result = await client
         .get(`/api/v1/announcements/${collegeAnnouncementId}`)
         .set(instructorAuthHeader)
@@ -233,7 +281,7 @@ describe("Announcements tests", () => {
         collegeAnnouncement.content
       );
     });
-    it("Get announcements as student in college-- GET /api/v1/announcements returns 200", async () => {
+    it("Get Specific college announcements as student in college-- GET /api/v1/announcements/:id returns 200", async () => {
       const result = await client
         .get(`/api/v1/announcements/${collegeAnnouncementId}`)
         .set(studentAuthHeader)
@@ -245,7 +293,7 @@ describe("Announcements tests", () => {
       );
     });
 
-    it("Get Specific announcement as student -- GET /api/v1/announcements/:id  returns 200", async () => {
+    it("Get Specific college announcement as student -- GET /api/v1/announcements/:id  returns 200", async () => {
       const result = await client
         .get(`/api/v1/announcements/${collegeAnnouncementId}`)
         .set(studentAuthHeader)
@@ -257,7 +305,7 @@ describe("Announcements tests", () => {
       expect(result.body.announcement.title).toEqual(collegeAnnouncement.title);
     });
 
-    it("Get Specific announcement as instructor -- GET /api/v1/announcements/:id returns 200", async () => {
+    it("Get Specific college announcement as instructor -- GET /api/v1/announcements/:id returns 200", async () => {
       const result = await client
         .get(`/api/v1/announcements/${collegeAnnouncementId}`)
         .set(instructorAuthHeader)
@@ -269,7 +317,7 @@ describe("Announcements tests", () => {
       expect(result.body.announcement.title).toEqual(collegeAnnouncement.title);
     });
 
-    it("Get Specific announcement as unauthorized -- GET /api/v1/announcements/:id  returns 401", async () => {
+    it("Get Specific college announcement as unauthorized -- GET /api/v1/announcements/:id  returns 401", async () => {
       const result = await client
         .get(`/api/v1/announcements/${collegeAnnouncementId}`)
         .expect(401);

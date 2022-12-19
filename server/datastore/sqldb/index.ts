@@ -74,9 +74,9 @@ export class SQLDataStore implements DataStore {
       migrationsPath: path.join(__dirname, "migrations"),
     });
 
-    if (dbPath == ":memory:") {
-      await this.seedDb();
-    }
+    //if (dbPath == ":memory:") {
+    await this.seedDb();
+    //}
 
     return this;
   }
@@ -535,7 +535,7 @@ export class SQLDataStore implements DataStore {
     departmentId: string
   ): Promise<UserRegistrationData | undefined> {
     return await this.db.get<UserRegistrationData>(
-      "SELECT colleges.Id,schools.id,departments.name,schools.name,colleges.name FROM schools,colleges,departments,users WHERE users.departmentId=departments.id and schoolId=schools.id and collegeId=colleges.id and departmentId=?",
+      "SELECT DISTINCT colleges.Id as collegeId,schools.id as schoolId,departments.name as departmentName,schools.name as schoolName,colleges.name as collegeName FROM schools,colleges,departments,users WHERE users.departmentId=departments.id and schoolId=schools.id and collegeId=colleges.id and departmentId=?",
       departmentId
     );
   }
