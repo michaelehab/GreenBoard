@@ -133,4 +133,8 @@ export const collegeSignUp = async (
 export const signOut = () => {
   localStorage.removeItem(LOCAL_STORAGE_JWT);
   localStorage.removeItem(LOCAL_STORAGE_CollegeID);
+  localStorage.removeItem(LOCAL_STORAGE_DepartmentID);
+  localStorage.removeItem(LOCAL_STORAGE_SchoolID);
+  localStorage.removeItem(LOCAL_STORAGE_UserID);
+  localStorage.removeItem(LOCAL_STORAGE_ROLE);
 };

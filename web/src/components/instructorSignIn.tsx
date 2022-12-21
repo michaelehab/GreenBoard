@@ -10,6 +10,7 @@ import {
   } from "@chakra-ui/react";
   import { FormEvent, useCallback, useEffect, useState } from "react";
   import { useNavigate } from "react-router-dom";
+import { ApiError } from "../utils/apiError";
   import { isLoggedIn, instructorSignIn } from "../utils/auth";
   
   export const InstructorSignIn = () => {
@@ -28,7 +29,9 @@ import {
             await instructorSignIn(email, passWord);
             navigate("/");
           } catch (err) {
-            setError(err as string);
+            if(err instanceof ApiError){
+                setError(err.message);
+            }
           }
         }
       },
