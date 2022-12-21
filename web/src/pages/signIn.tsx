@@ -4,6 +4,7 @@ import { SchoolSignIn } from "../components/schoolSignIn";
 import { useTitle } from "../utils/useTitle";
 import { DepartmentSignIn } from "../components/departmentSignIn";
 import { StudentSignIn } from "../components/studentSignIn";
+import { InstructorSignIn } from "../components/instructorSignIn";
 
 export const SignIn = () => {
   useTitle("Sign in");
@@ -27,6 +28,9 @@ export const SignIn = () => {
         </TabPanel>
         <TabPanel>
           <DepartmentSignIn />
+        </TabPanel>
+        <TabPanel>
+          <InstructorSignIn/>
         </TabPanel>
         <TabPanel>
           <StudentSignIn/>
