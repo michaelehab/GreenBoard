@@ -18,7 +18,7 @@ export const CollegeSignIn = () => {
   const [passWord, setPassWord] = useState("");
   const [error, setError] = useState("");
 
-  const tryCollegeSignin = useCallback(
+  const signIn = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       if (email === "" || passWord === "") {
@@ -42,7 +42,7 @@ export const CollegeSignIn = () => {
   }, [navigate]);
 
   return (
-    <form onSubmit={tryCollegeSignin}>
+    <form onSubmit={signIn}>
       <Center>
         <Heading color="#31C48D">College Sign In</Heading>
       </Center>
@@ -68,7 +68,7 @@ export const CollegeSignIn = () => {
             variant="solid"
             type="submit"
             display="block"
-            onClick={tryCollegeSignin}
+            onClick={signIn}
           >
             Sign in
           </Button>
