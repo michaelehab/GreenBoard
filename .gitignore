@@ -105,3 +105,6 @@ dist
 
 # RESTClient for testing api
 request.rest
+
+# SQLite DB
+greenboard.sqlite
