@@ -6,7 +6,7 @@ export const SignUp = () => {
   useTitle("Sign in");
 
   return (
-    <Tabs align="center">
+    <Tabs align="center" colorScheme="green">
       <TabList>
         <Tab>College</Tab>
         <Tab>School</Tab>

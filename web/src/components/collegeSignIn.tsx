@@ -29,8 +29,8 @@ export const CollegeSignIn = () => {
           await collegeSignIn(email, passWord);
           navigate("/");
         } catch (err) {
-          if(err instanceof ApiError){
-              setError(err.message);
+          if (err instanceof ApiError) {
+            setError(err.message);
           }
         }
       }
@@ -47,7 +47,7 @@ export const CollegeSignIn = () => {
   return (
     <form onSubmit={signIn}>
       <Center>
-        <Heading color="#31C48D">College Sign In</Heading>
+        <Heading color="#4d7e3e">College Sign In</Heading>
       </Center>
       <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
         <Input

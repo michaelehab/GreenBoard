@@ -25,14 +25,14 @@ export const Home = () => {
                 position: "absolute",
                 bottom: 1,
                 left: 0,
-                bg: "green.400",
+                bg: "#4d7e3e",
                 zIndex: -1,
               }}
             >
               GreenBoard
             </Text>
             <br />{" "}
-            <Text color={"green.400"} as={"span"}>
+            <Text color={"#4d7e3e"} as={"span"}>
               Better Education
             </Text>{" "}
           </Heading>
@@ -43,7 +43,7 @@ export const Home = () => {
           <Stack direction={{ base: "column", md: "row" }} spacing={4}>
             <Button
               rounded={"full"}
-              bg={"green.400"}
+              bg={"#4d7e3e"}
               color={"white"}
               _hover={{
                 bg: "green.500",

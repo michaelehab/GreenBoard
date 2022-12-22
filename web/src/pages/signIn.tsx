@@ -10,7 +10,7 @@ export const SignIn = () => {
   useTitle("Sign in");
 
   return (
-    <Tabs align="center">
+    <Tabs align="center" colorScheme="green">
       <TabList>
         <Tab>College</Tab>
         <Tab>School</Tab>
@@ -30,10 +30,10 @@ export const SignIn = () => {
           <DepartmentSignIn />
         </TabPanel>
         <TabPanel>
-          <InstructorSignIn/>
+          <InstructorSignIn />
         </TabPanel>
         <TabPanel>
-          <StudentSignIn/>
+          <StudentSignIn />
         </TabPanel>
       </TabPanels>
     </Tabs>

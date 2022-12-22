@@ -17,7 +17,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
-import Logo from "../assets/logo/svg/logo-no-background.svg";
+import Logo from "../assets/logo/png/logo-no-background.png";
 import UserAvatar from "../assets/user.png";
 import { isLoggedIn, signOut } from "../utils/auth";
 import { Link, useNavigate } from "react-router-dom";
@@ -55,18 +55,22 @@ export const NavBar = () => {
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box bg="#4d7e3e" px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <IconButton
-            size={"md"}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={"Open Menu"}
-            display={{ md: "none" }}
-            onClick={isOpen ? onClose : onOpen}
-          />
+          {Links.length > 0 ? (
+            <IconButton
+              size={"md"}
+              icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+              aria-label={"Open Menu"}
+              display={{ md: "none" }}
+              onClick={isOpen ? onClose : onOpen}
+            />
+          ) : (
+            <></>
+          )}
           <HStack spacing={8} alignItems={"center"}>
             <Link to={"/"}>
-              <Image src={Logo} height={10} />
+              <Image src={Logo} height={8} />
             </Link>
             <HStack
               as={"nav"}
@@ -111,13 +115,13 @@ export const NavBar = () => {
           ) : (
             <Flex>
               <Link to={"/signin"}>
-                <Button variant="ghost" color="green">
-                  SignIn
+                <Button variant="solid" color="green" m={1}>
+                  Sign In
                 </Button>
               </Link>
               <Link to={"/signup"}>
-                <Button colorScheme="green" variant="solid">
-                  SignUp
+                <Button colorScheme="green" variant="solid" m={1}>
+                  Sign Up
                 </Button>
               </Link>
             </Flex>

@@ -29,8 +29,8 @@ export const DepartmentSignIn = () => {
           await departmentSignIn(email, passWord);
           navigate("/");
         } catch (err) {
-          if(err instanceof ApiError){
-              setError(err.message);
+          if (err instanceof ApiError) {
+            setError(err.message);
           }
         }
       }
@@ -47,7 +47,7 @@ export const DepartmentSignIn = () => {
   return (
     <form onSubmit={signIn}>
       <Center>
-        <Heading color="#31C48D">Department Sign In</Heading>
+        <Heading color="#4d7e3e">Department Sign In</Heading>
       </Center>
       <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
         <Input
