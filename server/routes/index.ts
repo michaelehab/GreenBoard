@@ -5,6 +5,7 @@ import school from "./school";
 import instructor from "./instructor";
 import department from "./department";
 import course from "./course";
+import announcements from "./announcements";
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use("/school", school);
 router.use("/department", department);
 router.use("/instructor", instructor);
 router.use("/course", course);
+router.use("/announcements", announcements);
 
 export default router;

@@ -118,3 +118,21 @@ export interface GradeWithName {
   takenAt: Date;
   studentId: string;
 }
+
+export interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  postedAt: number;
+  departmentId: string;
+  schoolId: string;
+  collegeId: string;
+}
+
+export interface UserRegistrationData {
+  collegeId: string;
+  schoolId: string;
+  departmentName: string;
+  schoolName: string;
+  collegeName: string;
+}

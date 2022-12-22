@@ -16,6 +16,8 @@ import {
   Quiz,
   QuizQuestion,
   Grade,
+  Announcement,
+  UserRegistrationData,
   GradeWithName,
 } from "@greenboard/shared";
 import path from "path";
@@ -73,9 +75,9 @@ export class SQLDataStore implements DataStore {
       migrationsPath: path.join(__dirname, "migrations"),
     });
 
-    if (dbPath == ":memory:") {
-      await this.seedDb();
-    }
+    //if (dbPath == ":memory:") {
+    await this.seedDb();
+    //}
 
     return this;
   }
@@ -483,6 +485,63 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+async createAnnouncement(announcement: Announcement): Promise<void> {
+    await this.db.run(
+      "INSERT INTO announcements(id,title,content,postedAt,departmentId,schoolId,collegeId) VALUES(?,?,?,?,?,?,?)",
+      announcement.id,
+      announcement.title,
+      announcement.content,
+      announcement.postedAt,
+      announcement.departmentId,
+      announcement.schoolId,
+      announcement.collegeId
+    );
+  }
+
+  async getAnnouncementById(
+    announcementId: string
+  ): Promise<Announcement | undefined> {
+    return await this.db.get<Announcement>(
+      "SELECT * FROM announcements where id=? ",
+      announcementId
+    );
+  }
+
+  async listAnnouncementsOfCollegeByCollegeId(
+    collegeId: string
+  ): Promise<Announcement[]> {
+    return await this.db.all<Announcement[]>(
+      "SELECT * FROM announcements WHERE schoolId IS NULL AND departmentId IS NULL and collegeId=?",
+      collegeId
+    );
+  }
+  async listAnnouncementsOfSchoolBySchoolId(
+    schoolId: string
+  ): Promise<Announcement[]> {
+    return await this.db.all<Announcement[]>(
+      "SELECT * FROM announcements WHERE schoolId=? AND departmentId IS NULL",
+      schoolId
+    );
+  }
+
+  async listAnnouncementsOfDepartmentByDepartmentId(
+    departmentId: string
+  ): Promise<Announcement[]> {
+    return await this.db.all<Announcement[]>(
+      "SELECT * FROM announcements WHERE departmentId=?",
+      departmentId
+    );
+  }
+
+  async getUserRegistrationDatabyDepartmentId(
+    departmentId: string
+  ): Promise<UserRegistrationData | undefined> {
+    return await this.db.get<UserRegistrationData>(
+      "SELECT DISTINCT colleges.Id as collegeId,schools.id as schoolId,departments.name as departmentName,schools.name as schoolName,colleges.name as collegeName FROM schools,colleges,departments,users WHERE users.departmentId=departments.id and schoolId=schools.id and collegeId=colleges.id and departmentId=?",
+      departmentId
+    );
+  }
+  
   async getStudentGradesWithNameByCourseId(
     studentId: string,
     courseId: string
@@ -508,7 +567,7 @@ export class SQLDataStore implements DataStore {
       "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, grades.studentId from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.quizId = ? AND grades.studentId = ?",
       quizId,
       studentId
-    );
+      );
   }
 
   private seedDb = async () => {
