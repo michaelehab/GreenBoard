@@ -12,7 +12,7 @@ export async function createCourse(
   password: string
 ) {
   const res = await callEndpoint<CreateCourseRequest, CreateCourseResponse>(
-    "/course/",
+    "/courses/",
     "POST",
     false,
     {
@@ -25,7 +25,7 @@ export async function createCourse(
 
 export async function joinCourse(courseId: string, password: string) {
   const res = await callEndpoint<CourseEnrollRequest, CourseEnrollResponse>(
-    "/course/join",
+    "/courses/join",
     "POST",
     false,
     {
