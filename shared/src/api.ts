@@ -182,6 +182,11 @@ export interface ListEnrolledInCoursesResponse {
   courses: CourseData[];
 }
 
+export interface ListNotEnrolledInCoursesRequest {}
+export interface ListNotEnrolledInCoursesResponse {
+  courses: CourseData[];
+}
+
 // Post APIs
 export type CreatePostRequest = Pick<Post, "title" | "url" | "content">;
 

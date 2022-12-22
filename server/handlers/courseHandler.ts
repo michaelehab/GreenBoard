@@ -10,6 +10,8 @@ import {
   GetCourseDateResponse,
   ListEnrolledInCoursesRequest,
   ListEnrolledInCoursesResponse,
+  ListNotEnrolledInCoursesRequest,
+  ListNotEnrolledInCoursesResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -159,6 +161,25 @@ export const ListCourses: ExpressHandler<
   }
 
   const existingCourses = await db.listEnrolledCourse(res.locals.userId);
+
+  return res.status(200).send({
+    courses: existingCourses,
+  });
+};
+
+export const ListAvailableCourses: ExpressHandler<
+  ListNotEnrolledInCoursesRequest,
+  ListNotEnrolledInCoursesResponse
+> = async (req, res) => {
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "User is not found" });
+  }
+
+  const existingCourses = await db.listAvailableCourses(
+    res.locals.userId,
+    existingUser.departmentId
+  );
 
   return res.status(200).send({
     courses: existingCourses,

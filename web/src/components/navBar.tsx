@@ -20,7 +20,12 @@ import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
 import Logo from "../assets/logo/png/logo-no-background.png";
 import UserAvatar from "../assets/user.jpg";
 import AdminAvatar from "../assets/admin.jpg";
-import { LOCAL_STORAGE_ROLE, isLoggedIn, signOut } from "../utils/auth";
+import {
+  LOCAL_STORAGE_ROLE,
+  isLoggedIn,
+  isLoggedInUser,
+  signOut,
+} from "../utils/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 
@@ -111,7 +116,7 @@ export const NavBar = () => {
               )}
               {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" ||
               localStorage.getItem(LOCAL_STORAGE_ROLE) === "STUDENT" ? (
-                <Link to={"/join/course"}>
+                <Link to={"/courses"}>
                   <Button
                     variant={"solid"}
                     colorScheme="green"
@@ -119,7 +124,7 @@ export const NavBar = () => {
                     mr={4}
                     leftIcon={<AddIcon />}
                   >
-                    Join Course
+                    My Courses
                   </Button>
                 </Link>
               ) : (
@@ -146,6 +151,12 @@ export const NavBar = () => {
                     "INSTRUCTOR" && (
                     <MenuItem>
                       <Link to={"/new/course"}>Create Course</Link>
+                      <MenuDivider />
+                    </MenuItem>
+                  )}
+                  {isLoggedInUser() && (
+                    <MenuItem>
+                      <Link to={"/courses/available"}>Join Course</Link>
                       <MenuDivider />
                     </MenuItem>
                   )}

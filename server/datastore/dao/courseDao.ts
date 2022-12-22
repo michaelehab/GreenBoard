@@ -5,4 +5,8 @@ export interface CourseDao {
   getCourseByCode(courseCode: string): Promise<Course | undefined>;
   getCourseById(id: string): Promise<Course | undefined>;
   listEnrolledCourse(userId: string): Promise<CourseData[]>;
+  listAvailableCourses(
+    userId: string,
+    departmentId: string
+  ): Promise<CourseData[]>;
 }

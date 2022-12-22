@@ -4,6 +4,7 @@ import {
   JoinCourse,
   GetCourse,
   ListCourses,
+  ListAvailableCourses,
 } from "../handlers/courseHandler";
 import {
   parseJwtMiddleware,
@@ -18,9 +19,10 @@ const router = Router();
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
 router.post("/", CreateCourse);
+router.get("/available", ListAvailableCourses);
 router.post("/join", JoinCourse);
-router.get("/:courseId", GetCourse);
 router.get("/", ListCourses);
+router.get("/:courseId", GetCourse);
 
 router.use(coursePost);
 router.use(studentQuestion);

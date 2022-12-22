@@ -308,6 +308,17 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async listAvailableCourses(
+    userId: string,
+    departmentId: string
+  ): Promise<CourseData[]> {
+    return this.db.all<CourseData[]>(
+      "SELECT courses.id, courses.courseCode, courses.name from courses WHERE departmentId = ? EXCEPT SELECT courses.id, courses.courseCode, courses.name from courses JOIN enrollments ON enrollments.courseId = courses.id AND enrollments.userId = ?",
+      departmentId,
+      userId
+    );
+  }
+
   async createEnrollment(enrollment: Enrollment): Promise<void> {
     await this.db.run(
       "INSERT INTO enrollments(id, userId, courseId) VALUES (?,?,?)",

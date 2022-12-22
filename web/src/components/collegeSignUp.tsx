@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "../utils/useTitle";
 import { isLoggedIn, collegeSignUp } from "../utils/auth";
+import { ApiError } from "../utils/apiError";
 
 export const CollegeSignUp = () => {
   useTitle("Sign Up");
@@ -52,7 +53,9 @@ export const CollegeSignUp = () => {
           );
           navigate("/");
         } catch (err) {
-          setError(err as string);
+          if (err instanceof ApiError) {
+            setError(err.message);
+          }
         }
       }
     },
