@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ApiError } from "../utils/apiError";
 import { isLoggedIn, schoolSignIn } from "../utils/auth";
 
 export const SchoolSignIn = () => {
@@ -18,7 +19,7 @@ export const SchoolSignIn = () => {
   const [passWord, setPassWord] = useState("");
   const [error, setError] = useState("");
 
-  const trySchoolSignin = useCallback(
+  const signIn = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       if (email === "" || passWord === "") {
@@ -28,7 +29,9 @@ export const SchoolSignIn = () => {
           await schoolSignIn(email, passWord);
           navigate("/");
         } catch (err) {
-          setError(err as string);
+          if(err instanceof ApiError){
+              setError(err.message);
+          }
         }
       }
     },
@@ -42,7 +45,7 @@ export const SchoolSignIn = () => {
   }, [navigate]);
 
   return (
-    <form onSubmit={trySchoolSignin}>
+    <form onSubmit={signIn}>
       <Center>
         <Heading color="#31C48D">School Sign In</Heading>
       </Center>
@@ -68,7 +71,7 @@ export const SchoolSignIn = () => {
             variant="solid"
             type="submit"
             display="block"
-            onClick={trySchoolSignin}
+            onClick={signIn}
           >
             Sign in
           </Button>
