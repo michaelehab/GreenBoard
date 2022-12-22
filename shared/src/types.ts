@@ -50,6 +50,12 @@ export interface Course {
   departmentId: string;
 }
 
+export interface CourseData {
+  id: string;
+  courseCode: string;
+  name: string;
+}
+
 export interface Enrollment {
   id: string;
   userId: string;

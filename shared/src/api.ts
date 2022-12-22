@@ -17,6 +17,7 @@ import {
   Announcement,
   Grade,
   GradeWithName,
+  CourseData,
 } from "./types";
 
 export interface SignInRequest {
@@ -170,6 +171,16 @@ export interface CourseEnrollRequest {
 }
 
 export interface CourseEnrollResponse {}
+
+export interface GetCourseDataRequest {}
+export interface GetCourseDateResponse {
+  course: CourseData;
+}
+
+export interface ListEnrolledInCoursesRequest {}
+export interface ListEnrolledInCoursesResponse {
+  courses: CourseData[];
+}
 
 // Post APIs
 export type CreatePostRequest = Pick<Post, "title" | "url" | "content">;

@@ -1,6 +1,7 @@
 import { CourseEnrollRequest, CreateCourseRequest } from "@greenboard/shared";
 import supertest from "supertest";
 import {
+  SEED_COURSE,
   SEED_INSTRUCTOR,
   SEED_INSTRUCTOR2,
   SEED_INSTRUCTOR_PASSWORD,
@@ -208,6 +209,64 @@ describe("Course tests", () => {
       const result = await client
         .post("/api/v1/course/join")
         .send(enroll)
+        .expect(401);
+    });
+  });
+
+  describe("Get Courses", () => {
+    it("Get Course Data as Student in course -- GET /api/v1/course/:id returns 200", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}`)
+        .set(studentAuthHeader)
+        .expect(200);
+
+      expect(result.body.course.id).toEqual(SEED_COURSE.id);
+      expect(result.body.course.courseCode).toEqual(SEED_COURSE.courseCode);
+      expect(result.body.course.name).toEqual(SEED_COURSE.name);
+    });
+
+    it("Get Course Data as Student not in course -- GET /api/v1/course/:id returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}`)
+        .set(studentNotInSameDeptAuthHeader)
+        .expect(403);
+    });
+
+    it("Get Course Data as Student Wrong course -- GET /api/v1/course/:id returns 404", async () => {
+      const result = await client
+        .get(`/api/v1/course/InvalidCourseId`)
+        .set(studentAuthHeader)
+        .expect(404);
+    });
+
+    it("Get Course Data as Instructor in course -- GET /api/v1/course/:id returns 200", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}`)
+        .set(instructorAuthHeader)
+        .expect(200);
+
+      expect(result.body.course.id).toEqual(SEED_COURSE.id);
+      expect(result.body.course.courseCode).toEqual(SEED_COURSE.courseCode);
+      expect(result.body.course.name).toEqual(SEED_COURSE.name);
+    });
+
+    it("Get Course Data as Instructor not in course -- GET /api/v1/course/:id returns 403", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}`)
+        .set(instructorNotInSameDeptAuthHeader)
+        .expect(403);
+    });
+
+    it("Get Course Data as Instructor Wrong course -- GET /api/v1/course/:id returns 404", async () => {
+      const result = await client
+        .get(`/api/v1/course/InvalidCourseId`)
+        .set(instructorAuthHeader)
+        .expect(404);
+    });
+
+    it("Get Course Data as Unauthorized -- GET /api/v1/course/:id returns 401", async () => {
+      const result = await client
+        .get(`/api/v1/course/${SEED_COURSE.id}`)
         .expect(401);
     });
   });

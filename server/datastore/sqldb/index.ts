@@ -19,6 +19,7 @@ import {
   Announcement,
   UserRegistrationData,
   GradeWithName,
+  CourseData,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -298,6 +299,13 @@ export class SQLDataStore implements DataStore {
 
   async getCourseById(id: string): Promise<Course | undefined> {
     return await this.db.get<Course>("SELECT * from courses where id=?", id);
+  }
+
+  async listEnrolledCourse(userId: string): Promise<CourseData[]> {
+    return this.db.all<CourseData[]>(
+      "SELECT courses.id, courses.courseCode, courses.name from courses JOIN enrollments ON enrollments.courseId = courses.id AND enrollments.userId = ?",
+      userId
+    );
   }
 
   async createEnrollment(enrollment: Enrollment): Promise<void> {

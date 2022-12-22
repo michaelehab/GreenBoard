@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CreateCourse, JoinCourse } from "../handlers/courseHandler";
+import { CreateCourse, JoinCourse, GetCourse } from "../handlers/courseHandler";
 import {
   parseJwtMiddleware,
   requireJwtMiddleware,
@@ -14,6 +14,7 @@ router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
 router.post("/", CreateCourse);
 router.post("/join", JoinCourse);
+router.get("/:courseId", GetCourse);
 
 router.use(coursePost);
 router.use(studentQuestion);

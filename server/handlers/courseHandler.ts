@@ -1,4 +1,4 @@
-import { ExpressHandler } from "../types";
+import { ExpressHandler, ExpressHandlerWithParams } from "../types";
 import {
   CreateCourseRequest,
   CreateCourseResponse,
@@ -6,10 +6,15 @@ import {
   CourseEnrollResponse,
   Course,
   Enrollment,
+  GetCourseDataRequest,
+  GetCourseDateResponse,
+  ListEnrolledInCoursesRequest,
+  ListEnrolledInCoursesResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
 import { getPasswordHashed } from "../utils";
+import e from "express";
 
 export const CreateCourse: ExpressHandler<
   CreateCourseRequest,
@@ -105,4 +110,57 @@ export const JoinCourse: ExpressHandler<
 
   await db.createEnrollment(newEnrollment);
   return res.sendStatus(200);
+};
+
+export const GetCourse: ExpressHandlerWithParams<
+  { courseId: string },
+  GetCourseDataRequest,
+  GetCourseDateResponse
+> = async (req, res) => {
+  if (!req.params.courseId) {
+    return res.status(400).send({ error: "Course Id is required" });
+  }
+
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "User is not found" });
+  }
+
+  const existingCourse = await db.getCourseById(req.params.courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
+  }
+
+  const existingEnrollment = await db.checkEnrollment(
+    existingUser.id,
+    req.params.courseId
+  );
+
+  if (!existingEnrollment) {
+    return res.status(403).send({ error: "Not enrolled in this course" });
+  }
+
+  return res.status(200).send({
+    course: {
+      id: existingCourse.id,
+      courseCode: existingCourse.courseCode,
+      name: existingCourse.name,
+    },
+  });
+};
+
+export const ListCourses: ExpressHandler<
+  ListEnrolledInCoursesRequest,
+  ListEnrolledInCoursesResponse
+> = async (req, res) => {
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "User is not found" });
+  }
+
+  const existingCourses = await db.listEnrolledCourse(res.locals.userId);
+
+  return res.status(200).send({
+    courses: existingCourses,
+  });
 };
