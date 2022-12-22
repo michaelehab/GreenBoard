@@ -19,7 +19,7 @@ export const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/courses" element={<ListCourses />} />
         <Route path="/new/course" element={<CreateCourse />} />
-        <Route path="/join/course" element={<JoinCourse />} />
+        <Route path="/join/:courseId" element={<JoinCourse />} />
       </Routes>
     </BrowserRouter>
   );

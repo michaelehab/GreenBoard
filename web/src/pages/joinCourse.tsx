@@ -12,11 +12,11 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
 import { isLoggedInUser } from "../utils/auth";
 import { joinCourse } from "../utils/course";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const JoinCourse = () => {
   const navigate = useNavigate();
-  const [courseId, setCourseId] = useState("");
+  const { courseId } = useParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +24,9 @@ export const JoinCourse = () => {
   const join = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
-      if (courseId === "" || password === "" || confirmPassword === "") {
+      if (!courseId) {
+        navigate("/");
+      } else if (courseId === "" || password === "" || confirmPassword === "") {
         setError("All fields are required!");
       } else if (password !== confirmPassword) {
         setError("Confirm Password doesn't match password!");
@@ -46,7 +48,7 @@ export const JoinCourse = () => {
     if (!isLoggedInUser()) {
       navigate("/");
     }
-  }, [navigate]);
+  }, [navigate, courseId]);
 
   return (
     <form onSubmit={join}>
@@ -54,13 +56,6 @@ export const JoinCourse = () => {
         <Heading color="#4d7e3e">Join Course</Heading>
       </Center>
       <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
-        <Input
-          placeholder="Course ID"
-          value={courseId}
-          variant="outline"
-          onChange={(e) => setCourseId(e.target.value)}
-        />
-
         <Input
           placeholder="Course Password"
           type="password"
