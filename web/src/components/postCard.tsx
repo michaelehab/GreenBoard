@@ -1,5 +1,4 @@
-import { Text, Center, Box } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Text, Center, Box, Link as ChakraLink } from "@chakra-ui/react";
 import { Post } from "@greenboard/shared";
 
 export const PostCard: React.FC<Post> = (post) => {
@@ -17,7 +16,7 @@ export const PostCard: React.FC<Post> = (post) => {
         <Text fontSize="md" fontWeight="bold">
           {post.title}
         </Text>
-        <Link to={post.url}>Link</Link>
+        <ChakraLink href={post.url}>Link</ChakraLink>
       </Box>
     </Center>
   );

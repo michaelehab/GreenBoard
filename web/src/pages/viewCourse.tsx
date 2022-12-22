@@ -1,4 +1,4 @@
-import { Box, Flex, Center } from "@chakra-ui/react";
+import { Box, Flex, Center, Heading, Text } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -47,10 +47,12 @@ export const ViewCourse = () => {
   return (
     <Center>
       <Box>
-        <Flex align="center">
-          <h1>{courseData?.course.name}</h1>
-          <h1>{courseData?.course.id}</h1>
-          <h1>{courseData?.course.courseCode}</h1>
+        <Flex direction="column" boxShadow="md" p="6" rounded="md" width="100%">
+          <Box mx="auto">
+            <Heading as="h2" size="2xl">
+              {courseData?.course.courseCode} | {courseData?.course.name}
+            </Heading>
+          </Box>
         </Flex>
         <Tabs align="center" colorScheme="green">
           <TabList>
