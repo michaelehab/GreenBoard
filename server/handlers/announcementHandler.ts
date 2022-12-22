@@ -21,7 +21,7 @@ export const createAnnouncement: ExpressHandlerWithParams<
   if (!title || !content) {
     return res.status(400).send({ error: "All fields are required" });
   }
-  if (res.locals.role === "Instructor" || res.locals.role === "STUDENT") {
+  if (res.locals.role === "INSTRUCTOR" || res.locals.role === "STUDENT") {
     return res.status(403).send({ error: "User can't create announcement" });
   }
 
