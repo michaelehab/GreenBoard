@@ -10,33 +10,27 @@ import {
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
-import { isLoggedInInstructor } from "../utils/auth";
-import { createCourse } from "../utils/course";
+import { isLoggedInUser } from "../utils/auth";
+import { joinCourse } from "../utils/course";
 import { useNavigate } from "react-router-dom";
 
-export const CreateCourse = () => {
+export const JoinCourse = () => {
   const navigate = useNavigate();
-  const [code, setCode] = useState("");
-  const [name, setName] = useState("");
+  const [courseId, setCourseId] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const create = useCallback(
+  const join = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
-      if (
-        code === "" ||
-        name === "" ||
-        password === "" ||
-        confirmPassword === ""
-      ) {
+      if (courseId === "" || password === "" || confirmPassword === "") {
         setError("All fields are required!");
       } else if (password !== confirmPassword) {
         setError("Confirm Password doesn't match password!");
       } else {
         try {
-          await createCourse(code, name, password);
+          await joinCourse(courseId, password);
           navigate("/");
         } catch (err) {
           if (err instanceof ApiError) {
@@ -45,33 +39,26 @@ export const CreateCourse = () => {
         }
       }
     },
-    [navigate, code, name, password, confirmPassword]
+    [navigate, courseId, password, confirmPassword]
   );
 
   useEffect(() => {
-    if (!isLoggedInInstructor()) {
+    if (!isLoggedInUser()) {
       navigate("/");
     }
   }, [navigate]);
 
   return (
-    <form onSubmit={create}>
+    <form onSubmit={join}>
       <Center>
-        <Heading color="#4d7e3e">Create Course</Heading>
+        <Heading color="#4d7e3e">Join Course</Heading>
       </Center>
       <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
         <Input
-          placeholder="Course Name"
-          value={name}
+          placeholder="Course ID"
+          value={courseId}
           variant="outline"
-          onChange={(e) => setName(e.target.value)}
-        />
-
-        <Input
-          placeholder="Course Code"
-          variant="outline"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
+          onChange={(e) => setCourseId(e.target.value)}
         />
 
         <Input
@@ -96,7 +83,7 @@ export const CreateCourse = () => {
             variant="solid"
             type="submit"
             display="block"
-            onClick={create}
+            onClick={join}
           >
             Create
           </Button>

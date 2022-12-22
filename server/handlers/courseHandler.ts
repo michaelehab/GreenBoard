@@ -39,6 +39,15 @@ export const CreateCourse: ExpressHandler<
   };
 
   await db.createCourse(newCourse);
+
+  const newEnrollment: Enrollment = {
+    id: crypto.randomBytes(20).toString("hex"),
+    userId: res.locals.userId,
+    courseId: newCourse.id,
+  };
+
+  await db.createEnrollment(newEnrollment);
+
   return res.status(200).send({
     course: {
       id: newCourse.id,

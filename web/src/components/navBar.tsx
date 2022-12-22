@@ -109,8 +109,9 @@ export const NavBar = () => {
                   </Button>
                 </Link>
               )}
-              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" && (
-                <Link to={"/new/course"}>
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" ||
+              localStorage.getItem(LOCAL_STORAGE_ROLE) === "STUDENT" ? (
+                <Link to={"/join/course"}>
                   <Button
                     variant={"solid"}
                     colorScheme="green"
@@ -118,9 +119,11 @@ export const NavBar = () => {
                     mr={4}
                     leftIcon={<AddIcon />}
                   >
-                    Create Course
+                    Join Course
                   </Button>
                 </Link>
+              ) : (
+                <></>
               )}
               <Menu>
                 <MenuButton
@@ -139,6 +142,13 @@ export const NavBar = () => {
                   )}
                 </MenuButton>
                 <MenuList>
+                  {localStorage.getItem(LOCAL_STORAGE_ROLE) ===
+                    "INSTRUCTOR" && (
+                    <MenuItem>
+                      <Link to={"/new/course"}>Create Course</Link>
+                      <MenuDivider />
+                    </MenuItem>
+                  )}
                   <Link to={`/`}>
                     <MenuItem>Profile</MenuItem>
                   </Link>

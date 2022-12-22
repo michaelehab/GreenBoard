@@ -1,4 +1,9 @@
-import { CreateCourseRequest, CreateCourseResponse } from "@greenboard/shared";
+import {
+  CourseEnrollRequest,
+  CourseEnrollResponse,
+  CreateCourseRequest,
+  CreateCourseResponse,
+} from "@greenboard/shared";
 import { callEndpoint } from "./callEndpoint";
 
 export async function createCourse(
@@ -13,6 +18,18 @@ export async function createCourse(
     {
       courseCode,
       name,
+      password,
+    }
+  );
+}
+
+export async function joinCourse(courseId: string, password: string) {
+  const res = await callEndpoint<CourseEnrollRequest, CourseEnrollResponse>(
+    "/course/join",
+    "POST",
+    false,
+    {
+      courseId,
       password,
     }
   );

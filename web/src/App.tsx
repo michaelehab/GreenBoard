@@ -4,6 +4,7 @@ import { NavBar } from "./components/navBar";
 import { SignIn } from "./pages/signIn";
 import { SignUp } from "./pages/signUp";
 import { CreateCourse } from "./pages/createCourse";
+import { JoinCourse } from "./pages/joinCourse";
 
 export const App = () => {
   return (
@@ -16,6 +17,7 @@ export const App = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/new/course" element={<CreateCourse />} />
+        <Route path="/join/course" element={<JoinCourse />} />
       </Routes>
     </BrowserRouter>
   );

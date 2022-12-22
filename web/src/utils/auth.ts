@@ -22,13 +22,33 @@ export const getLocalStorageJWT = (): string => {
   return localStorage.getItem(LOCAL_STORAGE_JWT) || "";
 };
 
-export const getLocalStorageCollegeId = (): string => {
-  return localStorage.getItem(LOCAL_STORAGE_CollegeID) || "";
+export const getLocalStorageRole = (): string => {
+  return localStorage.getItem(LOCAL_STORAGE_ROLE) || "";
 };
 
 export const isLoggedIn = (): boolean => {
   const jwt = getLocalStorageJWT();
   return !!jwt;
+};
+
+export const isLoggedInInstructor = (): boolean => {
+  const role = getLocalStorageRole();
+  return role === "INSTRUCTOR";
+};
+
+export const isLoggedInUser = (): boolean => {
+  const role = getLocalStorageRole();
+  return role === "INSTRUCTOR" || role === "STUDENT";
+};
+
+export const isLoggedInCollege = (): boolean => {
+  const role = getLocalStorageRole();
+  return role === "COLLEGE";
+};
+
+export const isLoggedInSchool = (): boolean => {
+  const role = getLocalStorageRole();
+  return role === "SCHOOL";
 };
 
 export async function collegeSignIn(email: string, password: string) {

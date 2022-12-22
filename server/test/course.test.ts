@@ -119,12 +119,12 @@ describe("Course tests", () => {
   });
 
   describe("Enroll in Course", () => {
-    it("Enroll in existing course as Instructor in same department -- POST /api/v1/course/join returns 200", async () => {
+    it("Enroll in existing course as Instructor (created course) in same department -- POST /api/v1/course/join returns 403", async () => {
       const result = await client
         .post("/api/v1/course/join")
         .send(enroll)
         .set(instructorAuthHeader)
-        .expect(200);
+        .expect(403);
     });
 
     it("Enroll in existing course as Instructor not in same department -- POST /api/v1/course/join returns 200", async () => {
