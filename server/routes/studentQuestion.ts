@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   CreateStudentQuestion,
   ListStudentQuestions,
-  GetStudentQuestion
+  GetStudentQuestion,
 } from "../handlers/stdQuestionHandler";
 import {
   parseJwtMiddleware,
@@ -14,8 +14,8 @@ const router = Router();
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
 router.use(instructorAnswer);
-router.post("/:courseId/question", CreateStudentQuestion);
-router.get("/:courseId/question", ListStudentQuestions);
-router.get("/:courseId/question/:studentQuestionId", GetStudentQuestion);
+router.post("/:courseId/questions", CreateStudentQuestion);
+router.get("/:courseId/questions", ListStudentQuestions);
+router.get("/:courseId/questions/:studentQuestionId", GetStudentQuestion);
 
 export default router;

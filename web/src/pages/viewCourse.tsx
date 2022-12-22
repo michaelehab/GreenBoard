@@ -1,27 +1,18 @@
-import {
-  Alert,
-  AlertIcon,
-  Box,
-  Button,
-  Flex,
-  Input,
-  Center,
-} from "@chakra-ui/react";
+import { Box, Flex, Center } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router";
-import { isLoggedIn, isLoggedInUser } from "../utils/auth";
+import { isLoggedInUser } from "../utils/auth";
 import { callEndpoint } from "../utils/callEndpoint";
 import {
   GetCourseDataRequest,
   GetCourseDataResponse,
-  ListCoursePostsRequest,
-  ListCoursePostsResponse,
 } from "@greenboard/shared";
 import { ApiError } from "../utils/apiError";
-import { PostCard } from "../components/postCard";
 import { ViewCoursePosts } from "../components/viewCoursePosts";
+import { ViewStudentsQuestions } from "../components/viewStudentsQuestions";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 export const ViewCourse = () => {
   const { courseId } = useParams();
@@ -61,7 +52,21 @@ export const ViewCourse = () => {
           <h1>{courseData?.course.id}</h1>
           <h1>{courseData?.course.courseCode}</h1>
         </Flex>
-        <ViewCoursePosts />
+        <Tabs align="center" colorScheme="green">
+          <TabList>
+            <Tab>Students Questions</Tab>
+            <Tab>Course Posts</Tab>
+          </TabList>
+
+          <TabPanels>
+            <TabPanel>
+              <ViewStudentsQuestions />
+            </TabPanel>
+            <TabPanel>
+              <ViewCoursePosts />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </Box>
     </Center>
   );

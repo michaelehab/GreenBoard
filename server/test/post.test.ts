@@ -227,9 +227,9 @@ describe("Posts tests", () => {
   });
 
   describe("Creating Students Questions", () => {
-    it("Create a new student question as a student in course -- POST /api/v1/courses/:id/question returns 200", async () => {
+    it("Create a new student question as a student in course -- POST /api/v1/courses/:id/questions returns 200", async () => {
       const result = await client
-        .post(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .post(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .send(coursePost)
         .set(studentAuthHeader)
         .expect(200);
@@ -241,9 +241,9 @@ describe("Posts tests", () => {
       studentQuestionId = result.body.question.id;
     });
 
-    it("Create a new student question as a student in course invalid url -- POST /api/v1/courses/:id/question returns 400", async () => {
+    it("Create a new student question as a student in course invalid url -- POST /api/v1/courses/:id/questions returns 400", async () => {
       const result = await client
-        .post(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .post(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .send({
           title: "First Post title",
           url: "www.google",
@@ -254,44 +254,44 @@ describe("Posts tests", () => {
       expect(result.body.question).toBeUndefined();
     });
 
-    it("Create a new student question as a student not in course -- POST /api/v1/courses/:id/question returns 403", async () => {
+    it("Create a new student question as a student not in course -- POST /api/v1/courses/:id/questions returns 403", async () => {
       const result = await client
-        .post(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .post(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .send(coursePost)
         .set(studentNotInCourseAuthHeader)
         .expect(403);
       expect(result.body.question).toBeUndefined();
     });
 
-    it("Create a new student question as instructor -- POST /api/v1/courses/:id/question returns 403", async () => {
+    it("Create a new student question as instructor -- POST /api/v1/courses/:id/questions returns 403", async () => {
       const result = await client
-        .post(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .post(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .send(coursePost)
         .set(instructorAuthHeader)
         .expect(403);
       expect(result.body.question).toBeUndefined();
     });
 
-    it("Send empty object as student in course -- POST /api/v1/courses/:id/question returns 400", async () => {
+    it("Send empty object as student in course -- POST /api/v1/courses/:id/questions returns 400", async () => {
       const result = await client
-        .post(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .post(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .send({})
         .set(studentAuthHeader)
         .expect(400);
       expect(result.body.question).toBeUndefined();
     });
 
-    it("Create a new student question as unauthorized -- POST /api/v1/courses/:id/question returns 401", async () => {
+    it("Create a new student question as unauthorized -- POST /api/v1/courses/:id/questions returns 401", async () => {
       const result = await client
-        .post(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .post(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .send(coursePost)
         .expect(401);
       expect(result.body.question).toBeUndefined();
     });
 
-    it("Create a new student question with missing field as student in course -- POST /api/v1/courses/:id/question returns 400", async () => {
+    it("Create a new student question with missing field as student in course -- POST /api/v1/courses/:id/questions returns 400", async () => {
       const result = await client
-        .post(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .post(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .send({
           title: "this is a title",
           content: "content",
@@ -302,9 +302,9 @@ describe("Posts tests", () => {
       expect(result.body.question).toBeUndefined();
     });
 
-    it("Get Students Questions as student in course-- GET /api/v1/courses/:id/question returns 200", async () => {
+    it("Get Students Questions as student in course-- GET /api/v1/courses/:id/questions returns 200", async () => {
       const result = await client
-        .get(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .get(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .set(studentAuthHeader)
         .expect(200);
       expect(result.body.questions).toHaveLength(2);
@@ -312,82 +312,82 @@ describe("Posts tests", () => {
       expect(result.body.questions[0].url).toBe(coursePost.url);
     });
 
-    it("Get Students Questions as student not in course -- GET /api/v1/courses/:id/question returns 403", async () => {
+    it("Get Students Questions as student not in course -- GET /api/v1/courses/:id/questions returns 403", async () => {
       const result = await client
-        .get(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .get(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .set(studentNotInCourseAuthHeader)
         .expect(403);
       expect(result.body.questions).toBeUndefined();
     });
 
-    it("Get Students Questions as student invalid course -- GET /api/v1/courses/:id/question returns 404", async () => {
+    it("Get Students Questions as student invalid course -- GET /api/v1/courses/:id/questions returns 404", async () => {
       const result = await client
-        .get(`/api/v1/courses/InvalidCourseId/question`)
+        .get(`/api/v1/courses/InvalidCourseId/questions`)
         .set(studentNotInCourseAuthHeader)
         .expect(404);
       expect(result.body.questions).toBeUndefined();
     });
 
-    it("Get Students Questions as instructor in course -- GET /api/v1/courses/:id/question returns 200", async () => {
+    it("Get Students Questions as instructor in course -- GET /api/v1/courses/:id/questions returns 200", async () => {
       const result = await client
-        .get(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .get(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .set(instructorAuthHeader)
         .expect(200);
       expect(result.body.questions).toHaveLength(2);
       expect(result.body.questions[0].title).toBe(coursePost.title);
       expect(result.body.questions[0].url).toBe(coursePost.url);
     });
-    it("Get Students Questions as instructor not in course -- GET /api/v1/courses/:id/question returns 403", async () => {
+    it("Get Students Questions as instructor not in course -- GET /api/v1/courses/:id/questions returns 403", async () => {
       const result = await client
-        .get(`/api/v1/courses/${SEED_COURSE.id}/question`)
+        .get(`/api/v1/courses/${SEED_COURSE.id}/questions`)
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
       expect(result.body.questions).toBeUndefined();
     });
 
-    it("Get Students Questions as instructor with invalid course -- GET /api/v1/courses/:id/question returns 404", async () => {
+    it("Get Students Questions as instructor with invalid course -- GET /api/v1/courses/:id/questions returns 404", async () => {
       const result = await client
-        .get(`/api/v1/courses/InvalidCourseId/question`)
+        .get(`/api/v1/courses/InvalidCourseId/questions`)
         .set(instructorAuthHeader)
         .expect(404);
       expect(result.body.questions).toBeUndefined();
     });
 
-    it("Get Specific Student Question as student in course -- GET /api/v1/courses/:id/question/:id returns 200", async () => {
+    it("Get Specific Student Question as student in course -- GET /api/v1/courses/:id/questions/:id returns 200", async () => {
       const result = await client
-        .get(`/api/v1/courses/${SEED_COURSE.id}/question/${studentQuestionId}`)
+        .get(`/api/v1/courses/${SEED_COURSE.id}/questions/${studentQuestionId}`)
         .set(studentAuthHeader)
         .expect(200);
       expect(result.body.question.title).toBe(coursePost.title);
       expect(result.body.question.url).toBe(coursePost.url);
     });
-    it("Get Specific Student Question as student not in course -- GET /api/v1/courses/:id/question/:id returns 403", async () => {
+    it("Get Specific Student Question as student not in course -- GET /api/v1/courses/:id/questions/:id returns 403", async () => {
       const result = await client
-        .get(`/api/v1/courses/${SEED_COURSE.id}/question/${studentQuestionId}`)
+        .get(`/api/v1/courses/${SEED_COURSE.id}/questions/${studentQuestionId}`)
         .set(studentNotInCourseAuthHeader)
         .expect(403);
       expect(result.body.question).toBeUndefined();
     });
 
-    it("Get Specific Student Question as instructor in course -- GET /api/v1/courses/:id/question/:id returns 200", async () => {
+    it("Get Specific Student Question as instructor in course -- GET /api/v1/courses/:id/questions/:id returns 200", async () => {
       const result = await client
-        .get(`/api/v1/courses/${SEED_COURSE.id}/question/${studentQuestionId}`)
+        .get(`/api/v1/courses/${SEED_COURSE.id}/questions/${studentQuestionId}`)
         .set(instructorAuthHeader)
         .expect(200);
       expect(result.body.question.title).toBe(coursePost.title);
       expect(result.body.question.url).toBe(coursePost.url);
     });
-    it("Get Specific Student Question as instructor not in course -- GET /api/v1/courses/:id/question/:id returns 403", async () => {
+    it("Get Specific Student Question as instructor not in course -- GET /api/v1/courses/:id/questions/:id returns 403", async () => {
       const result = await client
-        .get(`/api/v1/courses/${SEED_COURSE.id}/question/${studentQuestionId}`)
+        .get(`/api/v1/courses/${SEED_COURSE.id}/questions/${studentQuestionId}`)
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
       expect(result.body.question).toBeUndefined();
     });
 
-    it("Get Specific Student Question as unauthorized -- GET /api/v1/courses/:id/question/:id returns 401", async () => {
+    it("Get Specific Student Question as unauthorized -- GET /api/v1/courses/:id/questions/:id returns 401", async () => {
       const result = await client
-        .get(`/api/v1/courses/${SEED_COURSE.id}/question/${studentQuestionId}`)
+        .get(`/api/v1/courses/${SEED_COURSE.id}/questions/${studentQuestionId}`)
         .expect(401);
       expect(result.body.question).toBeUndefined();
     });
