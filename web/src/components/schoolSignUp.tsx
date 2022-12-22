@@ -3,6 +3,7 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
 import { isLoggedIn, schoolSignUp } from "../utils/auth";
+import { ApiError } from "../utils/apiError";
 
 export const SchoolSignUp = () => {
   useTitle("Sign Up");
@@ -32,7 +33,9 @@ export const SchoolSignUp = () => {
           await schoolSignUp(email, name, phone, collegeId, adminPassword);
           navigate("/");
         } catch (err) {
-          setError(err as string);
+          if (err instanceof ApiError) {
+            setError(err.message);
+          }
         }
       }
     },
