@@ -80,7 +80,7 @@ export const JoinCourse = () => {
             display="block"
             onClick={join}
           >
-            Create
+            Join
           </Button>
         </Box>
 

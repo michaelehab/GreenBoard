@@ -10,15 +10,26 @@ import {
   ListNotEnrolledInCoursesResponse,
 } from "@greenboard/shared";
 import { CourseCard } from "../components/courseCard";
+import { isLoggedInUser } from "../utils/auth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const AvailableCourses = () => {
   useTitle("Available Courses");
+  const navigate = useNavigate();
+
   const { data, error, isLoading } = useQuery(["listAvailableCourses"], () =>
     callEndpoint<
       ListNotEnrolledInCoursesRequest,
       ListNotEnrolledInCoursesResponse
     >("/courses/available", "GET", true)
   );
+
+  useEffect(() => {
+    if (!isLoggedInUser()) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   if (isLoading) {
     return <div>Is Loading...</div>;

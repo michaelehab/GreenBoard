@@ -7,6 +7,7 @@ import { CreateCourse } from "./pages/createCourse";
 import { JoinCourse } from "./pages/joinCourse";
 import { ListCourses } from "./pages/myCourses";
 import { AvailableCourses } from "./pages/availableCourses";
+import { ViewCourse } from "./pages/viewCourse";
 
 export const App = () => {
   return (
@@ -20,6 +21,7 @@ export const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/courses" element={<ListCourses />} />
         <Route path="/courses/available" element={<AvailableCourses />} />
+        <Route path="/courses/:courseId" element={<ViewCourse />} />
         <Route path="/new/course" element={<CreateCourse />} />
         <Route path="/join/:courseId" element={<JoinCourse />} />
       </Routes>

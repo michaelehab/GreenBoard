@@ -7,7 +7,7 @@ import {
   Course,
   Enrollment,
   GetCourseDataRequest,
-  GetCourseDateResponse,
+  GetCourseDataResponse,
   ListEnrolledInCoursesRequest,
   ListEnrolledInCoursesResponse,
   ListNotEnrolledInCoursesRequest,
@@ -117,7 +117,7 @@ export const JoinCourse: ExpressHandler<
 export const GetCourse: ExpressHandlerWithParams<
   { courseId: string },
   GetCourseDataRequest,
-  GetCourseDateResponse
+  GetCourseDataResponse
 > = async (req, res) => {
   if (!req.params.courseId) {
     return res.status(400).send({ error: "Course Id is required" });

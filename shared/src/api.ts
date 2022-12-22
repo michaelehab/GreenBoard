@@ -173,7 +173,7 @@ export interface CourseEnrollRequest {
 export interface CourseEnrollResponse {}
 
 export interface GetCourseDataRequest {}
-export interface GetCourseDateResponse {
+export interface GetCourseDataResponse {
   course: CourseData;
 }
 
