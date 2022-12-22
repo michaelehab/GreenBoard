@@ -18,8 +18,9 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
 import Logo from "../assets/logo/png/logo-no-background.png";
-import UserAvatar from "../assets/user.png";
-import { isLoggedIn, signOut } from "../utils/auth";
+import UserAvatar from "../assets/user.jpg";
+import AdminAvatar from "../assets/admin.jpg";
+import { LOCAL_STORAGE_ROLE, isLoggedIn, signOut } from "../utils/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 
@@ -82,17 +83,45 @@ export const NavBar = () => {
           </HStack>
           {isLoggedIn() ? (
             <Flex alignItems={"center"}>
-              <Link to={"/new/post"}>
-                <Button
-                  variant={"solid"}
-                  colorScheme="green"
-                  size={"sm"}
-                  mr={4}
-                  leftIcon={<AddIcon />}
-                >
-                  New Post
-                </Button>
-              </Link>
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "COLLEGE" && (
+                <Link to={"/new/school"}>
+                  <Button
+                    variant={"solid"}
+                    colorScheme="green"
+                    size={"sm"}
+                    mr={4}
+                    leftIcon={<AddIcon />}
+                  >
+                    Create School
+                  </Button>
+                </Link>
+              )}
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "SCHOOL" && (
+                <Link to={"/new/department"}>
+                  <Button
+                    variant={"solid"}
+                    colorScheme="green"
+                    size={"sm"}
+                    mr={4}
+                    leftIcon={<AddIcon />}
+                  >
+                    Create Department
+                  </Button>
+                </Link>
+              )}
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" && (
+                <Link to={"/new/course"}>
+                  <Button
+                    variant={"solid"}
+                    colorScheme="green"
+                    size={"sm"}
+                    mr={4}
+                    leftIcon={<AddIcon />}
+                  >
+                    Create Course
+                  </Button>
+                </Link>
+              )}
               <Menu>
                 <MenuButton
                   as={Button}
@@ -101,11 +130,17 @@ export const NavBar = () => {
                   cursor={"pointer"}
                   minW={0}
                 >
-                  <Avatar size={"sm"} src={UserAvatar} />
+                  {localStorage.getItem(LOCAL_STORAGE_ROLE) === "COLLEGE" ||
+                  localStorage.getItem(LOCAL_STORAGE_ROLE) === "SCHOOL" ||
+                  localStorage.getItem(LOCAL_STORAGE_ROLE) === "DEPARTMENT" ? (
+                    <Avatar size={"md"} src={AdminAvatar} />
+                  ) : (
+                    <Avatar size={"md"} src={UserAvatar} />
+                  )}
                 </MenuButton>
                 <MenuList>
                   <Link to={`/`}>
-                    <MenuItem>My Profile</MenuItem>
+                    <MenuItem>Profile</MenuItem>
                   </Link>
                   <MenuDivider />
                   <MenuItem onClick={onSignout}>Sign Out</MenuItem>

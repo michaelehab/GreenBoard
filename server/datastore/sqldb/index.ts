@@ -75,9 +75,9 @@ export class SQLDataStore implements DataStore {
       migrationsPath: path.join(__dirname, "migrations"),
     });
 
-    //if (dbPath == ":memory:") {
-    await this.seedDb();
-    //}
+    if (dbPath == ":memory:") {
+      await this.seedDb();
+    }
 
     return this;
   }
@@ -485,7 +485,7 @@ export class SQLDataStore implements DataStore {
     );
   }
 
-async createAnnouncement(announcement: Announcement): Promise<void> {
+  async createAnnouncement(announcement: Announcement): Promise<void> {
     await this.db.run(
       "INSERT INTO announcements(id,title,content,postedAt,departmentId,schoolId,collegeId) VALUES(?,?,?,?,?,?,?)",
       announcement.id,
@@ -541,7 +541,7 @@ async createAnnouncement(announcement: Announcement): Promise<void> {
       departmentId
     );
   }
-  
+
   async getStudentGradesWithNameByCourseId(
     studentId: string,
     courseId: string
@@ -567,7 +567,7 @@ async createAnnouncement(announcement: Announcement): Promise<void> {
       "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, grades.studentId from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.quizId = ? AND grades.studentId = ?",
       quizId,
       studentId
-      );
+    );
   }
 
   private seedDb = async () => {
