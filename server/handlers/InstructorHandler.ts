@@ -57,7 +57,7 @@ export const SignUpInstructor: ExpressHandler<
 
   const tokenPayload: UserJwtPayload = {
     userId: Instructor.id,
-    role: "Instructor",
+    role: "INSTRUCTOR",
   };
 
   return res.status(200).send({
@@ -86,7 +86,7 @@ export const SignInInstructor: ExpressHandler<
 
   const tokenPayload: UserJwtPayload = {
     userId: existingInstructor.id,
-    role: "Instructor",
+    role: "INSTRUCTOR",
   };
 
   return res.status(200).send({

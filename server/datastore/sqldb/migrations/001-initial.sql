@@ -84,6 +84,7 @@ CREATE TABLE `grades` (
   `grade` float NOT NULL,
   `studentId` varchar(255) NOT NULL,
   `quizId` varchar(255) NOT NULL,
+  `takenAt` datetime NOT NULL,
   FOREIGN KEY (`studentId`) REFERENCES `students` (`id`),
   FOREIGN KEY (`quizId`) REFERENCES `quizzes` (`id`)
 );
