@@ -16,8 +16,12 @@ import { callEndpoint } from "../utils/callEndpoint";
 import {
   GetCourseDataRequest,
   GetCourseDataResponse,
+  ListCoursePostsRequest,
+  ListCoursePostsResponse,
 } from "@greenboard/shared";
 import { ApiError } from "../utils/apiError";
+import { PostCard } from "../components/postCard";
+import { ViewCoursePosts } from "../components/viewCoursePosts";
 
 export const ViewCourse = () => {
   const { courseId } = useParams();
@@ -57,6 +61,7 @@ export const ViewCourse = () => {
           <h1>{courseData?.course.id}</h1>
           <h1>{courseData?.course.courseCode}</h1>
         </Flex>
+        <ViewCoursePosts />
       </Box>
     </Center>
   );
