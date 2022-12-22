@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ApiError } from "../utils/apiError";
 import { isLoggedIn, departmentSignIn } from "../utils/auth";
 
 export const DepartmentSignIn = () => {
@@ -18,7 +19,7 @@ export const DepartmentSignIn = () => {
   const [passWord, setPassWord] = useState("");
   const [error, setError] = useState("");
 
-  const tryDepartmentSignin = useCallback(
+  const signIn = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       if (email === "" || passWord === "") {
@@ -28,7 +29,9 @@ export const DepartmentSignIn = () => {
           await departmentSignIn(email, passWord);
           navigate("/");
         } catch (err) {
-          setError(err as string);
+          if(err instanceof ApiError){
+              setError(err.message);
+          }
         }
       }
     },
@@ -42,7 +45,7 @@ export const DepartmentSignIn = () => {
   }, [navigate]);
 
   return (
-    <form onSubmit={tryDepartmentSignin}>
+    <form onSubmit={signIn}>
       <Center>
         <Heading color="#31C48D">Department Sign In</Heading>
       </Center>
@@ -68,7 +71,7 @@ export const DepartmentSignIn = () => {
             variant="solid"
             type="submit"
             display="block"
-            onClick={tryDepartmentSignin}
+            onClick={signIn}
           >
             Sign in
           </Button>
