@@ -54,6 +54,9 @@ import {
   SEED_GRADE_STUDENT,
   SEED_QUIZ_OPEN,
   SEED_QUIZ_OPEN_QUESTIONS,
+  SEED_COLLEGE_ANNOUNCEMENT,
+  SEED_DEPARTMENT_ANNOUNCEMENT,
+  SEED_SCHOOL_ANNOUNCEMENT,
 } from "./seeds";
 
 export class SQLDataStore implements DataStore {
@@ -646,5 +649,11 @@ export class SQLDataStore implements DataStore {
     for (let i = 0; i < SEED_QUIZ_OPEN_QUESTIONS.length; i++) {
       await this.createQuizQuestion(SEED_QUIZ_OPEN_QUESTIONS[i]);
     }
+
+    await this.createAnnouncement(SEED_COLLEGE_ANNOUNCEMENT);
+
+    await this.createAnnouncement(SEED_DEPARTMENT_ANNOUNCEMENT);
+
+    await this.createAnnouncement(SEED_SCHOOL_ANNOUNCEMENT);
   };
 }

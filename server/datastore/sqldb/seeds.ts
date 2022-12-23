@@ -12,6 +12,7 @@ import {
   Quiz,
   QuizQuestion,
   Grade,
+  Announcement,
 } from "@greenboard/shared";
 
 // SEED_DEPARTMENT, SEED_DEPARTMENT2 belongs to SEED_SCHOOL
@@ -294,3 +295,33 @@ export const SEED_QUIZ_OPEN_QUESTIONS: QuizQuestion[] = [
     weight: 3,
   },
 ];
+
+export const SEED_COLLEGE_ANNOUNCEMENT: Announcement = {
+  id: "COLLEGE_ANNOUNCEMENT_ID",
+  title: "College Announcement",
+  content: "This is a College Announcement",
+  postedAt: 2022,
+  departmentId: null,
+  schoolId: null,
+  collegeId: SEED_COLLEGE.id,
+};
+
+export const SEED_SCHOOL_ANNOUNCEMENT: Announcement = {
+  id: "SCHOOL_ANNOUNCEMENTL_ID",
+  title: "SCHOOL Announcement",
+  content: "This is a SCHOOL Announcement",
+  postedAt: 2022,
+  departmentId: null,
+  schoolId: SEED_SCHOOL.id,
+  collegeId: SEED_COLLEGE.id,
+};
+
+export const SEED_DEPARTMENT_ANNOUNCEMENT: Announcement = {
+  id: "DEPARTMENT_ANNOUNCEMENT_ID",
+  title: "DEPARTMENT Announcement",
+  content: "This is a DEPARTMENT Announcement",
+  postedAt: 2022,
+  departmentId: SEED_DEPARTMENT.id,
+  schoolId: SEED_SCHOOL.id,
+  collegeId: SEED_COLLEGE.id,
+};

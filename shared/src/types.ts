@@ -130,8 +130,8 @@ export interface Announcement {
   title: string;
   content: string;
   postedAt: number;
-  departmentId: string;
-  schoolId: string;
+  departmentId: string | null;
+  schoolId: string | null;
   collegeId: string;
 }
 
