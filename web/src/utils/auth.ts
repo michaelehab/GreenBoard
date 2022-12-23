@@ -56,6 +56,11 @@ export const isLoggedInSchool = (): boolean => {
   return role === "SCHOOL";
 };
 
+export const isLoggedInDepartment = (): boolean => {
+  const role = getLocalStorageRole();
+  return role === "DEPARTMENT";
+};
+
 export async function collegeSignIn(email: string, password: string) {
   const res = await callEndpoint<SignInRequest, CollegeSignInResponse>(
     "/college/signin",

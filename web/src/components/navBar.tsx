@@ -89,6 +89,23 @@ export const NavBar = () => {
           </HStack>
           {isLoggedIn() ? (
             <Flex alignItems={"center"}>
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "COLLEGE" ||
+              localStorage.getItem(LOCAL_STORAGE_ROLE) === "SCHOOL" ||
+              localStorage.getItem(LOCAL_STORAGE_ROLE) === "DEPARTMENT" ? (
+                <Link to={"/new/announcement"}>
+                  <Button
+                    variant={"solid"}
+                    colorScheme="green"
+                    size={"sm"}
+                    mr={4}
+                    leftIcon={<AddIcon />}
+                  >
+                    Create Announcement
+                  </Button>
+                </Link>
+              ) : (
+                <></>
+              )}
               {localStorage.getItem(LOCAL_STORAGE_ROLE) === "COLLEGE" && (
                 <Link to={"/new/school"}>
                   <Button
@@ -178,6 +195,7 @@ export const NavBar = () => {
               ) : (
                 <></>
               )}
+
               <Menu>
                 <MenuButton
                   as={Button}
