@@ -151,17 +151,30 @@ export const NavBar = () => {
               )}
               {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" ||
               localStorage.getItem(LOCAL_STORAGE_ROLE) === "STUDENT" ? (
-                <Link to={"/courses"}>
-                  <Button
-                    variant={"solid"}
-                    colorScheme="green"
-                    size={"sm"}
-                    mr={4}
-                    leftIcon={<AddIcon />}
-                  >
-                    My Courses
-                  </Button>
-                </Link>
+                <Flex>
+                  <Link to={"/announcements"}>
+                    <Button
+                      variant={"solid"}
+                      colorScheme="green"
+                      size={"sm"}
+                      mr={4}
+                      leftIcon={<AddIcon />}
+                    >
+                      My Announcements
+                    </Button>
+                  </Link>
+                  <Link to={"/courses"}>
+                    <Button
+                      variant={"solid"}
+                      colorScheme="green"
+                      size={"sm"}
+                      mr={4}
+                      leftIcon={<AddIcon />}
+                    >
+                      My Courses
+                    </Button>
+                  </Link>
+                </Flex>
               ) : (
                 <></>
               )}
