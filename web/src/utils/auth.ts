@@ -93,6 +93,7 @@ export const schoolSignUp = async (
     }
   );
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+  collegeId = LOCAL_STORAGE_CollegeID;
 };
 export const collegeSignUp = async (
   email: string,

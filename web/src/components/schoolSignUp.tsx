@@ -2,7 +2,11 @@ import { Box, Button, Flex, Input, Alert, AlertIcon } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
-import { isLoggedIn, schoolSignUp } from "../utils/auth";
+import {
+  isLoggedIn,
+  LOCAL_STORAGE_CollegeID,
+  schoolSignUp,
+} from "../utils/auth";
 import { ApiError } from "../utils/apiError";
 
 export const SchoolSignUp = () => {
@@ -13,18 +17,13 @@ export const SchoolSignUp = () => {
   const [adminPassword, setAdminPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
-  const [collegeId, setCollegeId] = useState("");
   const [error, setError] = useState("");
+  const [collegeId] = useState(LOCAL_STORAGE_CollegeID);
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
-      if (
-        name === "" ||
-        phone === "" ||
-        email === "" ||
-        adminPassword === "" ||
-        collegeId === ""
-      ) {
+      if (collegeId === "") setError("Please signin college first");
+      if (name === "" || phone === "" || email === "" || adminPassword === "") {
         setError("Please make sure all the fields are not empty!");
       } else if (adminPassword !== confirmAdminPassWord) {
         setError("Confirm Password doesn't match password!");
@@ -39,15 +38,7 @@ export const SchoolSignUp = () => {
         }
       }
     },
-    [
-      navigate,
-      email,
-      name,
-      phone,
-      collegeId,
-      adminPassword,
-      confirmAdminPassWord,
-    ]
+    [navigate, email, name, phone, adminPassword, confirmAdminPassWord]
   );
   useEffect(() => {
     if (isLoggedIn()) {
@@ -79,13 +70,6 @@ export const SchoolSignUp = () => {
           type="number"
           variant="outline"
           onChange={(e) => setPhone(e.target.value)}
-        />
-        <Input
-          placeholder="College ID"
-          value={collegeId}
-          type="number"
-          variant="outline"
-          onChange={(e) => setCollegeId(e.target.value)}
         />
 
         <Input
