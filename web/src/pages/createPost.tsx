@@ -7,6 +7,7 @@ import {
   AlertIcon,
   Heading,
   Center,
+  Textarea,
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
@@ -67,10 +68,12 @@ export const CreatePost = () => {
           onChange={(e) => setUrl(e.target.value)}
         />
 
-        <Input
+        <Textarea
           placeholder="Post Content"
           variant="outline"
+          height={60}
           value={content}
+          resize="none"
           onChange={(e) => setContent(e.target.value)}
         />
 
