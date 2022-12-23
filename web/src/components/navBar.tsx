@@ -53,6 +53,7 @@ const NavLink = (link: string) => {
 export const NavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+  const URLArray = window.location.pathname.split("/");
 
   const onSignout = useCallback(() => {
     signOut();
@@ -113,6 +114,23 @@ export const NavBar = () => {
                     Create Department
                   </Button>
                 </Link>
+              )}
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" &&
+              URLArray.length > 2 &&
+              URLArray[1] === "courses" ? (
+                <Link to={`/courses/${URLArray[2]}/new/post`}>
+                  <Button
+                    variant={"solid"}
+                    colorScheme="green"
+                    size={"sm"}
+                    mr={4}
+                    leftIcon={<AddIcon />}
+                  >
+                    Create Post
+                  </Button>
+                </Link>
+              ) : (
+                <></>
               )}
               {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" ||
               localStorage.getItem(LOCAL_STORAGE_ROLE) === "STUDENT" ? (
