@@ -10,7 +10,7 @@ import { AvailableCourses } from "./pages/availableCourses";
 import { ViewCourse } from "./pages/viewCourse";
 import { CreatePost } from "./pages/createPost";
 import { CreateStudentQuestion } from "./pages/createStudentQuestion";
-import { ViewAnnouncements } from "./components/viewAnnouncements";
+import { ViewAnnouncements } from "./pages/viewAnnouncements";
 export const App = () => {
   return (
     <BrowserRouter>

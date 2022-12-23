@@ -19,7 +19,7 @@ import {
   ListAnnouncementsResponse,
 } from "@greenboard/shared";
 import { ApiError } from "../utils/apiError";
-import { AnnouncementCard } from "./announcementCard";
+import { AnnouncementCard } from "../components/announcementCard";
 
 export const ViewAnnouncements = () => {
   const { data: announcements } = useQuery([`viewAnnouncements`], () =>
