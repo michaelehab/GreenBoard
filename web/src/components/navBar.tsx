@@ -126,7 +126,24 @@ export const NavBar = () => {
                     mr={4}
                     leftIcon={<AddIcon />}
                   >
-                    Create Post
+                    Post
+                  </Button>
+                </Link>
+              ) : (
+                <></>
+              )}
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "STUDENT" &&
+              URLArray.length > 2 &&
+              URLArray[1] === "courses" ? (
+                <Link to={`/courses/${URLArray[2]}/new/question`}>
+                  <Button
+                    variant={"solid"}
+                    colorScheme="green"
+                    size={"sm"}
+                    mr={4}
+                    leftIcon={<AddIcon />}
+                  >
+                    Ask
                   </Button>
                 </Link>
               ) : (

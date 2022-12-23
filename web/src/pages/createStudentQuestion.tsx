@@ -11,10 +11,10 @@ import {
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
-import { isLoggedInInstructor } from "../utils/auth";
+import { isLoggedInInstructor, isLoggedInStudent } from "../utils/auth";
 import { useNavigate, useParams } from "react-router-dom";
-import { createPost } from "../utils/post";
-export const CreatePost = () => {
+import { createStudentQuestion } from "../utils/post";
+export const CreateStudentQuestion = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -30,7 +30,7 @@ export const CreatePost = () => {
         setError("All fields are required!");
       } else {
         try {
-          await createPost(title, url, content, courseId);
+          await createStudentQuestion(title, url, content, courseId);
           navigate(`/courses/${courseId}`);
         } catch (err) {
           if (err instanceof ApiError) {
@@ -43,7 +43,7 @@ export const CreatePost = () => {
   );
 
   useEffect(() => {
-    if (!isLoggedInInstructor()) {
+    if (!isLoggedInStudent()) {
       navigate("/");
     }
   }, [navigate]);
@@ -51,25 +51,25 @@ export const CreatePost = () => {
   return (
     <form onSubmit={create}>
       <Center>
-        <Heading color="#4d7e3e">Post</Heading>
+        <Heading color="#4d7e3e">Ask</Heading>
       </Center>
       <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
         <Input
-          placeholder="Post title"
+          placeholder="Title"
           value={title}
           variant="outline"
           onChange={(e) => setTitle(e.target.value)}
         />
 
         <Input
-          placeholder="Post URL"
+          placeholder="URL"
           variant="outline"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
 
         <Textarea
-          placeholder="Post Content"
+          placeholder="Content"
           variant="outline"
           height={60}
           value={content}
@@ -85,7 +85,7 @@ export const CreatePost = () => {
             display="block"
             onClick={create}
           >
-            Create
+            Ask
           </Button>
         </Box>
 

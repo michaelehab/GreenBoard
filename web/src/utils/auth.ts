@@ -36,6 +36,11 @@ export const isLoggedInInstructor = (): boolean => {
   return role === "INSTRUCTOR";
 };
 
+export const isLoggedInStudent = (): boolean => {
+  const role = getLocalStorageRole();
+  return role === "STUDENT";
+};
+
 export const isLoggedInUser = (): boolean => {
   const role = getLocalStorageRole();
   return role === "INSTRUCTOR" || role === "STUDENT";

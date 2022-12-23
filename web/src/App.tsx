@@ -9,6 +9,7 @@ import { ListCourses } from "./pages/myCourses";
 import { AvailableCourses } from "./pages/availableCourses";
 import { ViewCourse } from "./pages/viewCourse";
 import { CreatePost } from "./pages/createPost";
+import { CreateStudentQuestion } from "./pages/createStudentQuestion";
 export const App = () => {
   return (
     <BrowserRouter>
@@ -25,6 +26,10 @@ export const App = () => {
         <Route path="/new/course" element={<CreateCourse />} />
         <Route path="/join/:courseId" element={<JoinCourse />} />
         <Route path="/courses/:courseId/new/post" element={<CreatePost />} />
+        <Route
+          path="/courses/:courseId/new/question"
+          element={<CreateStudentQuestion />}
+        />
       </Routes>
     </BrowserRouter>
   );
