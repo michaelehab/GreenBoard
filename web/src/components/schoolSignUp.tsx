@@ -16,18 +16,13 @@ export const SchoolSignUp = () => {
   const [adminPassword, setAdminPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
-  const [collegeId, setCollegeId] = useState("");
+  const [collegeId] = useState(LOCAL_STORAGE_CollegeID);
   const [error, setError] = useState("");
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
-      if (
-        name === "" ||
-        phone === "" ||
-        email === "" ||
-        adminPassword === "" ||
-        collegeId === ""
-      ) {
+      if (collegeId === "") setError("Please signin college first");
+      if (name === "" || phone === "" || email === "" || adminPassword === "") {
         setError("Please make sure all the fields are not empty!");
       } else if (adminPassword !== confirmAdminPassWord) {
         setError("Confirm Password doesn't match password!");
@@ -42,15 +37,7 @@ export const SchoolSignUp = () => {
         }
       }
     },
-    [
-      navigate,
-      email,
-      name,
-      phone,
-      collegeId,
-      adminPassword,
-      confirmAdminPassWord,
-    ]
+    [navigate, email, name, phone, adminPassword, confirmAdminPassWord]
   );
   useEffect(() => {
     if (isLoggedIn()) {
@@ -82,13 +69,6 @@ export const SchoolSignUp = () => {
           type="number"
           variant="outline"
           onChange={(e) => setPhone(e.target.value)}
-        />
-        <Input
-          placeholder="College ID"
-          value={collegeId}
-          type="number"
-          variant="outline"
-          onChange={(e) => setCollegeId(e.target.value)}
         />
 
         <Input
