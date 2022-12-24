@@ -27,7 +27,7 @@ export const ViewCourse = () => {
       if (err instanceof ApiError && err.status === 403) {
         if (err.status === 403) {
           navigate(`/join/${courseId}`);
-        } else {
+        } else if(err.status === 404) {
           navigate(`/`);
         }
       }

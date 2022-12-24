@@ -1,9 +1,10 @@
-import { Text, Center, Box, Link as ChakraLink } from "@chakra-ui/react";
+import { Text, Center, Box, Link as ChakraLink, Heading, Flex } from "@chakra-ui/react";
 import { Announcement } from "@greenboard/shared";
+import { format } from "timeago.js";
 
 export const AnnouncementCard: React.FC<Announcement> = (announcement) => {
   return (
-    <Center>
+    <Flex>
       <Box
         maxW="6xl"
         w={["sm", "xl", "3xl"]}
@@ -13,10 +14,16 @@ export const AnnouncementCard: React.FC<Announcement> = (announcement) => {
         rounded="md"
         bg="white"
       >
-        <Text fontSize="md" fontWeight="bold">
+        <Heading fontSize="md" fontWeight="bold">
           {announcement.title}
+        </Heading>
+        <Text>
+          {announcement.content}
+        </Text>
+        <Text>
+          Posted {format(announcement.postedAt, 'US')}
         </Text>
       </Box>
-    </Center>
+    </Flex>
   );
 };

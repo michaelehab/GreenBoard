@@ -44,7 +44,7 @@ export const AvailableCourses = () => {
         {!!data?.courses && data.courses.length > 0 ? (
           data?.courses.map((course, i) => <CourseCard key={i} {...course} />)
         ) : (
-          <Text>No Posts right now</Text>
+          <Text>No Available Courses right now</Text>
         )}
       </Flex>
     </Center>

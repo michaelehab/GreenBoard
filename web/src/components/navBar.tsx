@@ -175,7 +175,6 @@ export const NavBar = () => {
                       colorScheme="green"
                       size={"sm"}
                       mr={4}
-                      leftIcon={<AddIcon />}
                     >
                       My Announcements
                     </Button>
@@ -186,7 +185,6 @@ export const NavBar = () => {
                       colorScheme="green"
                       size={"sm"}
                       mr={4}
-                      leftIcon={<AddIcon />}
                     >
                       My Courses
                     </Button>
