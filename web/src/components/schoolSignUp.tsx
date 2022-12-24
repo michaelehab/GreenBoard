@@ -3,6 +3,7 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
 import {
+  getLocalCollegeId,
   isLoggedIn,
   LOCAL_STORAGE_CollegeID,
   schoolSignUp,
@@ -16,7 +17,7 @@ export const SchoolSignUp = () => {
   const [adminPassword, setAdminPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
-  const [collegeId] = useState(LOCAL_STORAGE_CollegeID);
+  const [collegeId] = useState(getLocalCollegeId());
   const [error, setError] = useState("");
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
