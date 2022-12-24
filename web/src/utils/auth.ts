@@ -3,6 +3,8 @@ import {
   CollegeSignUpRequest,
   CollegeSignUpResponse,
   DepartmentSignInResponse,
+  DepartmentSignUpRequest,
+  DepartmentSignUpResponse,
   InstructorSignInResponse,
   SchoolSignInResponse,
   SchoolSignUpRequest,
@@ -161,6 +163,27 @@ export const schoolSignUp = async (
       adminPassword,
     }
   );
+  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+};
+export const getLocalSchoolId = (): string => {
+  const getId = localStorage.getItem(LOCAL_STORAGE_SchoolID);
+  return getId || "";
+};
+export const departmentSignUp = async (
+  email: string,
+  name: string,
+  schoolId: string,
+  adminPassword: string
+) => {
+  const res = await callEndpoint<
+    DepartmentSignUpRequest,
+    DepartmentSignUpResponse
+  >("/department/signup", "post", false, {
+    email,
+    name,
+    schoolId,
+    adminPassword,
+  });
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
 };
 export const collegeSignUp = async (

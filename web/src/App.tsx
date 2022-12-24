@@ -15,6 +15,8 @@ import { CreateAnnouncement } from "./pages/createAnnouncement";
 import { NotFound } from "./pages/notFound";
 import { SchoolSignUp } from "./components/schoolSignUp";
 import { ViewCoursePost } from "./pages/viewCoursePost";
+import { DepartmentSignIn } from "./components/departmentSignIn";
+import { DepartmentSignUp } from "./components/departmentSignUp";
 
 export const App = () => {
   return (
@@ -43,6 +45,7 @@ export const App = () => {
         <Route path="/announcements" element={<ViewAnnouncements />} />
         <Route path="/new/announcement" element={<CreateAnnouncement />} />
         <Route path="/new/school" element={<SchoolSignUp />} />
+        <Route path="/new/department" element={<DepartmentSignUp />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

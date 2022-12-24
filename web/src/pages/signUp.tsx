@@ -1,5 +1,7 @@
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { CollegeSignUp } from "../components/collegeSignUp";
+import { DepartmentSignUp } from "../components/departmentSignUp";
+import { SchoolSignUp } from "../components/schoolSignUp";
 import { useTitle } from "../utils/useTitle";
 
 export const SignUp = () => {
@@ -18,6 +20,12 @@ export const SignUp = () => {
       <TabPanels>
         <TabPanel>
           <CollegeSignUp />
+        </TabPanel>
+        <TabPanel>
+          <SchoolSignUp />
+        </TabPanel>
+        <TabPanel>
+          <DepartmentSignUp />
         </TabPanel>
       </TabPanels>
     </Tabs>
