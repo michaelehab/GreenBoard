@@ -7,11 +7,13 @@ import {
   AlertIcon,
   Heading,
   Center,
+  Image,
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiError } from "../utils/apiError";
 import { isLoggedIn, departmentSignIn } from "../utils/auth";
+import departmentVector from "../assets/departmentsAdmins.jpg";
 
 export const DepartmentSignIn = () => {
   const navigate = useNavigate();
@@ -45,13 +47,14 @@ export const DepartmentSignIn = () => {
   }, [navigate]);
 
   return (
-    <form onSubmit={signIn}>
-      <Center>
-        <Heading color="#4d7e3e">Department Sign In</Heading>
-      </Center>
+    <Center flexDirection="column">
+      <Heading color="#4d7e3e" my={2}>
+        Department Sign In
+      </Heading>
+      <Image src={departmentVector} height={{ sm: "10rem", lg: "20rem" }} />
       <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
         <Input
-          placeholder="Username or email"
+          placeholder="Email"
           value={email}
           variant="outline"
           onChange={(e) => setEmail(e.target.value)}
@@ -84,6 +87,6 @@ export const DepartmentSignIn = () => {
           </Alert>
         )}
       </Flex>
-    </form>
+    </Center>
   );
 };

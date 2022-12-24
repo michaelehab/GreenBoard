@@ -7,11 +7,13 @@ import {
   AlertIcon,
   Heading,
   Center,
+  Image,
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiError } from "../utils/apiError";
 import { isLoggedIn, instructorSignIn } from "../utils/auth";
+import instructorVector from "../assets/instructors.jpg";
 
 export const InstructorSignIn = () => {
   const navigate = useNavigate();
@@ -45,13 +47,14 @@ export const InstructorSignIn = () => {
   }, [navigate]);
 
   return (
-    <form onSubmit={signIn}>
-      <Center>
-        <Heading color="#4d7e3e">Instructor Sign In</Heading>
-      </Center>
+    <Center flexDirection="column">
+      <Heading color="#4d7e3e" my={2}>
+        Instructor Sign In
+      </Heading>
+      <Image src={instructorVector} height={{ sm: "10rem", lg: "20rem" }} />
       <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
         <Input
-          placeholder="Username or email"
+          placeholder="Email"
           value={email}
           variant="outline"
           onChange={(e) => setEmail(e.target.value)}
@@ -84,6 +87,6 @@ export const InstructorSignIn = () => {
           </Alert>
         )}
       </Flex>
-    </form>
+    </Center>
   );
 };

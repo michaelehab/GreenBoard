@@ -54,7 +54,7 @@ export const CollegeSignIn = () => {
       <Image src={collegeVector} height={{ sm: "10rem", lg: "20rem" }} />
       <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
         <Input
-          placeholder="Username or email"
+          placeholder="Email"
           value={email}
           variant="outline"
           onChange={(e) => setEmail(e.target.value)}
