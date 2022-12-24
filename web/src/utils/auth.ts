@@ -5,6 +5,7 @@ import {
   DepartmentSignInResponse,
   InstructorSignInResponse,
   SchoolSignInResponse,
+  SchoolSignUpRequest,
   SignInRequest,
   StudentSignInResponse,
 } from "@greenboard/shared";
@@ -136,6 +137,32 @@ export async function instructorSignIn(email: string, password: string) {
   localStorage.setItem(LOCAL_STORAGE_ROLE, "INSTRUCTOR");
 }
 
+export const getLocalCollegeId = (): string => {
+  const getId = localStorage.getItem(LOCAL_STORAGE_CollegeID);
+  return getId || "";
+};
+
+export const schoolSignUp = async (
+  email: string,
+  name: string,
+  phone: string,
+  collegeId: string,
+  adminPassword: string
+) => {
+  const res = await callEndpoint<SchoolSignUpRequest, SchoolSignInResponse>(
+    "/school/signup",
+    "post",
+    false,
+    {
+      email,
+      name,
+      phone,
+      collegeId,
+      adminPassword,
+    }
+  );
+  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+};
 export const collegeSignUp = async (
   email: string,
   name: string,
