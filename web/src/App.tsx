@@ -13,6 +13,7 @@ import { CreateStudentQuestion } from "./pages/createStudentQuestion";
 import { ViewAnnouncements } from "./pages/viewAnnouncements";
 import { CreateAnnouncement } from "./pages/createAnnouncement";
 import { NotFound } from "./pages/notFound";
+import { ViewCoursePost } from "./pages/viewCoursePost";
 export const App = () => {
   return (
     <BrowserRouter>
@@ -32,6 +33,10 @@ export const App = () => {
         <Route
           path="/courses/:courseId/new/question"
           element={<CreateStudentQuestion />}
+        />
+        <Route
+          path="/courses/:courseId/posts/:postId"
+          element={<ViewCoursePost />}
         />
         <Route path="/announcements" element={<ViewAnnouncements />} />
         <Route path="/new/announcement" element={<CreateAnnouncement />} />
