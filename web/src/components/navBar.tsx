@@ -53,6 +53,7 @@ const NavLink = (link: string) => {
 export const NavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+  const URLArray = window.location.pathname.split("/");
 
   const onSignout = useCallback(() => {
     signOut();
@@ -88,6 +89,23 @@ export const NavBar = () => {
           </HStack>
           {isLoggedIn() ? (
             <Flex alignItems={"center"}>
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "COLLEGE" ||
+              localStorage.getItem(LOCAL_STORAGE_ROLE) === "SCHOOL" ||
+              localStorage.getItem(LOCAL_STORAGE_ROLE) === "DEPARTMENT" ? (
+                <Link to={"/new/announcement"}>
+                  <Button
+                    variant={"solid"}
+                    colorScheme="green"
+                    size={"sm"}
+                    mr={4}
+                    leftIcon={<AddIcon />}
+                  >
+                    Create Announcement
+                  </Button>
+                </Link>
+              ) : (
+                <></>
+              )}
               {localStorage.getItem(LOCAL_STORAGE_ROLE) === "COLLEGE" && (
                 <Link to={"/new/school"}>
                   <Button
@@ -114,9 +132,10 @@ export const NavBar = () => {
                   </Button>
                 </Link>
               )}
-              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" ||
-              localStorage.getItem(LOCAL_STORAGE_ROLE) === "STUDENT" ? (
-                <Link to={"/courses"}>
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" &&
+              URLArray.length > 2 &&
+              URLArray[1] === "courses" ? (
+                <Link to={`/courses/${URLArray[2]}/new/post`}>
                   <Button
                     variant={"solid"}
                     colorScheme="green"
@@ -124,12 +143,59 @@ export const NavBar = () => {
                     mr={4}
                     leftIcon={<AddIcon />}
                   >
-                    My Courses
+                    Post
                   </Button>
                 </Link>
               ) : (
                 <></>
               )}
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "STUDENT" &&
+              URLArray.length > 2 &&
+              URLArray[1] === "courses" ? (
+                <Link to={`/courses/${URLArray[2]}/new/question`}>
+                  <Button
+                    variant={"solid"}
+                    colorScheme="green"
+                    size={"sm"}
+                    mr={4}
+                    leftIcon={<AddIcon />}
+                  >
+                    Ask
+                  </Button>
+                </Link>
+              ) : (
+                <></>
+              )}
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" ||
+              localStorage.getItem(LOCAL_STORAGE_ROLE) === "STUDENT" ? (
+                <Flex>
+                  <Link to={"/announcements"}>
+                    <Button
+                      variant={"solid"}
+                      colorScheme="green"
+                      size={"sm"}
+                      mr={4}
+                      leftIcon={<AddIcon />}
+                    >
+                      My Announcements
+                    </Button>
+                  </Link>
+                  <Link to={"/courses"}>
+                    <Button
+                      variant={"solid"}
+                      colorScheme="green"
+                      size={"sm"}
+                      mr={4}
+                      leftIcon={<AddIcon />}
+                    >
+                      My Courses
+                    </Button>
+                  </Link>
+                </Flex>
+              ) : (
+                <></>
+              )}
+
               <Menu>
                 <MenuButton
                   as={Button}

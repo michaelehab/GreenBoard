@@ -204,28 +204,28 @@ describe("Announcements tests", () => {
         .get(`/api/v1/announcements`)
         .set(studentAuthHeader)
         .expect(200);
-      expect(result.body.collegeAnnouncements).toHaveLength(1);
-      expect(result.body.schoolAnnouncements).toHaveLength(1);
-      expect(result.body.departmentAnnouncements).toHaveLength(1);
+      expect(result.body.collegeAnnouncements).toHaveLength(2);
+      expect(result.body.schoolAnnouncements).toHaveLength(2);
+      expect(result.body.departmentAnnouncements).toHaveLength(2);
       expect(result.body.collegeName).toBe(SEED_COLLEGE.name);
       expect(result.body.schoolName).toBe(SEED_SCHOOL.name);
       expect(result.body.departmentName).toBe(SEED_DEPARTMENT.name);
-      expect(result.body.collegeAnnouncements[0].title).toBe(
+      expect(result.body.collegeAnnouncements[1].title).toBe(
         collegeAnnouncement.title
       );
-      expect(result.body.collegeAnnouncements[0].content).toBe(
+      expect(result.body.collegeAnnouncements[1].content).toBe(
         collegeAnnouncement.content
       );
-      expect(result.body.schoolAnnouncements[0].title).toBe(
+      expect(result.body.schoolAnnouncements[1].title).toBe(
         schoolAnnouncement.title
       );
-      expect(result.body.schoolAnnouncements[0].content).toBe(
+      expect(result.body.schoolAnnouncements[1].content).toBe(
         schoolAnnouncement.content
       );
-      expect(result.body.departmentAnnouncements[0].title).toBe(
+      expect(result.body.departmentAnnouncements[1].title).toBe(
         departmentAnnouncement.title
       );
-      expect(result.body.departmentAnnouncements[0].content).toBe(
+      expect(result.body.departmentAnnouncements[1].content).toBe(
         departmentAnnouncement.content
       );
     });
@@ -234,28 +234,28 @@ describe("Announcements tests", () => {
         .get(`/api/v1/announcements`)
         .set(instructorAuthHeader)
         .expect(200);
-      expect(result.body.collegeAnnouncements).toHaveLength(1);
-      expect(result.body.schoolAnnouncements).toHaveLength(1);
-      expect(result.body.departmentAnnouncements).toHaveLength(1);
+      expect(result.body.collegeAnnouncements).toHaveLength(2);
+      expect(result.body.schoolAnnouncements).toHaveLength(2);
+      expect(result.body.departmentAnnouncements).toHaveLength(2);
       expect(result.body.collegeName).toBe(SEED_COLLEGE.name);
       expect(result.body.schoolName).toBe(SEED_SCHOOL.name);
       expect(result.body.departmentName).toBe(SEED_DEPARTMENT.name);
-      expect(result.body.collegeAnnouncements[0].title).toBe(
+      expect(result.body.collegeAnnouncements[1].title).toBe(
         collegeAnnouncement.title
       );
-      expect(result.body.collegeAnnouncements[0].content).toBe(
+      expect(result.body.collegeAnnouncements[1].content).toBe(
         collegeAnnouncement.content
       );
-      expect(result.body.schoolAnnouncements[0].title).toBe(
+      expect(result.body.schoolAnnouncements[1].title).toBe(
         schoolAnnouncement.title
       );
-      expect(result.body.schoolAnnouncements[0].content).toBe(
+      expect(result.body.schoolAnnouncements[1].content).toBe(
         schoolAnnouncement.content
       );
-      expect(result.body.departmentAnnouncements[0].title).toBe(
+      expect(result.body.departmentAnnouncements[1].title).toBe(
         departmentAnnouncement.title
       );
-      expect(result.body.departmentAnnouncements[0].content).toBe(
+      expect(result.body.departmentAnnouncements[1].content).toBe(
         departmentAnnouncement.content
       );
     });

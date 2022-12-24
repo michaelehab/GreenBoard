@@ -8,7 +8,10 @@ import { JoinCourse } from "./pages/joinCourse";
 import { ListCourses } from "./pages/myCourses";
 import { AvailableCourses } from "./pages/availableCourses";
 import { ViewCourse } from "./pages/viewCourse";
-
+import { CreatePost } from "./pages/createPost";
+import { CreateStudentQuestion } from "./pages/createStudentQuestion";
+import { ViewAnnouncements } from "./pages/viewAnnouncements";
+import { CreateAnnouncement } from "./pages/createAnnouncement";
 export const App = () => {
   return (
     <BrowserRouter>
@@ -24,6 +27,13 @@ export const App = () => {
         <Route path="/courses/:courseId" element={<ViewCourse />} />
         <Route path="/new/course" element={<CreateCourse />} />
         <Route path="/join/:courseId" element={<JoinCourse />} />
+        <Route path="/courses/:courseId/new/post" element={<CreatePost />} />
+        <Route
+          path="/courses/:courseId/new/question"
+          element={<CreateStudentQuestion />}
+        />
+        <Route path="/announcements" element={<ViewAnnouncements />} />
+        <Route path="/new/announcement" element={<CreateAnnouncement />} />
       </Routes>
     </BrowserRouter>
   );

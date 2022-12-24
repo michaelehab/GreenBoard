@@ -36,6 +36,11 @@ export const isLoggedInInstructor = (): boolean => {
   return role === "INSTRUCTOR";
 };
 
+export const isLoggedInStudent = (): boolean => {
+  const role = getLocalStorageRole();
+  return role === "STUDENT";
+};
+
 export const isLoggedInUser = (): boolean => {
   const role = getLocalStorageRole();
   return role === "INSTRUCTOR" || role === "STUDENT";
@@ -49,6 +54,11 @@ export const isLoggedInCollege = (): boolean => {
 export const isLoggedInSchool = (): boolean => {
   const role = getLocalStorageRole();
   return role === "SCHOOL";
+};
+
+export const isLoggedInDepartment = (): boolean => {
+  const role = getLocalStorageRole();
+  return role === "DEPARTMENT";
 };
 
 export async function collegeSignIn(email: string, password: string) {
