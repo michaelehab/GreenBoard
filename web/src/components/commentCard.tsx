@@ -1,8 +1,8 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { format } from "timeago.js";
-import { PostComment } from "@greenboard/shared";
+import { Comment } from "@greenboard/shared";
 
-export const CommentCard: React.FC<PostComment> = (comment) => {
+export const CommentCard: React.FC<Comment> = (comment) => {
   return (
     <Flex
       maxW="6xl"
@@ -16,9 +16,7 @@ export const CommentCard: React.FC<PostComment> = (comment) => {
       bg="white"
     >
       <Flex justifyContent="space-between">
-        <Text fontSize="md" fontWeight="bold">
-          {comment.comment}
-        </Text>
+        <Text fontSize="md">{comment.comment}</Text>
       </Flex>
       <Flex gap={3}>
         <Text>{format(comment.postedAt, "en_US")}</Text>
