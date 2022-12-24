@@ -13,6 +13,8 @@ import { CreateStudentQuestion } from "./pages/createStudentQuestion";
 import { ViewAnnouncements } from "./pages/viewAnnouncements";
 import { CreateAnnouncement } from "./pages/createAnnouncement";
 import { NotFound } from "./pages/notFound";
+import { SchoolSignUp } from "./components/schoolSignUp";
+
 export const App = () => {
   return (
     <BrowserRouter>
@@ -35,6 +37,7 @@ export const App = () => {
         />
         <Route path="/announcements" element={<ViewAnnouncements />} />
         <Route path="/new/announcement" element={<CreateAnnouncement />} />
+        <Route path="/new/school" element={<SchoolSignUp />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

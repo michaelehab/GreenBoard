@@ -136,11 +136,19 @@ export async function instructorSignIn(email: string, password: string) {
   localStorage.setItem(LOCAL_STORAGE_UserID, res.instructor.id);
   localStorage.setItem(LOCAL_STORAGE_ROLE, "INSTRUCTOR");
 }
+
+export const getLocalCollegeId = (): string => {
+  {
+    const getId = localStorage.getItem(LOCAL_STORAGE_CollegeID);
+    return getId || "";
+  }
+};
+
 export const schoolSignUp = async (
   email: string,
   name: string,
   phone: string,
-  collegeId: string = LOCAL_STORAGE_CollegeID,
+  collegeId: string,
   adminPassword: string
 ) => {
   const res = await callEndpoint<SchoolSignUpRequest, SchoolSignInResponse>(
