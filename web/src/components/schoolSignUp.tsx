@@ -2,13 +2,9 @@ import { Box, Button, Flex, Input, Alert, AlertIcon } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
-import {
-  getLocalCollegeId,
-  isLoggedIn,
-  LOCAL_STORAGE_CollegeID,
-  schoolSignUp,
-} from "../utils/auth";
+import { getLocalCollegeId, isLoggedIn, schoolSignUp } from "../utils/auth";
 import { ApiError } from "../utils/apiError";
+
 export const SchoolSignUp = () => {
   useTitle("Sign Up");
   const navigate = useNavigate();
@@ -17,8 +13,9 @@ export const SchoolSignUp = () => {
   const [adminPassword, setAdminPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
-  const [collegeId] = useState(getLocalCollegeId());
+  const collegeId: string = getLocalCollegeId();
   const [error, setError] = useState("");
+
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
@@ -38,10 +35,18 @@ export const SchoolSignUp = () => {
         }
       }
     },
-    [navigate, email, name, phone, adminPassword, confirmAdminPassWord]
+    [
+      navigate,
+      email,
+      name,
+      phone,
+      adminPassword,
+      confirmAdminPassWord,
+      collegeId,
+    ]
   );
   useEffect(() => {
-    if (isLoggedIn()) {
+    if (!isLoggedIn()) {
       navigate("/");
     }
   }, [navigate]);

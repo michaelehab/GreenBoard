@@ -138,10 +138,8 @@ export async function instructorSignIn(email: string, password: string) {
 }
 
 export const getLocalCollegeId = (): string => {
-  {
-    const getId = localStorage.getItem(LOCAL_STORAGE_CollegeID);
-    return getId || "";
-  }
+  const getId = localStorage.getItem(LOCAL_STORAGE_CollegeID);
+  return getId || "";
 };
 
 export const schoolSignUp = async (
