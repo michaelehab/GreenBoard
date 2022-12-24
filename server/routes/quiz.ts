@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { CreateQuiz, getQuiz } from "../handlers/quizHandler";
+import {
+  CreateQuiz,
+  getQuiz,
+  toggleQuizActivation,
+} from "../handlers/quizHandler";
 import {
   parseJwtMiddleware,
   requireJwtMiddleware,
@@ -24,5 +28,6 @@ router.get(
   "/:courseId/quiz/:quizId/student/:studentId/grades",
   GetStudentGrade
 );
+router.put("/:courseId/quiz/:quizId/toggle", toggleQuizActivation);
 
 export default router;

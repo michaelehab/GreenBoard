@@ -461,6 +461,14 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async toggleQuizAcivation(isActive: boolean, quizId: string): Promise<void> {
+    await this.db.run(
+      "UPDATE quizzes SET isActive=? WHERE id=?",
+      isActive,
+      quizId
+    );
+  }
+
   async createQuizQuestion(quizQuestion: QuizQuestion): Promise<void> {
     await this.db.run(
       "INSERT INTO quizzes_questions(question_number,question,choiceA,choiceB,choiceC,choiceD,rightChoice,quizId,weight) VALUES (?,?,?,?,?,?,?,?,?)",

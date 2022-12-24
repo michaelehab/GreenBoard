@@ -6,6 +6,7 @@ import {
   QuizQuestion,
   GetQuizRequest,
   GetQuizResponse,
+  ToggleQuizActivationRequest,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -153,5 +154,48 @@ export const getQuiz: ExpressHandlerWithParams<
   return res.send({
     quiz: quiz1,
     questions: questions,
+  });
+};
+
+export const toggleQuizActivation: ExpressHandlerWithParams<
+  { courseId: string; quizId: string },
+  ToggleQuizActivationRequest,
+  ToggleQuizActivationRequest
+> = async (req, res) => {
+  if (!req.params.courseId) {
+    return res.status(400).send({ error: "CourseId is required" });
+  }
+
+  if (!req.params.quizId) {
+    return res.status(400).send({ error: "quizId is required" });
+  }
+
+  const existingCourse = await db.getCourseById(req.params.courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
+  }
+
+  const existingInstructor = await db.getInstructorById(res.locals.userId);
+  if (!existingInstructor) {
+    return res.status(403).send({ error: "Instructor is not valid" });
+  }
+
+  const existingEnrollment = await db.checkEnrollment(
+    existingInstructor.id,
+    req.params.courseId
+  );
+
+  if (!existingEnrollment) {
+    return res.status(403).send({ error: "Not enrolled in this course" });
+  }
+  const quiz1 = await db.getQuizById(req.params.quizId);
+  if (!quiz1) {
+    return res.status(404).send({ error: "Quiz not found" });
+  }
+
+  await db.toggleQuizAcivation(!quiz1.isActive, req.params.quizId);
+
+  return res.status(200).send({
+    isActive: !quiz1.isActive,
   });
 };
