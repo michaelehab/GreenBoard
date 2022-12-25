@@ -21,12 +21,6 @@ export const SignUp = () => {
         <TabPanel>
           <CollegeSignUp />
         </TabPanel>
-        <TabPanel>
-          <SchoolSignUp />
-        </TabPanel>
-        <TabPanel>
-          <DepartmentSignUp />
-        </TabPanel>
       </TabPanels>
     </Tabs>
   );
