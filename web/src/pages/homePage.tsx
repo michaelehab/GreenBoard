@@ -8,8 +8,10 @@ import {
   Text,
   useBreakpointValue,
 } from "@chakra-ui/react";
+import { useTitle } from "../utils/useTitle";
 
 export const Home = () => {
+  useTitle("Home");
   return (
     <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
       <Flex p={8} flex={1} align={"center"} justify={"center"}>

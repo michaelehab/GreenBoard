@@ -10,7 +10,7 @@ import {
   GetCourseStudentsQuestionsResponse,
 } from "@greenboard/shared";
 import { ApiError } from "../utils/apiError";
-import { PostCard } from "../components/postCard";
+import { StudentQuestionCard } from "./studentQuestionCard";
 
 export const ViewStudentsQuestions = () => {
   const { courseId } = useParams();
@@ -35,7 +35,7 @@ export const ViewStudentsQuestions = () => {
           {!!studentsQuestions?.questions &&
           studentsQuestions.questions.length > 0 ? (
             studentsQuestions?.questions.map((question, i) => (
-              <PostCard key={i} {...question} />
+              <StudentQuestionCard key={i} {...question} />
             ))
           ) : (
             <p>No Questions right now</p>

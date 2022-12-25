@@ -107,4 +107,4 @@ dist
 request.rest
 
 # SQLite DB
-greenboard.sqlite
+./server/sqldb/greenboard.sqlite

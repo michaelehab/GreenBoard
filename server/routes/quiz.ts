@@ -3,6 +3,7 @@ import {
   CreateQuiz,
   ListAvailableQuizzes,
   getQuiz,
+  toggleQuizActivation,
 } from "../handlers/quizHandler";
 import {
   parseJwtMiddleware,
@@ -29,5 +30,6 @@ router.get(
   "/:courseId/quizzes/:quizId/students/:studentId/grades",
   GetStudentGrade
 );
+router.put("/:courseId/quiz/:quizId/toggle", toggleQuizActivation);
 
 export default router;

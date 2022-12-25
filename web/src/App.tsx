@@ -15,6 +15,7 @@ import { CreateAnnouncement } from "./pages/createAnnouncement";
 import { NotFound } from "./pages/notFound";
 import { SchoolSignUp } from "./components/schoolSignUp";
 import { ViewCoursePost } from "./pages/viewCoursePost";
+import { ViewStudentQuestion } from "./pages/viewStudentQuestion";
 import { CreateQuiz } from "./pages/createQuiz";
 
 export const App = () => {
@@ -40,6 +41,10 @@ export const App = () => {
         <Route
           path="/courses/:courseId/posts/:postId"
           element={<ViewCoursePost />}
+        />
+        <Route
+          path="/courses/:courseId/questions/:questionId"
+          element={<ViewStudentQuestion />}
         />
         <Route path="/announcements" element={<ViewAnnouncements />} />
         <Route path="/new/announcement" element={<CreateAnnouncement />} />

@@ -274,6 +274,11 @@ export interface CreateQuizResponse {
   questions: QuizQuestion[];
 }
 
+export type ToggleQuizActivationRequest = Pick<Quiz, "isActive">;
+export interface ToogleQuizActivationResonse {
+  isActive: boolean;
+}
+
 export interface GetQuizRequest {}
 export interface GetQuizResponse {
   quiz: Quiz;
