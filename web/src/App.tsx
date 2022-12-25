@@ -18,6 +18,7 @@ import { ViewCoursePost } from "./pages/viewCoursePost";
 import { DepartmentSignUp } from "./components/departmentSignUp";
 import { ViewStudentQuestion } from "./pages/viewStudentQuestion";
 import { CreateQuiz } from "./pages/createQuiz";
+import { ViewQuiz } from "./pages/viewQuiz";
 
 export const App = () => {
   return (
@@ -52,6 +53,10 @@ export const App = () => {
         <Route path="/new/school" element={<SchoolSignUp />} />
         <Route path="/new/department" element={<DepartmentSignUp />} />
         <Route path="/courses/:courseId/new/quiz" element={<CreateQuiz />} />
+        <Route
+          path="/courses/:courseId/quizzes/:quizId"
+          element={<ViewQuiz />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

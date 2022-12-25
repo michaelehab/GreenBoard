@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
 import { ApiError } from "../utils/apiError";
 import {
-  isLoggedIn,
   departmentSignUp,
   getLocalSchoolId,
   isLoggedInSchool,

@@ -83,65 +83,61 @@ export const ViewCoursePost = () => {
 
   return (
     <Center>
-      <Box>
-        <Flex align="center">
-          <Box
-            maxW="6xl"
-            w={["sm", "xl", "3xl"]}
-            m={5}
-            boxShadow="xl"
-            p="6"
-            rounded="md"
-            bg="white"
-          >
-            <Text fontSize="md" fontWeight="bold">
-              {postData.post.title}
-            </Text>
-            <Text fontSize="md">{postData.post.content}</Text>
-            <ChakraLink href={postData.post.url}>Link</ChakraLink>
-          </Box>
-        </Flex>
-        <Flex direction="column">
-          {!!commentsData && commentsData.postComment.length > 0 ? (
-            commentsData.postComment.map((c, i) => (
-              <CommentCard key={i} {...c} />
-            ))
-          ) : (
-            <Center>No comments on this post</Center>
-          )}
-        </Flex>
-        {isLoggedIn() && (
-          <form onSubmit={addComment}>
-            <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
-              <Input
-                placeholder="Enter Your Comment"
-                value={comment}
-                variant="outline"
-                onChange={(e) => setComment(e.target.value)}
-              />
-
-              <Box m="auto">
-                <Button
-                  colorScheme="green"
-                  variant="solid"
-                  type="submit"
-                  display="block"
-                  onClick={addComment}
-                >
-                  Add Comment
-                </Button>
-              </Box>
-
-              {!!error && (
-                <Alert status="error">
-                  <AlertIcon />
-                  {error}
-                </Alert>
-              )}
-            </Flex>
-          </form>
+      <Flex align="center">
+        <Box
+          maxW="6xl"
+          w={["sm", "xl", "3xl"]}
+          m={5}
+          boxShadow="xl"
+          p="6"
+          rounded="md"
+          bg="white"
+        >
+          <Text fontSize="md" fontWeight="bold">
+            {postData.post.title}
+          </Text>
+          <Text fontSize="md">{postData.post.content}</Text>
+          <ChakraLink href={postData.post.url}>Link</ChakraLink>
+        </Box>
+      </Flex>
+      <Flex direction="column">
+        {!!commentsData && commentsData.postComment.length > 0 ? (
+          commentsData.postComment.map((c, i) => <CommentCard key={i} {...c} />)
+        ) : (
+          <Center>No comments on this post</Center>
         )}
-      </Box>
+      </Flex>
+      {isLoggedIn() && (
+        <form onSubmit={addComment}>
+          <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
+            <Input
+              placeholder="Enter Your Comment"
+              value={comment}
+              variant="outline"
+              onChange={(e) => setComment(e.target.value)}
+            />
+
+            <Box m="auto">
+              <Button
+                colorScheme="green"
+                variant="solid"
+                type="submit"
+                display="block"
+                onClick={addComment}
+              >
+                Add Comment
+              </Button>
+            </Box>
+
+            {!!error && (
+              <Alert status="error">
+                <AlertIcon />
+                {error}
+              </Alert>
+            )}
+          </Flex>
+        </form>
+      )}
     </Center>
   );
 };
