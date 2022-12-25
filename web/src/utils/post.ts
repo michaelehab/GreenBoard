@@ -4,7 +4,6 @@ import {
   CreateStudentQuestionResponse,
 } from "@greenboard/shared";
 import { callEndpoint } from "./callEndpoint";
-import { useParams } from "react-router-dom";
 
 export async function createPost(
   title: string,
@@ -12,7 +11,7 @@ export async function createPost(
   content: string,
   courseId: string | undefined
 ) {
-  const res = await callEndpoint<CreatePostRequest, CreateCoursePostResponse>(
+  await callEndpoint<CreatePostRequest, CreateCoursePostResponse>(
     `/courses/${courseId}/posts`,
     "POST",
     false,
@@ -30,12 +29,14 @@ export async function createStudentQuestion(
   content: string,
   courseId: string | undefined
 ) {
-  const res = await callEndpoint<
-    CreatePostRequest,
-    CreateStudentQuestionResponse
-  >(`/courses/${courseId}/questions`, "POST", false, {
-    title,
-    content,
-    url,
-  });
+  await callEndpoint<CreatePostRequest, CreateStudentQuestionResponse>(
+    `/courses/${courseId}/questions`,
+    "POST",
+    false,
+    {
+      title,
+      content,
+      url,
+    }
+  );
 }

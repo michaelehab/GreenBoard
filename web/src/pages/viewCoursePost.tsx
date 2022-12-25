@@ -6,8 +6,8 @@ import {
   Flex,
   Input,
   Center,
-  Text, 
-  Link as ChakraLink
+  Text,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +16,6 @@ import { useParams } from "react-router";
 import { isLoggedIn, isLoggedInUser } from "../utils/auth";
 import { callEndpoint } from "../utils/callEndpoint";
 import { CommentCard } from "../components/commentCard";
-import { PostCard } from "../components/postCard";
 import { NotFound } from "./notFound";
 import {
   CreateCommentRequest,
@@ -86,24 +85,21 @@ export const ViewCoursePost = () => {
     <Center>
       <Box>
         <Flex align="center">
-        <Box
-        maxW="6xl"
-        w={["sm", "xl", "3xl"]}
-        m={5}
-        boxShadow="xl"
-        p="6"
-        rounded="md"
-        bg="white"
-      >
-          <Text fontSize="md" fontWeight="bold">
-            {postData.post.title}
-          </Text>
-          <Text fontSize="md">
-            {postData.post.content}
-          </Text>
-        <ChakraLink href={postData.post.url}>Link</ChakraLink>
-
-      </Box>
+          <Box
+            maxW="6xl"
+            w={["sm", "xl", "3xl"]}
+            m={5}
+            boxShadow="xl"
+            p="6"
+            rounded="md"
+            bg="white"
+          >
+            <Text fontSize="md" fontWeight="bold">
+              {postData.post.title}
+            </Text>
+            <Text fontSize="md">{postData.post.content}</Text>
+            <ChakraLink href={postData.post.url}>Link</ChakraLink>
+          </Box>
         </Flex>
         <Flex direction="column">
           {!!commentsData && commentsData.postComment.length > 0 ? (

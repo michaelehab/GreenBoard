@@ -2,36 +2,34 @@ import { Box, Button, Flex, Input, Alert, AlertIcon } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
-import {
-  getLocalCollegeId,
-  isLoggedIn,
-  isLoggedInCollege,
-  schoolSignUp,
-} from "../utils/auth";
 import { ApiError } from "../utils/apiError";
-
-export const SchoolSignUp = () => {
+import {
+  isLoggedIn,
+  departmentSignUp,
+  getLocalSchoolId,
+  isLoggedInSchool,
+} from "../utils/auth";
+export const DepartmentSignUp = () => {
   useTitle("Sign Up");
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
-  const [phone, setPhone] = useState("");
   const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
-  const collegeId: string = getLocalCollegeId();
+  const schoolId: string = getLocalSchoolId();
   const [error, setError] = useState("");
 
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
-      if (collegeId === "") setError("Please signin college first");
-      if (name === "" || phone === "" || email === "" || adminPassword === "") {
+      if (schoolId === "") setError("Please signin school first");
+      if (name === "" || email === "" || adminPassword === "") {
         setError("Please make sure all the fields are not empty!");
       } else if (adminPassword !== confirmAdminPassWord) {
         setError("Confirm Password doesn't match password!");
       } else {
         try {
-          await schoolSignUp(email, name, phone, collegeId, adminPassword);
+          await departmentSignUp(email, name, schoolId, adminPassword);
           navigate("/");
         } catch (err) {
           if (err instanceof ApiError) {
@@ -40,18 +38,10 @@ export const SchoolSignUp = () => {
         }
       }
     },
-    [
-      navigate,
-      email,
-      name,
-      phone,
-      adminPassword,
-      confirmAdminPassWord,
-      collegeId,
-    ]
+    [navigate, email, name, adminPassword, confirmAdminPassWord, schoolId]
   );
   useEffect(() => {
-    if (!isLoggedInCollege()) {
+    if (!isLoggedInSchool()) {
       navigate("/");
     }
   }, [navigate]);
@@ -60,27 +50,19 @@ export const SchoolSignUp = () => {
       <Flex maxW="sm" my={3} mx="auto" direction="column" gap={3}>
         <Flex gap={2}>
           <Input
-            placeholder="School Name"
+            placeholder="Department Name"
             value={name}
             variant="outline"
             onChange={(e) => setName(e.target.value)}
           />
 
           <Input
-            placeholder="School Email"
+            placeholder="Department Email"
             value={email}
             variant="outline"
             onChange={(e) => setEmail(e.target.value)}
           />
         </Flex>
-
-        <Input
-          placeholder="School Phone"
-          value={phone}
-          type="number"
-          variant="outline"
-          onChange={(e) => setPhone(e.target.value)}
-        />
 
         <Input
           placeholder="Admin Password"

@@ -1,4 +1,4 @@
-import { Text, Center, Box, Link as ChakraLink } from "@chakra-ui/react";
+import { Text, Center, Box } from "@chakra-ui/react";
 import { QuizWithName } from "@greenboard/shared";
 import { Link } from "react-router-dom";
 

@@ -1,15 +1,11 @@
 import { Box, Flex, Center } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { useParams } from "react-router";
-import { isLoggedInUser } from "../utils/auth";
 import { callEndpoint } from "../utils/callEndpoint";
 import {
   GetCourseStudentsQuestionsRequest,
   GetCourseStudentsQuestionsResponse,
 } from "@greenboard/shared";
-import { ApiError } from "../utils/apiError";
 import { StudentQuestionCard } from "./studentQuestionCard";
 
 export const ViewStudentsQuestions = () => {

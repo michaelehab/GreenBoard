@@ -1,13 +1,11 @@
 import { Box, Flex, Center } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { isLoggedInUser } from "../utils/auth";
 import { callEndpoint } from "../utils/callEndpoint";
 import {
   ListCoursePostsRequest,
   ListCoursePostsResponse,
 } from "@greenboard/shared";
-import { ApiError } from "../utils/apiError";
 import { PostCard } from "../components/postCard";
 
 export const ViewCoursePosts = () => {

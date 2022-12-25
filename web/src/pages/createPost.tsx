@@ -39,7 +39,7 @@ export const CreatePost = () => {
         }
       }
     },
-    [navigate, title, content, url]
+    [navigate, title, content, url, courseId]
   );
 
   useEffect(() => {
