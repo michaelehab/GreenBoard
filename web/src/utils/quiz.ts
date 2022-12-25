@@ -22,8 +22,8 @@ export async function createQuiz(
     | "weight"
   >[]
 ) {
-  const res = await callEndpoint<CreateQuizRequest, CreateQuizResponse>(
-    `/courses/${courseId}/quiz`,
+  await callEndpoint<CreateQuizRequest, CreateQuizResponse>(
+    `/courses/${courseId}/quizzes`,
     "POST",
     true,
     {

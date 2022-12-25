@@ -38,7 +38,7 @@ describe("Posts tests", () => {
     client = await getTestServer();
 
     studentAuthHeader = await getAuthToken(
-      "/api/v1/student/signin",
+      "/api/v1/students/signin",
       SEED_STUDENT.email,
       SEED_STUDENT_PASSWORD
     );
@@ -50,7 +50,7 @@ describe("Posts tests", () => {
     );
 
     studentNotInCourseAuthHeader = await getAuthToken(
-      "/api/v1/student/signin",
+      "/api/v1/students/signin",
       SEED_STUDENT2.email,
       SEED_STUDENT_PASSWORD
     );

@@ -109,7 +109,7 @@ export async function departmentSignIn(email: string, password: string) {
 
 export async function studentSignIn(email: string, password: string) {
   const res = await callEndpoint<SignInRequest, StudentSignInResponse>(
-    "/student/signin",
+    "/students/signin",
     "POST",
     false,
     {

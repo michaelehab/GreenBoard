@@ -9,7 +9,7 @@ import announcements from "./announcements";
 
 const router = Router();
 
-router.use("/student", student);
+router.use("/students", student);
 router.use("/college", college);
 router.use("/school", school);
 router.use("/department", department);

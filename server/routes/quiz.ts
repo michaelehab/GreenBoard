@@ -15,13 +15,13 @@ const router = Router();
 
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
-router.post("/:courseId/quiz", CreateQuiz);
-router.get("/:courseId/quiz/:quizId", getQuiz);
-router.post("/:courseId/quiz/:quizId", SubmitQuiz);
+router.post("/:courseId/quizzes", CreateQuiz);
+router.get("/:courseId/quizzes/:quizId", getQuiz);
+router.post("/:courseId/quizzes/:quizId", SubmitQuiz);
 router.get("/:courseId/grades", ListCourseGrades);
-router.get("/:courseId/quiz/:quizId/grades", GetQuizGrades);
+router.get("/:courseId/quizzes/:quizId/grades", GetQuizGrades);
 router.get(
-  "/:courseId/quiz/:quizId/student/:studentId/grades",
+  "/:courseId/quizzes/:quizId/students/:studentId/grades",
   GetStudentGrade
 );
 
