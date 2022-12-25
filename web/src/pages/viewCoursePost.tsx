@@ -82,8 +82,8 @@ export const ViewCoursePost = () => {
   }
 
   return (
-    <Center>
-      <Flex align="center">
+    <Center flexDirection="column">
+      <Flex align="center" flexDirection="column">
         <Box
           maxW="6xl"
           w={["sm", "xl", "3xl"]}
@@ -108,7 +108,7 @@ export const ViewCoursePost = () => {
         )}
       </Flex>
       {isLoggedIn() && (
-        <form onSubmit={addComment}>
+        <Box>
           <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
             <Input
               placeholder="Enter Your Comment"
@@ -136,7 +136,7 @@ export const ViewCoursePost = () => {
               </Alert>
             )}
           </Flex>
-        </form>
+        </Box>
       )}
     </Center>
   );

@@ -19,6 +19,7 @@ import { ViewStudentsQuestions } from "../components/viewStudentsQuestions";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { ViewCourseQuizzes } from "../components/viewAvailableQuizzes";
 import { AddIcon } from "@chakra-ui/icons";
+import { ViewGrades } from "../components/viewGrades";
 
 export const ViewCourse = () => {
   const { courseId } = useParams();
@@ -111,6 +112,7 @@ export const ViewCourse = () => {
           <Tab>Course Posts</Tab>
           <Tab>Students Questions</Tab>
           <Tab>Quizzes</Tab>
+          {isLoggedInStudent() && <Tab>Grades</Tab>}
         </TabList>
 
         <TabPanels>
@@ -123,6 +125,11 @@ export const ViewCourse = () => {
           <TabPanel>
             <ViewCourseQuizzes />
           </TabPanel>
+          {isLoggedInStudent() && (
+            <TabPanel>
+              <ViewGrades />
+            </TabPanel>
+          )}
         </TabPanels>
       </Tabs>
     </Center>

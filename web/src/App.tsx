@@ -19,6 +19,7 @@ import { DepartmentSignUp } from "./components/departmentSignUp";
 import { ViewStudentQuestion } from "./pages/viewStudentQuestion";
 import { CreateQuiz } from "./pages/createQuiz";
 import { ViewQuiz } from "./pages/viewQuiz";
+import { ViewGrades } from "./components/viewGrades";
 
 export const App = () => {
   return (
@@ -57,6 +58,7 @@ export const App = () => {
           path="/courses/:courseId/quizzes/:quizId"
           element={<ViewQuiz />}
         />
+        <Route path="/courses/:courseId/grades" element={<ViewGrades />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
