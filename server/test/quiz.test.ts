@@ -6,6 +6,7 @@ import {
   SEED_INSTRUCTOR2,
   SEED_INSTRUCTOR_PASSWORD,
   SEED_QUIZ,
+  SEED_QUIZ_OPEN,
   SEED_QUIZ_QUESTIONS,
   SEED_QUIZ_TAKEN,
   SEED_STUDENT,
@@ -26,7 +27,7 @@ describe("Quiz and Quiz's Question tests", () => {
     quiz: {
       name: "MidTerm Quiz",
       isActive: true,
-      quizDate: new Date("2023-03-07"),
+      quizDate: new Date("2023-03-10"),
     },
     questions: [
       {
@@ -434,6 +435,51 @@ describe("Quiz and Quiz's Question tests", () => {
         .expect(403);
       expect(result.body.quiz).toBeUndefined();
       expect(result.body.questions).toBeUndefined();
+    });
+
+    it("Get available quizzes for student in course -- GET /api/v1/courses/:courseId/quizzes 200", async () => {
+      const result = await client
+        .get(`/api/v1/courses/${SEED_COURSE.id}/quizzes`)
+        .set(studentAuthHeader)
+        .expect(200);
+      expect(result.body.quizzes).toBeDefined();
+      expect(result.body.quizzes).toHaveLength(2);
+      expect(result.body.quizzes[0].name).toEqual(SEED_QUIZ_OPEN.name);
+      expect(result.body.quizzes[0].id).toEqual(SEED_QUIZ_OPEN.id);
+    });
+
+    it("Get available quizzes for student not in course -- GET /api/v1/courses/:courseId/quizzes 403", async () => {
+      const result = await client
+        .get(`/api/v1/courses/${SEED_COURSE.id}/quizzes`)
+        .set(studentNotInCourseAuthHeader)
+        .expect(403);
+      expect(result.body.quizzes).toBeUndefined();
+    });
+
+    it("Get available quizzes for instructor in course -- GET /api/v1/courses/:courseId/quizzes 200", async () => {
+      const result = await client
+        .get(`/api/v1/courses/${SEED_COURSE.id}/quizzes`)
+        .set(instructorAuthHeader)
+        .expect(200);
+      expect(result.body.quizzes).toBeDefined();
+      expect(result.body.quizzes).toHaveLength(4);
+      expect(result.body.quizzes[0].name).toEqual(SEED_QUIZ.name);
+      expect(result.body.quizzes[0].id).toEqual(SEED_QUIZ.id);
+    });
+
+    it("Get available quizzes for instructor not in course -- GET /api/v1/courses/:courseId/quizzes 403", async () => {
+      const result = await client
+        .get(`/api/v1/courses/${SEED_COURSE.id}/quizzes`)
+        .set(instructorNotInCourseAuthHeader)
+        .expect(403);
+      expect(result.body.quizzes).toBeUndefined();
+    });
+
+    it("Get available quizzes for unauthenticated -- GET /api/v1/courses/:courseId/quizzes 401", async () => {
+      const result = await client
+        .get(`/api/v1/courses/${SEED_COURSE.id}/quizzes`)
+        .expect(401);
+      expect(result.body.quizzes).toBeUndefined();
     });
   });
 });
