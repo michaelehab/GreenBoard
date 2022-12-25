@@ -9,8 +9,6 @@ export const SignUp = () => {
     <Tabs align="center" colorScheme="green">
       <TabList>
         <Tab>College</Tab>
-        <Tab>School</Tab>
-        <Tab>Department</Tab>
         <Tab>Instructor</Tab>
         <Tab>Student</Tab>
       </TabList>

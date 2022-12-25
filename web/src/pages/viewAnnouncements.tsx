@@ -11,14 +11,12 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useParams } from "react-router";
 import { isLoggedInUser } from "../utils/auth";
 import { callEndpoint } from "../utils/callEndpoint";
 import {
   ListAnnouncementsRequest,
   ListAnnouncementsResponse,
 } from "@greenboard/shared";
-import { ApiError } from "../utils/apiError";
 import { AnnouncementCard } from "../components/announcementCard";
 
 export const ViewAnnouncements = () => {

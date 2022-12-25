@@ -1,4 +1,4 @@
-import { Box, Flex, Center, Heading, Text, Button } from "@chakra-ui/react";
+import { Box, Flex, Center, Heading, Button } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";

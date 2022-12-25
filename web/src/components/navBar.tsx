@@ -53,9 +53,8 @@ const NavLink = (link: string) => {
 export const NavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
-  const URLArray = window.location.pathname.split("/");
 
-  const onSignout = useCallback(() => {
+  const onSignOut = useCallback(() => {
     signOut();
     navigate("/");
   }, [navigate]);
@@ -192,7 +191,7 @@ export const NavBar = () => {
                     <MenuItem>Profile</MenuItem>
                   </Link>
                   <MenuDivider />
-                  <MenuItem onClick={onSignout}>Sign Out</MenuItem>
+                  <MenuItem onClick={onSignOut}>Sign Out</MenuItem>
                 </MenuList>
               </Menu>
             </Flex>

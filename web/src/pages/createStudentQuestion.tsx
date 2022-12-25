@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
-import { isLoggedInInstructor, isLoggedInStudent } from "../utils/auth";
+import { isLoggedInStudent } from "../utils/auth";
 import { useNavigate, useParams } from "react-router-dom";
 import { createStudentQuestion } from "../utils/post";
 export const CreateStudentQuestion = () => {
@@ -39,7 +39,7 @@ export const CreateStudentQuestion = () => {
         }
       }
     },
-    [navigate, title, content, url]
+    [navigate, title, content, url, courseId]
   );
 
   useEffect(() => {

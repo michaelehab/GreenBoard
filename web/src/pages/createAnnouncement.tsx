@@ -14,10 +14,9 @@ import { ApiError } from "../utils/apiError";
 import {
   isLoggedInCollege,
   isLoggedInDepartment,
-  isLoggedInInstructor,
   isLoggedInSchool,
 } from "../utils/auth";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createAnnouncement } from "../utils/announcement";
 export const CreateAnnouncement = () => {
   const navigate = useNavigate();

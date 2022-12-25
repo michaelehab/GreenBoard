@@ -4,8 +4,6 @@ import { callEndpoint } from "../utils/callEndpoint";
 import { useTitle } from "../utils/useTitle";
 import { Center, Text, Flex } from "@chakra-ui/react";
 import {
-  ListEnrolledInCoursesRequest,
-  ListEnrolledInCoursesResponse,
   ListNotEnrolledInCoursesRequest,
   ListNotEnrolledInCoursesResponse,
 } from "@greenboard/shared";

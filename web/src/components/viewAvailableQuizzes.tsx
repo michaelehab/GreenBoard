@@ -6,8 +6,6 @@ import {
   ListAvailableQuizzesRequest,
   ListAvailableQuizzesResponse,
 } from "@greenboard/shared";
-import { ApiError } from "../utils/apiError";
-import { PostCard } from "../components/postCard";
 import { NotFound } from "../pages/notFound";
 import { QuizCard } from "./quizCard";
 

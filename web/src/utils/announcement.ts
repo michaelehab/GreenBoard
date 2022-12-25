@@ -5,11 +5,13 @@ import {
 import { callEndpoint } from "./callEndpoint";
 
 export async function createAnnouncement(title: string, content: string) {
-  const res = await callEndpoint<
-    CreateAnnouncementRequest,
-    CreateAnnouncementResponse
-  >(`/announcements`, "POST", false, {
-    title,
-    content,
-  });
+  await callEndpoint<CreateAnnouncementRequest, CreateAnnouncementResponse>(
+    `/announcements`,
+    "POST",
+    false,
+    {
+      title,
+      content,
+    }
+  );
 }
