@@ -42,7 +42,7 @@ CREATE TABLE `quizzes` (
   `id` varchar(255) PRIMARY KEY,
   `name` varchar(255) NOT NULL,
   `quizDate` datetime NOT NULL,
-  `isActive` boolean NOT NULL,
+  `isActive` bit NOT NULL,
   `courseId` varchar(255) NOT NULL,
   FOREIGN KEY (`courseId`) REFERENCES `courses` (`id`)
 );
