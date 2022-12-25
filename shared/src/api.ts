@@ -275,7 +275,7 @@ export interface CreateQuizResponse {
 }
 
 export type ToggleQuizActivationRequest = Pick<Quiz, "isActive">;
-export interface ToogleQuizActivationResonse {
+export interface ToggleQuizActivationResponse {
   isActive: boolean;
 }
 

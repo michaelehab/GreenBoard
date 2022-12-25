@@ -2,6 +2,8 @@ import {
   CreateQuizRequest,
   CreateQuizResponse,
   QuizQuestion,
+  ToggleQuizActivationRequest,
+  ToggleQuizActivationResponse,
 } from "@greenboard/shared";
 import { callEndpoint } from "./callEndpoint";
 
@@ -35,4 +37,13 @@ export async function createQuiz(
       questions,
     }
   );
+}
+
+export async function toggleQuiz(courseId: string, quizId: string) {
+  const res = await callEndpoint<
+    ToggleQuizActivationRequest,
+    ToggleQuizActivationResponse
+  >(`/courses/${courseId}/quizzes/${quizId}/toggle`, "PUT", true);
+
+  return res.isActive;
 }

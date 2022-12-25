@@ -482,48 +482,48 @@ describe("Quiz and Quiz's Question tests", () => {
   });
 
   describe("Toggle Quiz Activation", () => {
-    it("Toggle quiz activation as instructor in course -- PUT /api/v1/courses/:courseId/quiz/:quizId/toggle return 200", async () => {
+    it("Toggle quiz activation as instructor in course -- PUT /api/v1/courses/:courseId/quizzes/:quizId/toggle return 200", async () => {
       const result = await client
-        .put(`/api/v1/courses/${SEED_COURSE.id}/quiz/${quizId}/toggle`)
+        .put(`/api/v1/courses/${SEED_COURSE.id}/quizzes/${quizId}/toggle`)
         .set(instructorAuthHeader)
         .expect(200);
       expect(result.body.isActive).toBeDefined();
       expect(result.body.isActive).toBe(!quiz1.quiz.isActive);
     });
-    it("Toggle quiz activation as instructor in course -- PUT /api/v1/courses/:courseId/quiz/:quizId/toggle return 200", async () => {
+    it("Toggle quiz activation as instructor in course -- PUT /api/v1/courses/:courseId/quizzes/:quizId/toggle return 200", async () => {
       const result = await client
-        .put(`/api/v1/courses/${SEED_COURSE.id}/quiz/${quizId}/toggle`)
+        .put(`/api/v1/courses/${SEED_COURSE.id}/quizzes/${quizId}/toggle`)
         .set(instructorAuthHeader)
         .expect(200);
       expect(result.body.isActive).toBeDefined();
       expect(result.body.isActive).toBe(quiz1.quiz.isActive);
     });
-    it("Toggle quiz activation as instructor not in course -- PUT /api/v1/courses/:courseId/quiz/:quizId/toggle return 403", async () => {
+    it("Toggle quiz activation as instructor not in course -- PUT /api/v1/courses/:courseId/quizzes/:quizId/toggle return 403", async () => {
       const result = await client
-        .put(`/api/v1/courses/${SEED_COURSE.id}/quiz/${quizId}/toggle`)
+        .put(`/api/v1/courses/${SEED_COURSE.id}/quizzes/${quizId}/toggle`)
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
       expect(result.body.isActive).toBeUndefined();
     });
 
-    it("Toggle quiz activation as student in course -- PUT /api/v1/courses/:courseId/quiz/:quizId/toggle return 403", async () => {
+    it("Toggle quiz activation as student in course -- PUT /api/v1/courses/:courseId/quizzes/:quizId/toggle return 403", async () => {
       const result = await client
-        .put(`/api/v1/courses/${SEED_COURSE.id}/quiz/${quizId}/toggle`)
+        .put(`/api/v1/courses/${SEED_COURSE.id}/quizzes/${quizId}/toggle`)
         .set(studentAuthHeader)
         .expect(403);
       expect(result.body.isActive).toBeUndefined();
     });
-    it("Toggle quiz activation as instructor in course invalidCourseId -- PUT /api/v1/courses/:courseId/quiz/:quizId/toggle return 404", async () => {
+    it("Toggle quiz activation as instructor in course invalidCourseId -- PUT /api/v1/courses/:courseId/quizzes/:quizId/toggle return 404", async () => {
       const result = await client
-        .put(`/api/v1/courses/invalidCourseId/quiz/${quizId}/toggle`)
+        .put(`/api/v1/courses/invalidCourseId/quizzes/${quizId}/toggle`)
         .set(instructorAuthHeader)
         .expect(404);
       expect(result.body.isActive).toBeUndefined();
     });
 
-    it("Toggle quiz activation as instructor in course invalidQuizId -- PUT /api/v1/courses/:courseId/quiz/:quizId/toggle return 404", async () => {
+    it("Toggle quiz activation as instructor in course invalidQuizId -- PUT /api/v1/courses/:courseId/quizzes/:quizId/toggle return 404", async () => {
       const result = await client
-        .put(`/api/v1/courses/${SEED_COURSE.id}/quiz/invalidQuizId/toggle`)
+        .put(`/api/v1/courses/${SEED_COURSE.id}/quizzes/invalidQuizId/toggle`)
         .set(instructorAuthHeader)
         .expect(404);
       expect(result.body.isActive).toBeUndefined();

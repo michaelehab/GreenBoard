@@ -1,32 +1,23 @@
 import {
-  Alert,
-  AlertIcon,
   Box,
   Button,
   Flex,
-  Input,
-  Center,
   Text,
-  Link as ChakraLink,
   Container,
-  RadioGroup,
   Stack,
-  Radio,
+  Checkbox,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { isLoggedInUser } from "../utils/auth";
+import { isLoggedInInstructor, isLoggedInUser } from "../utils/auth";
 import { callEndpoint } from "../utils/callEndpoint";
 import { NotFound } from "./notFound";
-import {
-  GetQuizRequest,
-  GetQuizResponse,
-  QuizQuestion,
-} from "@greenboard/shared";
+import { GetQuizRequest, GetQuizResponse } from "@greenboard/shared";
 import { submitQuiz } from "../utils/grade";
 import { ApiError } from "../utils/apiError";
+import { toggleQuiz } from "../utils/quiz";
 
 export const ViewQuiz = () => {
   const { courseId, quizId } = useParams();
@@ -35,6 +26,7 @@ export const ViewQuiz = () => {
   const [answers, setAsnwers] = useState(Array<string>);
   const [confirmSubmit, setConfirmSubmit] = useState(false);
   const [error, setError] = useState("");
+  const [isActive, setIsActive] = useState(false);
 
   const { data: quizData, error: quizError } = useQuery(
     [`view${quizId}Quiz`],
@@ -50,12 +42,9 @@ export const ViewQuiz = () => {
     const nextQuestion = currentQuestion + 1;
     answers[currentQuestion] = choice;
     if (quizData && nextQuestion < quizData.questions.length) {
-      console.log(currentQuestion + 1, choice);
       setCurrentQuestion(nextQuestion);
     } else {
       setConfirmSubmit(true);
-      console.log(answers);
-      console.log("Quiz Ended");
     }
   };
 
@@ -91,11 +80,20 @@ export const ViewQuiz = () => {
     [answers, courseId, navigate, quizId]
   );
 
+  const toggleIsActive = async () => {
+    // @ts-ignore
+    const newActive = await toggleQuiz(courseId, quizId);
+    setIsActive(newActive);
+  };
+
   useEffect(() => {
     if (!isLoggedInUser()) {
       navigate("/");
     }
-  }, [navigate]);
+    if (quizData) {
+      setIsActive(quizData.quiz.isActive);
+    }
+  }, [navigate, quizData]);
 
   if (!courseId || !quizData) {
     return <NotFound />;
@@ -123,6 +121,11 @@ export const ViewQuiz = () => {
           <Text fontSize="md">
             {new Date(quizData.quiz.quizDate).toDateString()}
           </Text>
+          {isLoggedInInstructor() && (
+            <Checkbox isChecked={isActive} onChange={(e) => toggleIsActive()}>
+              Activate Quiz
+            </Checkbox>
+          )}
         </Box>
         {!confirmSubmit && (
           <Box>

@@ -30,6 +30,6 @@ router.get(
   "/:courseId/quizzes/:quizId/students/:studentId/grades",
   GetStudentGrade
 );
-router.put("/:courseId/quiz/:quizId/toggle", toggleQuizActivation);
+router.put("/:courseId/quizzes/:quizId/toggle", toggleQuizActivation);
 
 export default router;
