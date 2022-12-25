@@ -59,33 +59,37 @@ export const ViewCourse = () => {
         width="100%"
         justifyContent="space-between"
       >
-        <Heading as="h2" size="xl">
+        <Heading as="h2" size="xl" alignSelf="center">
           {courseData?.course.courseCode} | {courseData?.course.name}
         </Heading>
         {isLoggedInInstructor() && (
           <Box flexDirection="column">
-            <Link to={`/courses/${courseId}/new/post`}>
-              <Button
-                variant={"solid"}
-                colorScheme="green"
-                size={"sm"}
-                mr={4}
-                leftIcon={<AddIcon />}
-              >
-                Post
-              </Button>
-            </Link>
-            <Link to={`/courses/${courseId}/new/quiz`}>
-              <Button
-                variant={"solid"}
-                colorScheme="green"
-                size={"sm"}
-                mr={4}
-                leftIcon={<AddIcon />}
-              >
-                Quiz
-              </Button>
-            </Link>
+            <Box>
+              <Link to={`/courses/${courseId}/new/post`}>
+                <Button
+                  variant={"solid"}
+                  colorScheme="green"
+                  size={"sm"}
+                  m={2}
+                  leftIcon={<AddIcon />}
+                >
+                  Post
+                </Button>
+              </Link>
+            </Box>
+            <Box>
+              <Link to={`/courses/${courseId}/new/quiz`}>
+                <Button
+                  variant={"solid"}
+                  colorScheme="green"
+                  size={"sm"}
+                  m={2}
+                  leftIcon={<AddIcon />}
+                >
+                  Quiz
+                </Button>
+              </Link>
+            </Box>
           </Box>
         )}
         {isLoggedInStudent() && (
@@ -94,7 +98,7 @@ export const ViewCourse = () => {
               variant={"solid"}
               colorScheme="green"
               size={"sm"}
-              mr={4}
+              m={2}
               leftIcon={<AddIcon />}
             >
               Ask
