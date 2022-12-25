@@ -129,6 +129,7 @@ export interface QuizWithName {
   id: string;
   quizName: string;
   quizDate: Date;
+  courseId: string;
 }
 
 export interface Announcement {

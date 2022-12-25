@@ -495,13 +495,13 @@ export class SQLDataStore implements DataStore {
     courseId: string
   ): Promise<QuizWithName[]> {
     return await this.db.all<QuizWithName[]>(
-      "SELECT quizzes.id, quizzes.name, quizzes.quizDate FROM quizzes where isActive = 1 AND courseId = ? ORDER BY quizDate DESC",
+      "SELECT id, name as quizName, quizDate, courseId FROM quizzes where isActive = 1 AND courseId = ? ORDER BY quizDate ASC",
       courseId
     );
   }
   async getQuizzesByCourseId(courseId: string): Promise<QuizWithName[]> {
     return await this.db.all<QuizWithName[]>(
-      "SELECT quizzes.id, quizzes.name, quizzes.quizDate FROM quizzes where courseId = ? ORDER BY quizDate DESC",
+      "SELECT id, name as quizName, quizDate, courseId FROM quizzes where courseId = ? ORDER BY quizDate ASC",
       courseId
     );
   }

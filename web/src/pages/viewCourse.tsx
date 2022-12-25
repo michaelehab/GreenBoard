@@ -13,6 +13,7 @@ import { ApiError } from "../utils/apiError";
 import { ViewCoursePosts } from "../components/viewCoursePosts";
 import { ViewStudentsQuestions } from "../components/viewStudentsQuestions";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { ViewCourseQuizzes } from "../components/viewAvailableQuizzes";
 
 export const ViewCourse = () => {
   const { courseId } = useParams();
@@ -27,7 +28,7 @@ export const ViewCourse = () => {
       if (err instanceof ApiError && err.status === 403) {
         if (err.status === 403) {
           navigate(`/join/${courseId}`);
-        } else if(err.status === 404) {
+        } else if (err.status === 404) {
           navigate(`/`);
         }
       }
@@ -56,16 +57,20 @@ export const ViewCourse = () => {
         </Flex>
         <Tabs align="center" colorScheme="green">
           <TabList>
-            <Tab>Students Questions</Tab>
             <Tab>Course Posts</Tab>
+            <Tab>Students Questions</Tab>
+            <Tab>Quizzes</Tab>
           </TabList>
 
           <TabPanels>
             <TabPanel>
+              <ViewCoursePosts />
+            </TabPanel>
+            <TabPanel>
               <ViewStudentsQuestions />
             </TabPanel>
             <TabPanel>
-              <ViewCoursePosts />
+              <ViewCourseQuizzes />
             </TabPanel>
           </TabPanels>
         </Tabs>

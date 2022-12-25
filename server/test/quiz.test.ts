@@ -444,8 +444,7 @@ describe("Quiz and Quiz's Question tests", () => {
         .expect(200);
       expect(result.body.quizzes).toBeDefined();
       expect(result.body.quizzes).toHaveLength(2);
-      expect(result.body.quizzes[0].name).toEqual(SEED_QUIZ_OPEN.name);
-      expect(result.body.quizzes[0].id).toEqual(SEED_QUIZ_OPEN.id);
+      expect(result.body.quizzes[0].quizName).toEqual(quiz1.quiz.name);
     });
 
     it("Get available quizzes for student not in course -- GET /api/v1/courses/:courseId/quizzes 403", async () => {
@@ -463,8 +462,7 @@ describe("Quiz and Quiz's Question tests", () => {
         .expect(200);
       expect(result.body.quizzes).toBeDefined();
       expect(result.body.quizzes).toHaveLength(4);
-      expect(result.body.quizzes[0].name).toEqual(SEED_QUIZ.name);
-      expect(result.body.quizzes[0].id).toEqual(SEED_QUIZ.id);
+      expect(result.body.quizzes[0].quizName).toEqual(quiz1.quiz.name);
     });
 
     it("Get available quizzes for instructor not in course -- GET /api/v1/courses/:courseId/quizzes 403", async () => {
