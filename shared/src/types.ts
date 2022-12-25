@@ -100,9 +100,6 @@ export interface Quiz {
 }
 
 export interface QuizQuestion {
-  [char: string]: any;
-}
-{
   question_number: number;
   question: string;
   choiceA: string;
@@ -126,6 +123,12 @@ export interface GradeWithName {
   quizName: string;
   takenAt: Date;
   studentId: string;
+}
+
+export interface QuizWithName {
+  id: string;
+  quizName: string;
+  quizDate: Date;
 }
 
 export interface Announcement {

@@ -20,6 +20,7 @@ import {
   UserRegistrationData,
   GradeWithName,
   CourseData,
+  QuizWithName,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -62,6 +63,7 @@ import {
 export class SQLDataStore implements DataStore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;
   public async openDb(dbPath: string) {
+    const { NODE_ENV } = process.env;
     try {
       this.db = await sqliteOpen({
         filename: dbPath,
@@ -486,6 +488,21 @@ export class SQLDataStore implements DataStore {
     return await this.db.all<QuizQuestion[]>(
       "SELECT * FROM quizzes_questions where quizId=?",
       QuizId
+    );
+  }
+
+  async getActivatedQuizzesByCourseId(
+    courseId: string
+  ): Promise<QuizWithName[]> {
+    return await this.db.all<QuizWithName[]>(
+      "SELECT quizzes.id, quizzes.name, quizzes.quizDate FROM quizzes where isActive = 1 AND courseId = ? ORDER BY quizDate DESC",
+      courseId
+    );
+  }
+  async getQuizzesByCourseId(courseId: string): Promise<QuizWithName[]> {
+    return await this.db.all<QuizWithName[]>(
+      "SELECT quizzes.id, quizzes.name, quizzes.quizDate FROM quizzes where courseId = ? ORDER BY quizDate DESC",
+      courseId
     );
   }
 

@@ -6,6 +6,9 @@ import {
   QuizQuestion,
   GetQuizRequest,
   GetQuizResponse,
+  ListAvailableQuizzesRequest,
+  ListAvailableQuizzesResponse,
+  QuizWithName,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -153,5 +156,47 @@ export const getQuiz: ExpressHandlerWithParams<
   return res.send({
     quiz: quiz1,
     questions: questions,
+  });
+};
+
+export const ListAvailableQuizzes: ExpressHandlerWithParams<
+  { courseId: string },
+  ListAvailableQuizzesRequest,
+  ListAvailableQuizzesResponse
+> = async (req, res) => {
+  if (!req.params.courseId) {
+    return res.status(400).send({ error: "CourseId is required" });
+  }
+
+  const existingCourse = await db.getCourseById(req.params.courseId);
+  if (!existingCourse) {
+    return res.status(404).send({ error: "Course not found" });
+  }
+
+  const existingUser = await db.getUserById(res.locals.userId);
+  if (!existingUser) {
+    return res.status(404).send({ error: "User is not found" });
+  }
+
+  const existingEnrollment = await db.checkEnrollment(
+    existingUser.id,
+    req.params.courseId
+  );
+
+  if (!existingEnrollment) {
+    return res.status(403).send({ error: "Not enrolled in this course" });
+  }
+  let quizzes: QuizWithName[];
+
+  if (res.locals.role === "STUDENT") {
+    quizzes = await db.getActivatedQuizzesByCourseId(req.params.courseId);
+  } else if (res.locals.role === "INSTRUCTOR") {
+    quizzes = await db.getQuizzesByCourseId(req.params.courseId);
+  } else {
+    return res.status(403).send({ error: "Must be a user" });
+  }
+
+  return res.status(200).send({
+    quizzes,
   });
 };

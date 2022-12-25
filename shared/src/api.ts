@@ -18,6 +18,7 @@ import {
   Grade,
   GradeWithName,
   CourseData,
+  QuizWithName,
 } from "./types";
 
 export interface SignInRequest {
@@ -285,6 +286,11 @@ export interface SubmitQuizRequest {
 
 export interface SubmitQuizResponse {
   grade: number;
+}
+
+export interface ListAvailableQuizzesRequest {}
+export interface ListAvailableQuizzesResponse {
+  quizzes: QuizWithName[];
 }
 
 export interface ListGradesRequest {}
