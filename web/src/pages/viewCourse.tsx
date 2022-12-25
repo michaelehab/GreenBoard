@@ -1,9 +1,13 @@
-import { Box, Flex, Center, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Center, Heading, Text, Button } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useParams } from "react-router";
-import { isLoggedInUser } from "../utils/auth";
+import {
+  isLoggedInInstructor,
+  isLoggedInStudent,
+  isLoggedInUser,
+} from "../utils/auth";
 import { callEndpoint } from "../utils/callEndpoint";
 import {
   GetCourseDataRequest,
@@ -14,6 +18,7 @@ import { ViewCoursePosts } from "../components/viewCoursePosts";
 import { ViewStudentsQuestions } from "../components/viewStudentsQuestions";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { ViewCourseQuizzes } from "../components/viewAvailableQuizzes";
+import { AddIcon } from "@chakra-ui/icons";
 
 export const ViewCourse = () => {
   const { courseId } = useParams();
@@ -46,35 +51,76 @@ export const ViewCourse = () => {
   }
 
   return (
-    <Center>
-      <Box>
-        <Flex direction="column" boxShadow="md" p="6" rounded="md" width="100%">
-          <Box mx="auto">
-            <Heading as="h2" size="2xl">
-              {courseData?.course.courseCode} | {courseData?.course.name}
-            </Heading>
+    <Center flexDirection="column">
+      <Flex
+        boxShadow="md"
+        p="6"
+        rounded="md"
+        width="100%"
+        justifyContent="space-between"
+      >
+        <Heading as="h2" size="xl">
+          {courseData?.course.courseCode} | {courseData?.course.name}
+        </Heading>
+        {isLoggedInInstructor() && (
+          <Box flexDirection="column">
+            <Link to={`/courses/${courseId}/new/post`}>
+              <Button
+                variant={"solid"}
+                colorScheme="green"
+                size={"sm"}
+                mr={4}
+                leftIcon={<AddIcon />}
+              >
+                Post
+              </Button>
+            </Link>
+            <Link to={`/courses/${courseId}/new/quiz`}>
+              <Button
+                variant={"solid"}
+                colorScheme="green"
+                size={"sm"}
+                mr={4}
+                leftIcon={<AddIcon />}
+              >
+                Quiz
+              </Button>
+            </Link>
           </Box>
-        </Flex>
-        <Tabs align="center" colorScheme="green">
-          <TabList>
-            <Tab>Course Posts</Tab>
-            <Tab>Students Questions</Tab>
-            <Tab>Quizzes</Tab>
-          </TabList>
+        )}
+        {isLoggedInStudent() && (
+          <Link to={`/courses/${courseId}/new/question`}>
+            <Button
+              variant={"solid"}
+              colorScheme="green"
+              size={"sm"}
+              mr={4}
+              leftIcon={<AddIcon />}
+            >
+              Ask
+            </Button>
+          </Link>
+        )}
+      </Flex>
+      <Tabs align="center" colorScheme="green">
+        <TabList>
+          <Tab>Course Posts</Tab>
+          <Tab>Students Questions</Tab>
+          <Tab>Quizzes</Tab>
+        </TabList>
 
-          <TabPanels>
-            <TabPanel>
-              <ViewCoursePosts />
-            </TabPanel>
-            <TabPanel>
-              <ViewStudentsQuestions />
-            </TabPanel>
-            <TabPanel>
-              <ViewCourseQuizzes />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Box>
+        <TabPanels>
+          <TabPanel>
+            <ViewCoursePosts />
+          </TabPanel>
+          <TabPanel>
+            <ViewStudentsQuestions />
+          </TabPanel>
+          <TabPanel>
+            <ViewCourseQuizzes />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Center>
   );
 };
