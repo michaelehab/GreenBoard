@@ -100,6 +100,9 @@ export interface Quiz {
 }
 
 export interface QuizQuestion {
+  [char: string]: any;
+}
+{
   question_number: number;
   question: string;
   choiceA: string;
