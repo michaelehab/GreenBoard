@@ -17,7 +17,7 @@ import { SchoolSignUp } from "./components/schoolSignUp";
 import { ViewCoursePost } from "./pages/viewCoursePost";
 import { DepartmentSignIn } from "./components/departmentSignIn";
 import { DepartmentSignUp } from "./components/departmentSignUp";
-
+import { InstructorSignUp } from "./components/instructorSignUp";
 export const App = () => {
   return (
     <BrowserRouter>
@@ -46,6 +46,7 @@ export const App = () => {
         <Route path="/new/announcement" element={<CreateAnnouncement />} />
         <Route path="/new/school" element={<SchoolSignUp />} />
         <Route path="/new/department" element={<DepartmentSignUp />} />
+        <Route path="/new/instructor" element={<InstructorSignUp />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
