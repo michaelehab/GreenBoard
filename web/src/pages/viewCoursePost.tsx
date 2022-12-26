@@ -94,6 +94,9 @@ export const ViewCoursePost = () => {
           bg="white"
         >
           <Text fontSize="md" fontWeight="bold">
+            {postData.post.firstName} {postData.post.lastName}
+          </Text>
+          <Text fontSize="md" fontWeight="bold">
             {postData.post.title}
           </Text>
           <Text fontSize="md">{postData.post.content}</Text>

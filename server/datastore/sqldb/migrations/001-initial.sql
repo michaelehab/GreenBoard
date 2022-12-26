@@ -72,12 +72,17 @@ CREATE TABLE `posts` (
 
 CREATE TABLE `students_questions` (
   `id` varchar(255)  NOT NULL PRIMARY KEY,
-  FOREIGN KEY (`id`) REFERENCES `posts` (`id`)
+  `studentId` varchar(255) NOT NULL,
+  FOREIGN KEY (`id`) REFERENCES `posts` (`id`),
+  FOREIGN KEY (`studentId`) REFERENCES `students` (`id`)
+
 );
 
 CREATE TABLE `course_posts` (
   `id` varchar(255) NOT NULL PRIMARY KEY,
-  FOREIGN KEY (`id`) REFERENCES `posts` (`id`)
+  `instructorId` varchar(255) NOT NULL,
+  FOREIGN KEY (`id`) REFERENCES `posts` (`id`),
+  FOREIGN KEY (`instructorId`) REFERENCES `instructors` (`id`)
 );
 
 CREATE TABLE `grades` (

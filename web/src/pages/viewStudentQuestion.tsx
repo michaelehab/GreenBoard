@@ -95,6 +95,9 @@ export const ViewStudentQuestion = () => {
             bg="white"
           >
             <Text fontSize="md" fontWeight="bold">
+            {questionData.question.firstName} {questionData.question.lastName}
+          </Text>
+            <Text fontSize="md" fontWeight="bold">
               {questionData.question.title}
             </Text>
             <Text fontSize="md">{questionData.question.content}</Text>

@@ -20,6 +20,7 @@ import {
   CourseData,
   QuizWithName,
   UserDataAndComment,
+  UserDataAndPost,
 } from "./types";
 
 export interface SignInRequest {
@@ -202,22 +203,22 @@ export interface CreateStudentQuestionResponse {
 
 export interface ListCoursePostsRequest {} // Course Id will be a url param
 export interface ListCoursePostsResponse {
-  posts: CoursePost[];
+  posts: UserDataAndPost[];
 }
 
 export interface GetCoursePostRequest {} // Course Id will be a url param
 export interface GetCoursePostResponse {
-  post: CoursePost;
+  post: UserDataAndPost;
 }
 
 export interface GetCourseStudentsQuestionsRequest {} // Course Id will be a url param
 export interface GetCourseStudentsQuestionsResponse {
-  questions: StudentQuestion[];
+  questions: UserDataAndPost[];
 }
 
 export interface GetCourseStudentQuestionRequest {} // Course Id will be a url param
 export interface GetCourseStudentQuestionResponse {
-  question: StudentQuestion;
+  question: UserDataAndPost;
 }
 
 //Post comment APIs

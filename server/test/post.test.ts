@@ -142,6 +142,11 @@ describe("Posts tests", () => {
       expect(result.body.posts).toHaveLength(2); // 1 Seeded + 1 tested
       expect(result.body.posts[0].title).toBe(coursePost.title);
       expect(result.body.posts[0].url).toBe(coursePost.url);
+      expect(result.body.posts[0].firstName).toBe(SEED_INSTRUCTOR.firstName);
+      expect(result.body.posts[0].lastName).toBe(SEED_INSTRUCTOR.lastName);
+      expect(result.body.posts[1].firstName).toBe(SEED_INSTRUCTOR.firstName);
+      expect(result.body.posts[1].lastName).toBe(SEED_INSTRUCTOR.lastName);
+
     });
 
     it("Get Course Posts as student not in course -- GET /api/v1/courses/:id/posts returns 403", async () => {
@@ -168,6 +173,10 @@ describe("Posts tests", () => {
       expect(result.body.posts).toHaveLength(2); // 1 Seeded + 1 tested
       expect(result.body.posts[0].title).toBe(coursePost.title);
       expect(result.body.posts[0].url).toBe(coursePost.url);
+      expect(result.body.posts[0].firstName).toBe(SEED_INSTRUCTOR.firstName);
+      expect(result.body.posts[0].lastName).toBe(SEED_INSTRUCTOR.lastName);
+      expect(result.body.posts[1].firstName).toBe(SEED_INSTRUCTOR.firstName);
+      expect(result.body.posts[1].lastName).toBe(SEED_INSTRUCTOR.lastName);
     });
 
     it("Get Course Posts as instructor not in course -- GET /api/v1/courses/:id/posts returns 403", async () => {
@@ -193,6 +202,9 @@ describe("Posts tests", () => {
         .expect(200);
       expect(result.body.post.title).toBe(coursePost.title);
       expect(result.body.post.url).toBe(coursePost.url);
+      expect(result.body.post.firstName).toBe(SEED_INSTRUCTOR.firstName);
+      expect(result.body.post.lastName).toBe(SEED_INSTRUCTOR.lastName);
+     
     });
     it("Get Specific Course Post as student not in course -- GET /api/v1/courses/:id/posts/:id returns 403", async () => {
       const result = await client
@@ -209,6 +221,8 @@ describe("Posts tests", () => {
         .expect(200);
       expect(result.body.post.title).toBe(coursePost.title);
       expect(result.body.post.url).toBe(coursePost.url);
+      expect(result.body.post.firstName).toBe(SEED_INSTRUCTOR.firstName);
+      expect(result.body.post.lastName).toBe(SEED_INSTRUCTOR.lastName);
     });
     it("Get Specific Course Post as instructor not in course -- GET /api/v1/courses/:id/posts/:id returns 403", async () => {
       const result = await client
@@ -310,6 +324,10 @@ describe("Posts tests", () => {
       expect(result.body.questions).toHaveLength(2);
       expect(result.body.questions[0].title).toBe(coursePost.title);
       expect(result.body.questions[0].url).toBe(coursePost.url);
+      expect(result.body.questions[0].firstName).toBe(SEED_STUDENT.firstName);
+      expect(result.body.questions[0].lastName).toBe(SEED_STUDENT.lastName);
+      expect(result.body.questions[1].firstName).toBe(SEED_STUDENT.firstName);
+      expect(result.body.questions[1].lastName).toBe(SEED_STUDENT.lastName);
     });
 
     it("Get Students Questions as student not in course -- GET /api/v1/courses/:id/questions returns 403", async () => {
@@ -336,6 +354,10 @@ describe("Posts tests", () => {
       expect(result.body.questions).toHaveLength(2);
       expect(result.body.questions[0].title).toBe(coursePost.title);
       expect(result.body.questions[0].url).toBe(coursePost.url);
+      expect(result.body.questions[0].firstName).toBe(SEED_STUDENT.firstName);
+      expect(result.body.questions[0].lastName).toBe(SEED_STUDENT.lastName);
+      expect(result.body.questions[1].firstName).toBe(SEED_STUDENT.firstName);
+      expect(result.body.questions[1].lastName).toBe(SEED_STUDENT.lastName);
     });
     it("Get Students Questions as instructor not in course -- GET /api/v1/courses/:id/questions returns 403", async () => {
       const result = await client
@@ -360,6 +382,8 @@ describe("Posts tests", () => {
         .expect(200);
       expect(result.body.question.title).toBe(coursePost.title);
       expect(result.body.question.url).toBe(coursePost.url);
+      expect(result.body.question.firstName).toBe(SEED_STUDENT.firstName);
+      expect(result.body.question.lastName).toBe(SEED_STUDENT.lastName);
     });
     it("Get Specific Student Question as student not in course -- GET /api/v1/courses/:id/questions/:id returns 403", async () => {
       const result = await client
@@ -376,6 +400,8 @@ describe("Posts tests", () => {
         .expect(200);
       expect(result.body.question.title).toBe(coursePost.title);
       expect(result.body.question.url).toBe(coursePost.url);
+      expect(result.body.question.firstName).toBe(SEED_STUDENT.firstName);
+      expect(result.body.question.lastName).toBe(SEED_STUDENT.lastName);
     });
     it("Get Specific Student Question as instructor not in course -- GET /api/v1/courses/:id/questions/:id returns 403", async () => {
       const result = await client

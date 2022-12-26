@@ -1,8 +1,8 @@
 import { Text, Center, Box, Link as ChakraLink } from "@chakra-ui/react";
-import { Post } from "@greenboard/shared";
+import { Post, UserDataAndPost } from "@greenboard/shared";
 import { Link } from "react-router-dom";
 
-export const StudentQuestionCard: React.FC<Post> = (question) => {
+export const StudentQuestionCard: React.FC<UserDataAndPost> = (question) => {
   return (
     <Center>
       <Box
@@ -14,6 +14,9 @@ export const StudentQuestionCard: React.FC<Post> = (question) => {
         rounded="md"
         bg="white"
       >
+        <Text fontSize="md" fontWeight="bold">
+            {question.firstName} {question.lastName}
+          </Text>
         <Link to={`/courses/${question.courseId}/questions/${question.id}`}>
           <Text fontSize="md" fontWeight="bold">
             {question.title}
