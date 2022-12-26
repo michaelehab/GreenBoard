@@ -141,6 +141,12 @@ describe("Posts tests", () => {
         .expect(200);
       expect(result.body.postComment).toHaveLength(2);
       expect(result.body.postComment[0].comment).toBe(postComment.comment);
+      expect(result.body.postComment[0].firstName).toBe(SEED_STUDENT.firstName);
+      expect(result.body.postComment[0].lastName).toBe(SEED_STUDENT.lastName);
+      expect(result.body.postComment[1].firstName).toBe(SEED_INSTRUCTOR.firstName);
+      expect(result.body.postComment[1].lastName).toBe(SEED_INSTRUCTOR.lastName);
+
+
     });
 
     it("Get Post commets as student not in course -- GET /api/v1/courses/:courseId/posts/:id/comments returns 403", async () => {
@@ -170,6 +176,11 @@ describe("Posts tests", () => {
         .expect(200);
       expect(result.body.postComment).toHaveLength(2);
       expect(result.body.postComment[0].comment).toBe(postComment.comment);
+      expect(result.body.postComment[0].firstName).toBe(SEED_STUDENT.firstName);
+      expect(result.body.postComment[0].lastName).toBe(SEED_STUDENT.lastName);
+      expect(result.body.postComment[1].firstName).toBe(SEED_INSTRUCTOR.firstName);
+      expect(result.body.postComment[1].lastName).toBe(SEED_INSTRUCTOR.lastName);
+
     });
 
     it("Get Posts comments as instructor not in course -- GET /api/v1/courses/:courseId/posts/:id/comments returns 403", async () => {
@@ -224,6 +235,9 @@ describe("Posts tests", () => {
         .set(studentAuthHeader)
         .expect(200);
       expect(result.body.postComment.comment).toBe(postComment.comment);
+      expect(result.body.postComment.firstName).toBe(SEED_INSTRUCTOR.firstName);
+      expect(result.body.postComment.lastName).toBe(SEED_INSTRUCTOR.lastName);
+
     });
     it("Get Specific Post comment as student not in course -- GET /api/v1/courses/:courseId/posts/:id/comments/:id returns 403", async () => {
       const result = await client
@@ -243,6 +257,9 @@ describe("Posts tests", () => {
         .set(instructorAuthHeader)
         .expect(200);
       expect(result.body.postComment.comment).toBe(postComment.comment);
+      expect(result.body.postComment.firstName).toBe(SEED_INSTRUCTOR.firstName);
+      expect(result.body.postComment.lastName).toBe(SEED_INSTRUCTOR.lastName);
+
     });
     it("Get Specific Post comment as instructor in course (wrong course) -- GET /api/v1/courses/:courseId/posts/:id/comments/:id returns 404", async () => {
       const result = await client
@@ -368,10 +385,13 @@ describe("Posts tests", () => {
         )
         .set(studentAuthHeader)
         .expect(200);
-      expect(result.body.instructorAnswer).toHaveLength(1);
-      expect(result.body.instructorAnswer[0].comment).toBe(
+      expect(result.body.InstructorDataAndAnswer).toHaveLength(1);
+      expect(result.body.InstructorDataAndAnswer[0].comment).toBe(
         instructorAnswer.comment
       );
+      expect(result.body.InstructorDataAndAnswer[0].firstName).toBe(SEED_INSTRUCTOR.firstName)
+      expect(result.body.InstructorDataAndAnswer[0].lastName).toBe(SEED_INSTRUCTOR.lastName)
+
     });
 
     it("Get instructor answer as student not in course -- GET /api/v1/courses/:courseId/question/:id/answer returns 403", async () => {
@@ -381,7 +401,7 @@ describe("Posts tests", () => {
         )
         .set(studentNotInCourseAuthHeader)
         .expect(403);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
 
     it("Get instructor answer as student invalid post -- GET /api/v1/courses/:courseId/question/:id/answer returns 404", async () => {
@@ -391,7 +411,7 @@ describe("Posts tests", () => {
         )
         .set(studentAuthHeader)
         .expect(404);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
 
     it("Get instructor answer as instructor in course -- GET /api/v1/courses/:courseId/question/:id/answer returns 200", async () => {
@@ -401,10 +421,12 @@ describe("Posts tests", () => {
         )
         .set(instructorAuthHeader)
         .expect(200);
-      expect(result.body.instructorAnswer).toHaveLength(1);
-      expect(result.body.instructorAnswer[0].comment).toBe(
+      expect(result.body.InstructorDataAndAnswer).toHaveLength(1);
+      expect(result.body.InstructorDataAndAnswer[0].comment).toBe(
         instructorAnswer.comment
       );
+      expect(result.body.InstructorDataAndAnswer[0].firstName).toBe(SEED_INSTRUCTOR.firstName)
+      expect(result.body.InstructorDataAndAnswer[0].lastName).toBe(SEED_INSTRUCTOR.lastName)
     });
 
     it("Get instructor answer as instructor not in course -- GET /api/v1/courses/:courseId/question/:id/answer returns 403", async () => {
@@ -414,7 +436,7 @@ describe("Posts tests", () => {
         )
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
 
     it("Get instructor answer as instructor invalid post -- GET /api/v1/courses/:courseId/question/:id/answer returns 404", async () => {
@@ -424,7 +446,7 @@ describe("Posts tests", () => {
         )
         .set(instructorAuthHeader)
         .expect(404);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
     it("Get instructor answer as instructor invalid course -- GET /api/v1/courses/:courseId/question/:id/answer returns 404", async () => {
       const result = await client
@@ -433,7 +455,7 @@ describe("Posts tests", () => {
         )
         .set(instructorAuthHeader)
         .expect(404);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
 
     it("Get instructor answer as student invalid post -- GET /api/v1/courses/:courseId/question/:id/answer returns 404", async () => {
@@ -443,7 +465,7 @@ describe("Posts tests", () => {
         )
         .set(studentAuthHeader)
         .expect(404);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
     it("Get instructor answer as student invalid course -- GET /api/v1/courses/:courseId/question/:id/answer returns 404", async () => {
       const result = await client
@@ -452,7 +474,7 @@ describe("Posts tests", () => {
         )
         .set(studentAuthHeader)
         .expect(404);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
 
     it("Get Specific instructor answer as student in course -- GET /api/v1/courses/:courseId/question/:id/answer/:id returns 200", async () => {
@@ -462,9 +484,11 @@ describe("Posts tests", () => {
         )
         .set(studentAuthHeader)
         .expect(200);
-      expect(result.body.instructorAnswer.comment).toBe(
+      expect(result.body.InstructorDataAndAnswer.comment).toBe(
         instructorAnswer.comment
       );
+      expect(result.body.InstructorDataAndAnswer.firstName).toBe(SEED_INSTRUCTOR.firstName)
+      expect(result.body.InstructorDataAndAnswer.lastName).toBe(SEED_INSTRUCTOR.lastName)
     });
     it("Get Specific instructor answer as student not in course -- GET /api/v1/courses/:courseId/question/:id/answer/:id returns 403", async () => {
       const result = await client
@@ -473,7 +497,7 @@ describe("Posts tests", () => {
         )
         .set(studentNotInCourseAuthHeader)
         .expect(403);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
 
     it("Get Specific instructor answer as instructor in course -- GET /api/v1/courses/:courseId/question/:id/answer/:id returns 200", async () => {
@@ -483,9 +507,11 @@ describe("Posts tests", () => {
         )
         .set(instructorAuthHeader)
         .expect(200);
-      expect(result.body.instructorAnswer.comment).toBe(
+      expect(result.body.InstructorDataAndAnswer.comment).toBe(
         instructorAnswer.comment
       );
+      expect(result.body.InstructorDataAndAnswer.firstName).toBe(SEED_INSTRUCTOR.firstName)
+      expect(result.body.InstructorDataAndAnswer.lastName).toBe(SEED_INSTRUCTOR.lastName)
     });
     it("Get Specific instructor answer as instructor in course (wrong course) -- GET /api/v1/courses/:courseId/question/:id/answer/:id returns 404", async () => {
       const result = await client
@@ -494,7 +520,7 @@ describe("Posts tests", () => {
         )
         .set(instructorAuthHeader)
         .expect(404);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
     it("Get Specific instructor answer as instructor in course (wrong question) -- GET /api/v1/courses/:courseId/question/:id/answer/:id returns 404", async () => {
       const result = await client
@@ -503,7 +529,7 @@ describe("Posts tests", () => {
         )
         .set(instructorAuthHeader)
         .expect(404);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
     it("Get Specific instructor answer as instructor in course (wrong answer) -- GET /api/v1/courses/:courseId/question/:id/answer/:id returns 404", async () => {
       const result = await client
@@ -512,7 +538,7 @@ describe("Posts tests", () => {
         )
         .set(instructorAuthHeader)
         .expect(404);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
     it("Get Specific instructor answer as instructor not in course -- GET /api/v1/courses/:courseId/question/:id/answer/:id returns 403", async () => {
       const result = await client
@@ -521,7 +547,7 @@ describe("Posts tests", () => {
         )
         .set(instructorNotInCourseAuthHeader)
         .expect(403);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
 
     it("Get Specific instructor answer as unauthorized -- GET /api/v1/courses/:courseId/question/:id/answer/:id returns 401", async () => {
@@ -530,7 +556,7 @@ describe("Posts tests", () => {
           `/api/v1/courses/${SEED_COURSE.id}/question/${SEED_STUDENT_QUESTION.id}/answer/${instructorAnswerId}`
         )
         .expect(401);
-      expect(result.body.instructorAnswer).toBeUndefined();
+      expect(result.body.InstructorDataAndAnswer).toBeUndefined();
     });
   });
 });

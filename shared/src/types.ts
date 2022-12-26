@@ -149,3 +149,12 @@ export interface UserRegistrationData {
   schoolName: string;
   collegeName: string;
 }
+
+export interface UserDataAndComment{
+  commentId:string;
+  postId:string;
+  comment:string;
+  postedAt:number;
+  firstName:string;
+  lastName:string;
+}

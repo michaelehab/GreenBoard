@@ -102,8 +102,8 @@ export const ViewStudentQuestion = () => {
           </Box>
         </Flex>
         <Flex direction="column">
-          {!!answersData && answersData.instructorAnswer.length > 0 ? (
-            answersData.instructorAnswer.map((c, i) => (
+          {!!answersData && answersData.InstructorDataAndAnswer.length > 0 ? (
+            answersData.InstructorDataAndAnswer.map((c, i) => (
               <CommentCard key={i} {...c} />
             ))
           ) : (

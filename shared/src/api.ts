@@ -19,6 +19,7 @@ import {
   GradeWithName,
   CourseData,
   QuizWithName,
+  UserDataAndComment,
 } from "./types";
 
 export interface SignInRequest {
@@ -228,12 +229,12 @@ export interface CreatePostCommentResponse {
 
 export interface ListPostCommentRequest {} // post Id will be a url param
 export interface ListPostCommentResponse {
-  postComment: PostComment[];
+  postComment: UserDataAndComment[];
 }
 
 export interface GetPostCommentsRequest {} // post Id will be a url param
 export interface GetPostCommentsResponse {
-  postComment: PostComment;
+  postComment: UserDataAndComment;
 }
 
 //Instructor answers APIs
@@ -245,12 +246,12 @@ export interface CreateInstructorAnswerResponse {
 
 export interface ListInstructorsAnswersRequest {} // post Id will be a url param
 export interface ListInstructorsAnswersResponse {
-  instructorAnswer: InstructorAnswer[];
+  InstructorDataAndAnswer: UserDataAndComment[];
 }
 
 export interface GetInstructorAnswerRequest {} // post Id will be a url param
 export interface GetInstructorAnswerResponse {
-  instructorAnswer: InstructorAnswer;
+  InstructorDataAndAnswer: UserDataAndComment;
 }
 
 //Quiz API

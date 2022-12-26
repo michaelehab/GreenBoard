@@ -1,8 +1,8 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { format } from "timeago.js";
-import { Comment } from "@greenboard/shared";
+import { Comment, UserDataAndComment } from "@greenboard/shared";
 
-export const CommentCard: React.FC<Comment> = (comment) => {
+export const CommentCard: React.FC<UserDataAndComment> = (comment) => {
   return (
     <Flex
       maxW="6xl"
@@ -15,6 +15,9 @@ export const CommentCard: React.FC<Comment> = (comment) => {
       rounded="md"
       bg="white"
     >
+       <Flex justifyContent="space-between" fontWeight="bold">
+        <Text fontSize="md">{comment.firstName} {comment.lastName}</Text>
+      </Flex>
       <Flex justifyContent="space-between">
         <Text fontSize="md">{comment.comment}</Text>
       </Flex>

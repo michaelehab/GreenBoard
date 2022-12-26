@@ -21,6 +21,7 @@ import {
   GradeWithName,
   CourseData,
   QuizWithName,
+  UserDataAndComment,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -413,15 +414,15 @@ export class SQLDataStore implements DataStore {
   }
   async getPostCommentById(
     postCommentId: string
-  ): Promise<PostComment | undefined> {
-    return await this.db.get<PostComment>(
-      "SELECT * FROM comments JOIN post_comments ON post_comments.id = comments.id WHERE comments.id = ?",
+  ): Promise<UserDataAndComment | undefined> {
+    return await this.db.get<UserDataAndComment>(
+      "SELECT post_comments.id,postId,comment,postedAt,firstName,lastName  FROM comments , post_comments,users WHERE post_comments.id = comments.id AND comments.id=? AND userId=users.id",
       postCommentId
     );
   }
-  async listPostCommentsByPostId(PostId: string): Promise<PostComment[]> {
-    return await this.db.all<PostComment[]>(
-      "SELECT * FROM comments JOIN post_comments ON post_comments.id = comments.id WHERE postId=?",
+  async listPostCommentsByPostId(PostId: string): Promise<UserDataAndComment[]> {
+    return await this.db.all<UserDataAndComment[]>(
+      "SELECT post_comments.id,postId,comment,postedAt,firstName,lastName  FROM comments , post_comments,users WHERE post_comments.id = comments.id AND postId=? AND userId=users.id",
       PostId
     );
   }
@@ -438,17 +439,17 @@ export class SQLDataStore implements DataStore {
   }
   async getInstructorAnswerById(
     AnswerId: string
-  ): Promise<InstructorAnswer | undefined> {
-    return await this.db.get<InstructorAnswer>(
-      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE comments.id = ?",
+  ): Promise<UserDataAndComment | undefined> {
+    return await this.db.get<UserDataAndComment>(
+      "SELECT instructors_answers.id,questionId,comment,postedAt,firstName,lastName FROM comments, instructors_answers,users WHERE instructors_answers.id = comments.id AND comments.id = ? AND users.id=instructorId",
       AnswerId
     );
   }
   async listInstructorAnswerByPostId(
     questionId: string
-  ): Promise<InstructorAnswer[]> {
-    return await this.db.all<InstructorAnswer[]>(
-      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE questionId=?",
+  ): Promise<UserDataAndComment[]> {
+    return await this.db.all<UserDataAndComment[]>(
+      "SELECT instructors_answers.id,questionId,comment,postedAt,firstName,lastName FROM comments,instructors_answers,users WHERE instructors_answers.id = comments.id AND questionId=? AND users.id=instructorId",
       questionId
     );
   }

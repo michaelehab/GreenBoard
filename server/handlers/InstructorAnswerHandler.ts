@@ -44,7 +44,7 @@ export const ListInstructorAnswer: ExpressHandlerWithParams<
     return res.status(403).send({ error: "Not enrolled in this course" });
   }
   return res.send({
-    instructorAnswer: await db.listInstructorAnswerByPostId(
+    InstructorDataAndAnswer: await db.listInstructorAnswerByPostId(
       req.params.questionId
     ),
   });
@@ -150,10 +150,10 @@ export const getInstructorAnswer: ExpressHandlerWithParams<
     return res.status(403).send({ error: "Not enrolled in this course" });
   }
 
-  const comment = await db.getInstructorAnswerById(req.params.answerId);
-  if (!comment) {
+  const InstructorDataAndAnswer = await db.getInstructorAnswerById(req.params.answerId);
+  if (!InstructorDataAndAnswer) {
     return res.sendStatus(404);
   }
 
-  return res.send({ instructorAnswer: comment });
+  return res.send({ InstructorDataAndAnswer: InstructorDataAndAnswer });
 };
