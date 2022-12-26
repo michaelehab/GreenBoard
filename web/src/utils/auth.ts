@@ -12,6 +12,8 @@ import {
   SchoolSignUpRequest,
   SignInRequest,
   StudentSignInResponse,
+  StudentSignUpRequest,
+  StudentSignUpResponse,
 } from "@greenboard/shared";
 
 import { callEndpoint } from "./callEndpoint";
@@ -190,6 +192,31 @@ export const instructorSignUp = async (
     password,
     departmentId,
   });
+  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+};
+export const studentSignUp = async (
+  email: string,
+  firstName: string,
+  lastName: string,
+  phone: string,
+  level: number,
+  password: string,
+  departmentId: string
+) => {
+  const res = await callEndpoint<StudentSignUpRequest, StudentSignUpResponse>(
+    "/student/signup",
+    "post",
+    false,
+    {
+      email,
+      firstName,
+      lastName,
+      phone,
+      level,
+      password,
+      departmentId,
+    }
+  );
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
 };
 

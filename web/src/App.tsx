@@ -18,6 +18,7 @@ import { ViewCoursePost } from "./pages/viewCoursePost";
 import { DepartmentSignIn } from "./components/departmentSignIn";
 import { DepartmentSignUp } from "./components/departmentSignUp";
 import { InstructorSignUp } from "./components/instructorSignUp";
+import { StudentSignUp } from "./components/studentSignUp";
 export const App = () => {
   return (
     <BrowserRouter>
@@ -47,6 +48,8 @@ export const App = () => {
         <Route path="/new/school" element={<SchoolSignUp />} />
         <Route path="/new/department" element={<DepartmentSignUp />} />
         <Route path="/new/instructor" element={<InstructorSignUp />} />
+        <Route path="/new/student" element={<StudentSignUp />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

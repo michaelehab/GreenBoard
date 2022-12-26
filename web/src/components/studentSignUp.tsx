@@ -3,18 +3,15 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
 import { ApiError } from "../utils/apiError";
-import {
-  isLoggedIn,
-  getLocalDepartmentId,
-  instructorSignUp,
-} from "../utils/auth";
-export const InstructorSignUp = () => {
+import { isLoggedIn, getLocalDepartmentId, studentSignUp } from "../utils/auth";
+export const StudentSignUp = () => {
   useTitle("Sign Up");
   const navigate = useNavigate();
   const [Firstname, setFirstName] = useState("");
   const [Lastname, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [level, setlevel] = useState(0);
   const [adminPassword, setAdminPassword] = useState("");
   const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
   const departmentId: string = getLocalDepartmentId();
@@ -30,18 +27,20 @@ export const InstructorSignUp = () => {
         Lastname === "" ||
         Firstname === "" ||
         email === "" ||
-        adminPassword === ""
+        adminPassword === "" ||
+        level === 0
       ) {
         setError("Please make sure all the fields are not empty!");
       } else if (adminPassword !== confirmAdminPassWord) {
         setError("Confirm Password doesn't match password!");
       } else {
         try {
-          await instructorSignUp(
+          await studentSignUp(
             email,
             Firstname,
             Lastname,
             phone,
+            level,
             adminPassword,
             departmentId
           );
@@ -59,6 +58,7 @@ export const InstructorSignUp = () => {
       Firstname,
       Lastname,
       phone,
+      level,
       adminPassword,
       confirmAdminPassWord,
       departmentId,
@@ -88,20 +88,26 @@ export const InstructorSignUp = () => {
         </Flex>
 
         <Input
-          placeholder="Instructor Email"
+          placeholder="Student Email"
           value={email}
           variant="outline"
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <Input
-          placeholder="Instructor Phone"
+          placeholder="Student Phone"
           value={phone}
           type="number"
           variant="outline"
           onChange={(e) => setPhone(e.target.value)}
         />
-
+        <Input
+          placeholder="Student Level"
+          value={level}
+          type="number"
+          variant="outline"
+          onChange={(e) => setlevel(e.target.valueAsNumber)}
+        />
         <Input
           placeholder="Admin Password"
           type="password"
@@ -109,7 +115,6 @@ export const InstructorSignUp = () => {
           value={adminPassword}
           onChange={(e) => setAdminPassword(e.target.value)}
         />
-
         <Input
           placeholder="Confirm Admin Password"
           type="password"

@@ -145,6 +145,19 @@ export const NavBar = () => {
                   </Button>
                 </Link>
               )}
+              {localStorage.getItem(LOCAL_STORAGE_ROLE) === "DEPARTMENT" && (
+                <Link to={"/new/student"}>
+                  <Button
+                    variant={"solid"}
+                    colorScheme="green"
+                    size={"sm"}
+                    mr={4}
+                    leftIcon={<AddIcon />}
+                  >
+                    Add Student
+                  </Button>
+                </Link>
+              )}
               {localStorage.getItem(LOCAL_STORAGE_ROLE) === "INSTRUCTOR" &&
               URLArray.length > 2 &&
               URLArray[1] === "courses" ? (
