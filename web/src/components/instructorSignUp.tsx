@@ -85,22 +85,22 @@ export const InstructorSignUp = () => {
             variant="outline"
             onChange={(e) => setLastName(e.target.value)}
           />
-
-          <Input
-            placeholder="Instructor Email"
-            value={email}
-            variant="outline"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <Input
-            placeholder="Instructor Phone"
-            value={phone}
-            type="number"
-            variant="outline"
-            onChange={(e) => setPhone(e.target.value)}
-          />
         </Flex>
+
+        <Input
+          placeholder="Instructor Email"
+          value={email}
+          variant="outline"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <Input
+          placeholder="Instructor Phone"
+          value={phone}
+          type="number"
+          variant="outline"
+          onChange={(e) => setPhone(e.target.value)}
+        />
 
         <Input
           placeholder="Admin Password"
