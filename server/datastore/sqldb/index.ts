@@ -21,6 +21,8 @@ import {
   GradeWithName,
   CourseData,
   QuizWithName,
+  UserDataAndComment,
+  UserDataAndPost,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -357,40 +359,41 @@ export class SQLDataStore implements DataStore {
   }
   async createCoursePost(coursePost: CoursePost): Promise<void> {
     await this.createPost(coursePost);
-    await this.db.run("INSERT INTO course_posts(id) VALUES (?)", coursePost.id);
+    await this.db.run("INSERT INTO course_posts(id,instructorId) VALUES (?,?)", coursePost.id,coursePost.instructorId);
   }
-  async getCoursePostById(postId: string): Promise<CoursePost | undefined> {
-    return await this.db.get<CoursePost>(
-      "SELECT * FROM posts JOIN course_posts ON course_posts.id = posts.id WHERE posts.id = ?",
+  async getCoursePostById(postId: string): Promise<UserDataAndPost | undefined> {
+    return await this.db.get<UserDataAndPost>(
+      "SELECT posts.id,title,content,url,postedAt,courseId,firstName,lastName FROM posts, course_posts,users WHERE course_posts.id = posts.id AND users.id=instructorId AND posts.id = ?",
       postId
     );
   }
-  async listCoursePostsByCourseId(courseId: string): Promise<CoursePost[]> {
-    return await this.db.all<CoursePost[]>(
-      "SELECT * FROM posts JOIN course_posts ON course_posts.id = posts.id WHERE posts.courseId = ? ORDER BY postedAt DESC",
+  async listCoursePostsByCourseId(courseId: string): Promise<UserDataAndPost[]> {
+    return await this.db.all<UserDataAndPost[]>(
+      "SELECT posts.id,title,content,url,postedAt,courseId,firstName,lastName FROM posts, course_posts,users WHERE course_posts.id = posts.id AND users.id=instructorId AND posts.courseId = ? ORDER BY postedAt DESC",
       courseId
     );
   }
   async createStuQuestion(StudentQuestion: StudentQuestion): Promise<void> {
     await this.createPost(StudentQuestion);
     await this.db.run(
-      "INSERT INTO students_questions(id) VALUES(?)",
-      StudentQuestion.id
+      "INSERT INTO students_questions(id,studentId) VALUES(?,?)",
+      StudentQuestion.id,
+      StudentQuestion.studentId
     );
   }
   async getStdQuestionById(
     StudentQuestionId: string
-  ): Promise<StudentQuestion | undefined> {
-    return await this.db.get<StudentQuestion>(
-      "SELECT * FROM posts JOIN students_questions ON students_questions.id = posts.id WHERE posts.id = ?",
+  ): Promise<UserDataAndPost | undefined> {
+    return await this.db.get<UserDataAndPost>(
+      "SELECT posts.id,title,content,url,postedAt,courseId,firstName,lastName FROM posts, students_questions,users WHERE students_questions.id = posts.id AND users.id=studentId AND posts.id = ?",
       StudentQuestionId
     );
   }
   async listStuQuestionByCourseId(
     courseId: string
-  ): Promise<StudentQuestion[]> {
-    return await this.db.all<StudentQuestion[]>(
-      "SELECT * FROM posts JOIN students_questions ON students_questions.id = posts.id WHERE posts.courseId = ? ORDER BY postedAt DESC",
+  ): Promise<UserDataAndPost[]> {
+    return await this.db.all<UserDataAndPost[]>(
+      "SELECT posts.id,title,content,url,postedAt,courseId,firstName,lastName FROM posts, students_questions,users WHERE students_questions.id = posts.id AND users.id=studentId AND posts.courseId = ? ORDER BY postedAt DESC",
       courseId
     );
   }
@@ -413,15 +416,15 @@ export class SQLDataStore implements DataStore {
   }
   async getPostCommentById(
     postCommentId: string
-  ): Promise<PostComment | undefined> {
-    return await this.db.get<PostComment>(
-      "SELECT * FROM comments JOIN post_comments ON post_comments.id = comments.id WHERE comments.id = ?",
+  ): Promise<UserDataAndComment | undefined> {
+    return await this.db.get<UserDataAndComment>(
+      "SELECT post_comments.id,postId,comment,postedAt,firstName,lastName  FROM comments , post_comments,users WHERE post_comments.id = comments.id AND comments.id=? AND userId=users.id",
       postCommentId
     );
   }
-  async listPostCommentsByPostId(PostId: string): Promise<PostComment[]> {
-    return await this.db.all<PostComment[]>(
-      "SELECT * FROM comments JOIN post_comments ON post_comments.id = comments.id WHERE postId=?",
+  async listPostCommentsByPostId(PostId: string): Promise<UserDataAndComment[]> {
+    return await this.db.all<UserDataAndComment[]>(
+      "SELECT post_comments.id,postId,comment,postedAt,firstName,lastName  FROM comments , post_comments,users WHERE post_comments.id = comments.id AND postId=? AND userId=users.id",
       PostId
     );
   }
@@ -438,17 +441,17 @@ export class SQLDataStore implements DataStore {
   }
   async getInstructorAnswerById(
     AnswerId: string
-  ): Promise<InstructorAnswer | undefined> {
-    return await this.db.get<InstructorAnswer>(
-      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE comments.id = ?",
+  ): Promise<UserDataAndComment | undefined> {
+    return await this.db.get<UserDataAndComment>(
+      "SELECT instructors_answers.id,questionId,comment,postedAt,firstName,lastName FROM comments, instructors_answers,users WHERE instructors_answers.id = comments.id AND comments.id = ? AND users.id=instructorId",
       AnswerId
     );
   }
   async listInstructorAnswerByPostId(
     questionId: string
-  ): Promise<InstructorAnswer[]> {
-    return await this.db.all<InstructorAnswer[]>(
-      "SELECT * FROM comments JOIN instructors_answers ON instructors_answers.id = comments.id WHERE questionId=?",
+  ): Promise<UserDataAndComment[]> {
+    return await this.db.all<UserDataAndComment[]>(
+      "SELECT instructors_answers.id,questionId,comment,postedAt,firstName,lastName FROM comments,instructors_answers,users WHERE instructors_answers.id = comments.id AND questionId=? AND users.id=instructorId",
       questionId
     );
   }

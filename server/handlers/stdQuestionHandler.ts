@@ -81,6 +81,7 @@ export const CreateStudentQuestion: ExpressHandlerWithParams<
     url,
     postedAt: Date.now(),
     courseId: req.params.courseId,
+    studentId:res.locals.userId
   };
   await db.createStuQuestion(question);
   return res.status(200).send({
@@ -91,6 +92,8 @@ export const CreateStudentQuestion: ExpressHandlerWithParams<
       content: question.content,
       postedAt: question.postedAt,
       courseId: question.courseId,
+      studentId:res.locals.userId
+
     },
   });
 };

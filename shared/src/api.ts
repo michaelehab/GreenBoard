@@ -19,6 +19,8 @@ import {
   GradeWithName,
   CourseData,
   QuizWithName,
+  UserDataAndComment,
+  UserDataAndPost,
 } from "./types";
 
 export interface SignInRequest {
@@ -201,22 +203,22 @@ export interface CreateStudentQuestionResponse {
 
 export interface ListCoursePostsRequest {} // Course Id will be a url param
 export interface ListCoursePostsResponse {
-  posts: CoursePost[];
+  posts: UserDataAndPost[];
 }
 
 export interface GetCoursePostRequest {} // Course Id will be a url param
 export interface GetCoursePostResponse {
-  post: CoursePost;
+  post: UserDataAndPost;
 }
 
 export interface GetCourseStudentsQuestionsRequest {} // Course Id will be a url param
 export interface GetCourseStudentsQuestionsResponse {
-  questions: StudentQuestion[];
+  questions: UserDataAndPost[];
 }
 
 export interface GetCourseStudentQuestionRequest {} // Course Id will be a url param
 export interface GetCourseStudentQuestionResponse {
-  question: StudentQuestion;
+  question: UserDataAndPost;
 }
 
 //Post comment APIs
@@ -228,12 +230,12 @@ export interface CreatePostCommentResponse {
 
 export interface ListPostCommentRequest {} // post Id will be a url param
 export interface ListPostCommentResponse {
-  postComment: PostComment[];
+  postComment: UserDataAndComment[];
 }
 
 export interface GetPostCommentsRequest {} // post Id will be a url param
 export interface GetPostCommentsResponse {
-  postComment: PostComment;
+  postComment: UserDataAndComment;
 }
 
 //Instructor answers APIs
@@ -245,12 +247,12 @@ export interface CreateInstructorAnswerResponse {
 
 export interface ListInstructorsAnswersRequest {} // post Id will be a url param
 export interface ListInstructorsAnswersResponse {
-  instructorAnswer: InstructorAnswer[];
+  InstructorDataAndAnswer: UserDataAndComment[];
 }
 
 export interface GetInstructorAnswerRequest {} // post Id will be a url param
 export interface GetInstructorAnswerResponse {
-  instructorAnswer: InstructorAnswer;
+  InstructorDataAndAnswer: UserDataAndComment;
 }
 
 //Quiz API

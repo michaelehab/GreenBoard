@@ -71,9 +71,13 @@ export interface Post {
   courseId: string;
 }
 
-export interface CoursePost extends Post {}
+export interface CoursePost extends Post {
+  instructorId:string;
+}
 
-export interface StudentQuestion extends Post {}
+export interface StudentQuestion extends Post {
+  studentId:string;
+}
 
 export interface Comment {
   id: string;
@@ -148,4 +152,18 @@ export interface UserRegistrationData {
   departmentName: string;
   schoolName: string;
   collegeName: string;
+}
+
+export interface UserDataAndComment extends Comment{
+  commentId:string;
+  postId:string;
+  comment:string;
+  postedAt:number;
+  firstName:string;
+  lastName:string;
+}
+
+export interface UserDataAndPost extends Post{
+  firstName:string;
+  lastName:string;
 }

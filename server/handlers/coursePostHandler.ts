@@ -89,6 +89,7 @@ export const CreateCoursePost: ExpressHandlerWithParams<
     url,
     postedAt: Date.now(),
     courseId: req.params.courseId,
+    instructorId:res.locals.userId
   };
 
   await db.createCoursePost(coursePost);
@@ -101,6 +102,7 @@ export const CreateCoursePost: ExpressHandlerWithParams<
       content: coursePost.content,
       postedAt: coursePost.postedAt,
       courseId: coursePost.courseId,
+      instructorId:coursePost.instructorId
     },
   });
 };

@@ -10,13 +10,14 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  useDisclosure,
   Image,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import Logo from "../assets/logo/png/logo-no-background.png";
-import UserAvatar from "../assets/user.jpg";
+import boardOnly from "../assets/logo/png/board-only.png";
 import AdminAvatar from "../assets/admin.jpg";
+import userOutline from "../assets/userOutline.svg";
 import {
   LOCAL_STORAGE_ROLE,
   isLoggedIn,
@@ -31,6 +32,7 @@ import { useCallback } from "react";
 
 export const NavBar = () => {
   const navigate = useNavigate();
+  const [isLargerThan600] = useMediaQuery("(min-width: 600px)");
 
   const onSignOut = useCallback(() => {
     signOut();
@@ -43,7 +45,11 @@ export const NavBar = () => {
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <HStack spacing={8} alignItems={"center"}>
             <Link to={"/"}>
-              <Image src={Logo} height={8} />
+              {isLargerThan600 ? (
+                <Image src={Logo} height={8} />
+              ) : (
+                <Image src={boardOnly} height={8} />
+              )}
             </Link>
           </HStack>
           {isLoggedIn() ? (
@@ -88,7 +94,7 @@ export const NavBar = () => {
                 </Link>
               )}
 
-              {isLoggedInUser() && (
+              {isLoggedInUser() && isLargerThan600 && (
                 <Flex>
                   <Link to={"/announcements"}>
                     <Button
@@ -124,21 +130,29 @@ export const NavBar = () => {
                   {isLoggedInAdmin() ? (
                     <Avatar size={"md"} src={AdminAvatar} />
                   ) : (
-                    <Avatar size={"md"} src={UserAvatar} />
+                    <Avatar size={"md"} src={userOutline} bg="white" />
                   )}
                 </MenuButton>
                 <MenuList>
+                  {!isLargerThan600 && (
+                    <>
+                      <MenuItem>
+                        <Link to={"/announcements"}>My Announcements</Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link to={"/courses"}>My Courses</Link>
+                      </MenuItem>
+                    </>
+                  )}
                   {localStorage.getItem(LOCAL_STORAGE_ROLE) ===
                     "INSTRUCTOR" && (
                     <MenuItem>
                       <Link to={"/new/course"}>Create Course</Link>
-                      <MenuDivider />
                     </MenuItem>
                   )}
                   {isLoggedInUser() && (
                     <MenuItem>
                       <Link to={"/courses/available"}>Join Course</Link>
-                      <MenuDivider />
                     </MenuItem>
                   )}
                   <Link to={`/`}>

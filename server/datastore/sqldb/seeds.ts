@@ -142,6 +142,7 @@ export const SEED_COURSE_POST: CoursePost = {
   content: "This is a post content",
   postedAt: 2022,
   courseId: SEED_COURSE.id,
+  instructorId:SEED_INSTRUCTOR.id
 };
 
 export const SEED_STUDENT_QUESTION: StudentQuestion = {
@@ -151,6 +152,7 @@ export const SEED_STUDENT_QUESTION: StudentQuestion = {
   content: "This is a question content",
   postedAt: 2022,
   courseId: SEED_COURSE.id,
+  studentId:SEED_STUDENT.id
 };
 
 //SEED_QUIZ AND SEED_QUIZ_QUESTIONS are for testing if the quiz is inactive
