@@ -4,45 +4,47 @@ import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
 import { ApiError } from "../utils/apiError";
 import {
-  isLoggedIn,
   getLocalDepartmentId,
   instructorSignUp,
+  isLoggedInDepartment,
 } from "../utils/auth";
+
 export const InstructorSignUp = () => {
   useTitle("Sign Up");
   const navigate = useNavigate();
-  const [Firstname, setFirstName] = useState("");
-  const [Lastname, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [adminPassword, setAdminPassword] = useState("");
-  const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
-  const departmentId: string = getLocalDepartmentId();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+
+  const departmentId: string = getLocalDepartmentId();
 
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       if (departmentId === "") setError("Please signin department first");
       if (
-        confirmAdminPassWord === "" ||
+        password === "" ||
         phone === "" ||
-        Lastname === "" ||
-        Firstname === "" ||
+        lastName === "" ||
+        firstName === "" ||
         email === "" ||
-        adminPassword === ""
+        confirmPassword === ""
       ) {
         setError("Please make sure all the fields are not empty!");
-      } else if (adminPassword !== confirmAdminPassWord) {
+      } else if (password !== confirmPassword) {
         setError("Confirm Password doesn't match password!");
       } else {
         try {
           await instructorSignUp(
             email,
-            Firstname,
-            Lastname,
+            firstName,
+            lastName,
             phone,
-            adminPassword,
+            password,
             departmentId
           );
           navigate("/");
@@ -56,16 +58,16 @@ export const InstructorSignUp = () => {
     [
       navigate,
       email,
-      Firstname,
-      Lastname,
+      firstName,
+      lastName,
       phone,
-      adminPassword,
-      confirmAdminPassWord,
+      password,
+      confirmPassword,
       departmentId,
     ]
   );
   useEffect(() => {
-    if (!isLoggedIn()) {
+    if (!isLoggedInDepartment()) {
       navigate("/");
     }
   }, [navigate]);
@@ -75,13 +77,13 @@ export const InstructorSignUp = () => {
         <Flex gap={2}>
           <Input
             placeholder="First Name"
-            value={Firstname}
+            value={firstName}
             variant="outline"
             onChange={(e) => setFirstName(e.target.value)}
           />
           <Input
             placeholder="Last Name"
-            value={Lastname}
+            value={lastName}
             variant="outline"
             onChange={(e) => setLastName(e.target.value)}
           />
@@ -103,19 +105,19 @@ export const InstructorSignUp = () => {
         />
 
         <Input
-          placeholder="Admin Password"
+          placeholder="Password"
           type="password"
           variant="outline"
-          value={adminPassword}
-          onChange={(e) => setAdminPassword(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <Input
-          placeholder="Confirm Admin Password"
+          placeholder="Confirm Password"
           type="password"
           variant="outline"
-          value={confirmAdminPassWord}
-          onChange={(e) => setConfirmAdminPassWord(e.target.value)}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
         <Box m="auto">

@@ -162,7 +162,7 @@ export const schoolSignUp = async (
 ) => {
   const res = await callEndpoint<SchoolSignUpRequest, SchoolSignInResponse>(
     "/school/signup",
-    "post",
+    "POST",
     false,
     {
       email,
@@ -189,7 +189,7 @@ export const instructorSignUp = async (
   const res = await callEndpoint<
     InstructorSignUpRequest,
     InstructorSignUpResponse
-  >("/instructor/signup", "post", false, {
+  >("/instructor/signup", "POST", false, {
     email,
     firstName,
     lastName,
@@ -210,7 +210,7 @@ export const studentSignUp = async (
 ) => {
   const res = await callEndpoint<StudentSignUpRequest, StudentSignUpResponse>(
     "/student/signup",
-    "post",
+    "POST",
     false,
     {
       email,
@@ -238,7 +238,7 @@ export const departmentSignUp = async (
   const res = await callEndpoint<
     DepartmentSignUpRequest,
     DepartmentSignUpResponse
-  >("/department/signup", "post", false, {
+  >("/department/signup", "POST", false, {
     email,
     name,
     schoolId,
@@ -256,7 +256,7 @@ export const collegeSignUp = async (
 ) => {
   const res = await callEndpoint<CollegeSignUpRequest, CollegeSignUpResponse>(
     "/college/signup",
-    "post",
+    "POST",
     false,
     {
       email,
