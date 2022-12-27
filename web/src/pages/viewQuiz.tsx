@@ -53,14 +53,20 @@ export const ViewQuiz = () => {
   };
 
   const nextQuestion = () => {
-    setCurrentQuestion(
-      //@ts-ignore
-      Math.min(quizData?.questions.length - 1, currentQuestion + 1)
-    );
+    const nextIndex = currentQuestion + 1;
+    //@ts-ignore
+    if (quizData && nextIndex < quizData.questions.length) {
+      setCurrentQuestion(
+        //@ts-ignore
+        Math.min(quizData?.questions.length - 1, currentQuestion + 1)
+      );
+    } else {
+      setConfirmSubmit(true);
+    }
   };
 
   const backToQuestions = () => {
-    previousQuestion();
+    setCurrentQuestion(0);
     setConfirmSubmit(false);
   };
 
