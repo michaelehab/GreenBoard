@@ -1,4 +1,8 @@
-import { CollegeJwtPayload, ExpressHandler } from "../types";
+import {
+  CollegeJwtPayload,
+  ExpressHandler,
+  ExpressHandlerWithParams,
+} from "../types";
 import {
   College,
   SignInRequest,
@@ -7,6 +11,8 @@ import {
   CollegeSignUpResponse,
   CollegeUpdateRequest,
   CollegeUpdateResponse,
+  GetCollegeRequest,
+  GetCollegeResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -113,6 +119,30 @@ export const UpdateCollege: ExpressHandler<
   return res.status(200).send({
     college: {
       id: existingCollege.id,
+      email: existingCollege.email,
+      name: existingCollege.name,
+      foundedAt: existingCollege.foundedAt,
+      location: existingCollege.location,
+      phone: existingCollege.phone,
+    },
+  });
+};
+
+export const GetCollegeById: ExpressHandlerWithParams<
+  { collegeId: string },
+  GetCollegeRequest,
+  GetCollegeResponse
+> = async (req, res) => {
+  if (!req.params.collegeId) {
+    return res.status(400).send({ error: "collegeId is required" });
+  }
+  const existingCollege = await db.getCollegeById(req.params.collegeId);
+
+  if (!existingCollege) {
+    return res.status(404).send({ error: "College not found" });
+  }
+  return res.status(200).send({
+    college: {
       email: existingCollege.email,
       name: existingCollege.name,
       foundedAt: existingCollege.foundedAt,

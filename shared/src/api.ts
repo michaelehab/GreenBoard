@@ -101,6 +101,11 @@ export interface CollegeUpdateResponse {
   >;
 }
 
+export interface GetCollegeRequest {}
+export interface GetCollegeResponse {
+  college: Pick<College, "email" | "foundedAt" | "location" | "name" | "phone">;
+}
+
 export interface CollegeResetPasswordRequest {
   newPassword: string;
 }

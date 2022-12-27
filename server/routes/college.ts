@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  GetCollegeById,
   SignInCollege,
   SignUpCollege,
   UpdateCollege,
@@ -15,5 +16,6 @@ router.post("/signin", SignInCollege);
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
 router.put("/update", UpdateCollege);
+router.get("/:collegeId", GetCollegeById);
 
 export default router;
