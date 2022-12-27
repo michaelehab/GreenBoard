@@ -83,9 +83,9 @@ export class SQLDataStore implements DataStore {
       migrationsPath: path.join(__dirname, "migrations"),
     });
 
-   // if (dbPath == ":memory:") {
+    if (dbPath == ":memory:") {
       await this.seedDb();
-    //}
+    }
 
     return this;
   }
