@@ -141,7 +141,7 @@ export const NavBar = () => {
                       <MenuDivider />
                     </MenuItem>
                   )}
-                  <Link to={`/`}>
+                  <Link to={`/profile`}>
                     <MenuItem>Profile</MenuItem>
                   </Link>
                   <MenuDivider />

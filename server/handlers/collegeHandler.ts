@@ -7,6 +7,8 @@ import {
   CollegeSignUpResponse,
   CollegeUpdateRequest,
   CollegeUpdateResponse,
+  GetCollegeRequest,
+  GetCollegeResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -123,8 +125,8 @@ export const UpdateCollege: ExpressHandler<
 };
 
 export const GetCollegeById: ExpressHandler<
-  CollegeUpdateRequest,
-  CollegeUpdateResponse
+  GetCollegeRequest,
+  GetCollegeResponse
 > = async (req, res) => {
   const existingCollege = await db.getCollegeById(res.locals.collegeId);
 
