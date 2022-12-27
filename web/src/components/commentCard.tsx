@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react";
+import { Avatar, Flex, Stack, Text, WrapItem } from "@chakra-ui/react";
 import { format } from "timeago.js";
 import { Comment, UserDataAndComment } from "@greenboard/shared";
 
@@ -15,13 +15,21 @@ export const CommentCard: React.FC<UserDataAndComment> = (comment) => {
       rounded="md"
       bg="white"
     >
-       <Flex justifyContent="space-between" fontWeight="bold">
-        <Text fontSize="md">{comment.firstName} {comment.lastName}</Text>
-      </Flex>
       <Flex justifyContent="space-between">
         <Text fontSize="md">{comment.comment}</Text>
       </Flex>
-      <Flex gap={3}>
+      <Flex gap={3} justifyContent="space-between">
+        <Stack direction="row">
+          <WrapItem>
+            <Avatar
+              size={"xs"}
+              name={`${comment.firstName} ${comment.lastName}`}
+            />
+          </WrapItem>
+          <Text fontSize="md">
+            {comment.firstName} {comment.lastName}
+          </Text>
+        </Stack>
         <Text>{format(comment.postedAt, "en_US")}</Text>
       </Flex>
     </Flex>

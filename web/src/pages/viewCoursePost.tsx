@@ -8,6 +8,10 @@ import {
   Center,
   Text,
   Link as ChakraLink,
+  AvatarGroup,
+  Avatar,
+  Stack,
+  Heading,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +29,8 @@ import {
   ListPostCommentRequest,
   ListPostCommentResponse,
 } from "@greenboard/shared";
+import userOutline from "../assets/userOutline.svg";
+import { format } from "timeago.js";
 
 export const ViewCoursePost = () => {
   const { courseId, postId } = useParams();
@@ -83,26 +89,40 @@ export const ViewCoursePost = () => {
 
   return (
     <Center flexDirection="column">
-      <Flex align="center" flexDirection="column">
-        <Box
-          maxW="6xl"
-          w={["sm", "xl", "3xl"]}
-          m={5}
-          boxShadow="xl"
-          p="6"
-          rounded="md"
-          bg="white"
-        >
-          <Text fontSize="md" fontWeight="bold">
-            {postData.post.firstName} {postData.post.lastName}
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
+      <Box
+        maxW="6xl"
+        w={["sm", "xl", "3xl"]}
+        m={5}
+        boxShadow="xl"
+        p="6"
+        rounded="md"
+        bg="white"
+      >
+        <Stack direction="row" alignItems="center">
+          <Heading as="h3" size="lg">
             {postData.post.title}
-          </Text>
-          <Text fontSize="md">{postData.post.content}</Text>
-          <ChakraLink href={postData.post.url}>Link</ChakraLink>
-        </Box>
-      </Flex>
+          </Heading>
+          {postData.post.url !== "NoLink" && (
+            <ChakraLink color="#4d7e3e" href={postData.post.url}>
+              (Visit Link)
+            </ChakraLink>
+          )}
+        </Stack>
+
+        <Text fontSize="md">{postData.post.content}</Text>
+
+        <Flex justifyContent="space-between">
+          <Stack direction="row" alignItems="center">
+            <AvatarGroup spacing="1rem">
+              <Avatar bg="teal.500" size={"sm"} />
+            </AvatarGroup>
+            <Text fontSize="md">
+              {postData.post.firstName} {postData.post.lastName}
+            </Text>
+          </Stack>
+          <Text>{format(postData.post.postedAt, "en_US")}</Text>
+        </Flex>
+      </Box>
       <Flex direction="column">
         {!!commentsData && commentsData.postComment.length > 0 ? (
           commentsData.postComment.map((c, i) => <CommentCard key={i} {...c} />)

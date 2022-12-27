@@ -42,7 +42,7 @@ export const PostCard: React.FC<UserDataAndPost> = (post) => {
             <WrapItem>
               <Avatar size={"xs"} name={`${post.firstName} ${post.lastName}`} />
             </WrapItem>
-            <Text fontSize="md" fontWeight="bold">
+            <Text fontSize="md">
               {post.firstName} {post.lastName}
             </Text>
           </Stack>
