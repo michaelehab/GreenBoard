@@ -60,7 +60,7 @@ export const ViewCourse = () => {
         width="100%"
         justifyContent="space-between"
       >
-        <Heading as="h2" size="xl" alignSelf="center">
+        <Heading as="h2" size="lg" alignSelf="center">
           {courseData?.course.courseCode} | {courseData?.course.name}
         </Heading>
         {isLoggedInInstructor() && (
@@ -109,8 +109,8 @@ export const ViewCourse = () => {
       </Flex>
       <Tabs align="center" colorScheme="green">
         <TabList>
-          <Tab>Course Posts</Tab>
-          <Tab>Students Questions</Tab>
+          <Tab>Posts</Tab>
+          <Tab>Questions</Tab>
           <Tab>Quizzes</Tab>
           {isLoggedInStudent() && <Tab>Grades</Tab>}
         </TabList>

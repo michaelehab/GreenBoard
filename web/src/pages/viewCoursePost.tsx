@@ -29,7 +29,6 @@ import {
   ListPostCommentRequest,
   ListPostCommentResponse,
 } from "@greenboard/shared";
-import userOutline from "../assets/userOutline.svg";
 import { format } from "timeago.js";
 
 export const ViewCoursePost = () => {
