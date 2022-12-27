@@ -8,6 +8,10 @@ import {
   Center,
   Text,
   Link as ChakraLink,
+  Stack,
+  Heading,
+  AvatarGroup,
+  Avatar,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +33,7 @@ import {
   CreateInstructorAnswerRequest,
   CreateInstructorAnswerResponse,
 } from "@greenboard/shared";
+import { format } from "timeago.js";
 
 export const ViewStudentQuestion = () => {
   const { courseId, questionId } = useParams();
@@ -82,69 +87,81 @@ export const ViewStudentQuestion = () => {
   }
 
   return (
-    <Center>
-      <Box>
-        <Flex align="center">
-          <Box
-            maxW="6xl"
-            w={["sm", "xl", "3xl"]}
-            m={5}
-            boxShadow="xl"
-            p="6"
-            rounded="md"
-            bg="white"
-          >
-            <Text fontSize="md" fontWeight="bold">
-            {questionData.question.firstName} {questionData.question.lastName}
-          </Text>
-            <Text fontSize="md" fontWeight="bold">
-              {questionData.question.title}
-            </Text>
-            <Text fontSize="md">{questionData.question.content}</Text>
-            <ChakraLink href={questionData.question.url}>Link</ChakraLink>
-          </Box>
-        </Flex>
-        <Flex direction="column">
-          {!!answersData && answersData.InstructorDataAndAnswer.length > 0 ? (
-            answersData.InstructorDataAndAnswer.map((c, i) => (
-              <CommentCard key={i} {...c} />
-            ))
-          ) : (
-            <Center>No answers on this question</Center>
+    <Center flexDirection="column">
+      <Box
+        maxW="6xl"
+        w={["sm", "xl", "3xl"]}
+        m={5}
+        boxShadow="xl"
+        p="6"
+        rounded="md"
+        bg="white"
+      >
+        <Stack direction="row" alignItems="center">
+          <Heading as="h3" size="lg">
+            {questionData.question.title}
+          </Heading>
+          {questionData.question.url !== "NoLink" && (
+            <ChakraLink color="#4d7e3e" href={questionData.question.url}>
+              (Visit Link)
+            </ChakraLink>
           )}
+        </Stack>
+
+        <Text fontSize="md">{questionData.question.content}</Text>
+
+        <Flex justifyContent="space-between">
+          <Stack direction="row" alignItems="center">
+            <AvatarGroup spacing="1rem">
+              <Avatar bg="teal.500" size={"sm"} />
+            </AvatarGroup>
+            <Text fontSize="md">
+              {questionData.question.firstName} {questionData.question.lastName}
+            </Text>
+          </Stack>
+          <Text>{format(questionData.question.postedAt, "en_US")}</Text>
         </Flex>
-        {isLoggedIn() && isLoggedInInstructor() && (
-          <form onSubmit={addAnswer}>
-            <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
-              <Input
-                placeholder="Enter Your Answer"
-                value={comment}
-                variant="outline"
-                onChange={(e) => setAnswer(e.target.value)}
-              />
-
-              <Box m="auto">
-                <Button
-                  colorScheme="green"
-                  variant="solid"
-                  type="submit"
-                  display="block"
-                  onClick={addAnswer}
-                >
-                  Add Answer
-                </Button>
-              </Box>
-
-              {!!error && (
-                <Alert status="error">
-                  <AlertIcon />
-                  {error}
-                </Alert>
-              )}
-            </Flex>
-          </form>
-        )}
       </Box>
+      <Flex direction="column">
+        {!!answersData && answersData.InstructorDataAndAnswer.length > 0 ? (
+          answersData.InstructorDataAndAnswer.map((c, i) => (
+            <CommentCard key={i} {...c} />
+          ))
+        ) : (
+          <Center>No answers on this question</Center>
+        )}
+      </Flex>
+      {isLoggedIn() && isLoggedInInstructor() && (
+        <Box>
+          <Flex maxW="sm" mx="auto" my={10} direction="column" gap={3}>
+            <Input
+              placeholder="Enter Your Answer"
+              value={comment}
+              variant="outline"
+              onChange={(e) => setAnswer(e.target.value)}
+            />
+
+            <Box m="auto">
+              <Button
+                colorScheme="green"
+                variant="solid"
+                type="submit"
+                display="block"
+                onClick={addAnswer}
+              >
+                Add Answer
+              </Button>
+            </Box>
+
+            {!!error && (
+              <Alert status="error">
+                <AlertIcon />
+                {error}
+              </Alert>
+            )}
+          </Flex>
+        </Box>
+      )}
     </Center>
   );
 };
