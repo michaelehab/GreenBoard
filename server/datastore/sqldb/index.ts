@@ -23,6 +23,7 @@ import {
   QuizWithName,
   UserDataAndComment,
   UserDataAndPost,
+  QuizTrial,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -359,15 +360,23 @@ export class SQLDataStore implements DataStore {
   }
   async createCoursePost(coursePost: CoursePost): Promise<void> {
     await this.createPost(coursePost);
-    await this.db.run("INSERT INTO course_posts(id,instructorId) VALUES (?,?)", coursePost.id,coursePost.instructorId);
+    await this.db.run(
+      "INSERT INTO course_posts(id,instructorId) VALUES (?,?)",
+      coursePost.id,
+      coursePost.instructorId
+    );
   }
-  async getCoursePostById(postId: string): Promise<UserDataAndPost | undefined> {
+  async getCoursePostById(
+    postId: string
+  ): Promise<UserDataAndPost | undefined> {
     return await this.db.get<UserDataAndPost>(
       "SELECT posts.id,title,content,url,postedAt,courseId,firstName,lastName FROM posts, course_posts,users WHERE course_posts.id = posts.id AND users.id=instructorId AND posts.id = ?",
       postId
     );
   }
-  async listCoursePostsByCourseId(courseId: string): Promise<UserDataAndPost[]> {
+  async listCoursePostsByCourseId(
+    courseId: string
+  ): Promise<UserDataAndPost[]> {
     return await this.db.all<UserDataAndPost[]>(
       "SELECT posts.id,title,content,url,postedAt,courseId,firstName,lastName FROM posts, course_posts,users WHERE course_posts.id = posts.id AND users.id=instructorId AND posts.courseId = ? ORDER BY postedAt DESC",
       courseId
@@ -422,7 +431,9 @@ export class SQLDataStore implements DataStore {
       postCommentId
     );
   }
-  async listPostCommentsByPostId(PostId: string): Promise<UserDataAndComment[]> {
+  async listPostCommentsByPostId(
+    PostId: string
+  ): Promise<UserDataAndComment[]> {
     return await this.db.all<UserDataAndComment[]>(
       "SELECT post_comments.id,postId,comment,postedAt,firstName,lastName  FROM comments , post_comments,users WHERE post_comments.id = comments.id AND postId=? AND userId=users.id",
       PostId
@@ -466,7 +477,7 @@ export class SQLDataStore implements DataStore {
     );
   }
 
-  async toggleQuizAcivation(isActive: boolean, quizId: string): Promise<void> {
+  async toggleQuizActivation(isActive: boolean, quizId: string): Promise<void> {
     await this.db.run(
       "UPDATE quizzes SET isActive=? WHERE id=?",
       isActive,
@@ -506,13 +517,36 @@ export class SQLDataStore implements DataStore {
     courseId: string
   ): Promise<QuizWithName[]> {
     return await this.db.all<QuizWithName[]>(
-      "SELECT id, name as quizName, quizDate, courseId FROM quizzes where isActive = 1 AND courseId = ? ORDER BY quizDate ASC",
+      "SELECT id, name as quizName, quizDate, courseId FROM quizzes where isActive = 1 AND courseId = ? ORDER BY quizDate DESC",
       courseId
+    );
+  }
+
+  async logQuizTrial(
+    studentId: string,
+    quizId: string,
+    trialDate: number
+  ): Promise<void> {
+    await this.db.run(
+      "INSERT INTO quizzes_logs(studentId, quizId, trialDate) VALUES (?,?,?)",
+      studentId,
+      quizId,
+      trialDate
+    );
+  }
+  async checkIfQuizTrialExist(
+    studentId: string,
+    quizId: string
+  ): Promise<QuizTrial | undefined> {
+    return await this.db.get<QuizTrial>(
+      "SELECT * FROM quizzes_logs WHERE studentId = ? AND quizId = ?",
+      studentId,
+      quizId
     );
   }
   async getQuizzesByCourseId(courseId: string): Promise<QuizWithName[]> {
     return await this.db.all<QuizWithName[]>(
-      "SELECT id, name as quizName, quizDate, courseId FROM quizzes where courseId = ? ORDER BY quizDate ASC",
+      "SELECT id, name as quizName, quizDate, courseId FROM quizzes where courseId = ? ORDER BY quizDate DESC",
       courseId
     );
   }

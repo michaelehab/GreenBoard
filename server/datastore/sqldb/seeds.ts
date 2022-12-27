@@ -72,7 +72,7 @@ export const SEED_INSTRUCTOR: Instructor = {
   phone: "Phone1",
   email: "Email1",
   password: "", // getPasswordHashed(SEED_INSTRUCTOR_PASSWORD)
-  joinedAt: new Date(),
+  joinedAt: Date.now(),
   departmentId: SEED_DEPARTMENT.id,
 };
 
@@ -83,7 +83,7 @@ export const SEED_INSTRUCTOR2: Instructor = {
   phone: "Phone2",
   email: "Email2",
   password: "", // getPasswordHashed(SEED_INSTRUCTOR_PASSWORD)
-  joinedAt: new Date(),
+  joinedAt: Date.now(),
   departmentId: SEED_DEPARTMENT2.id,
 };
 
@@ -96,7 +96,7 @@ export const SEED_STUDENT: Student = {
   phone: "Phone123",
   email: "Email123",
   password: "", // getPasswordHashed(SEED_STUDENT_PASSWORD)
-  joinedAt: new Date(),
+  joinedAt: Date.now(),
   departmentId: SEED_DEPARTMENT.id,
   level: 1,
 };
@@ -108,7 +108,7 @@ export const SEED_STUDENT2: Student = {
   phone: "Phone1234",
   email: "Email1234",
   password: "", // getPasswordHashed(SEED_STUDENT_PASSWORD)
-  joinedAt: new Date(),
+  joinedAt: Date.now(),
   departmentId: SEED_DEPARTMENT2.id,
   level: 2,
 };
@@ -142,7 +142,7 @@ export const SEED_COURSE_POST: CoursePost = {
   content: "This is a post content",
   postedAt: 2022,
   courseId: SEED_COURSE.id,
-  instructorId:SEED_INSTRUCTOR.id
+  instructorId: SEED_INSTRUCTOR.id,
 };
 
 export const SEED_STUDENT_QUESTION: StudentQuestion = {
@@ -152,7 +152,7 @@ export const SEED_STUDENT_QUESTION: StudentQuestion = {
   content: "This is a question content",
   postedAt: 2022,
   courseId: SEED_COURSE.id,
-  studentId:SEED_STUDENT.id
+  studentId: SEED_STUDENT.id,
 };
 
 //SEED_QUIZ AND SEED_QUIZ_QUESTIONS are for testing if the quiz is inactive
@@ -160,7 +160,7 @@ export const SEED_QUIZ: Quiz = {
   id: "Quiz0001",
   name: "Final Quiz",
   isActive: false,
-  quizDate: new Date("2023-03-08"),
+  quizDate: Date.parse("2023-03-08"),
   courseId: SEED_COURSE.id,
 };
 
@@ -205,7 +205,7 @@ export const SEED_QUIZ_TAKEN: Quiz = {
   id: "Quiz0003",
   name: " Quiz 1",
   isActive: false,
-  quizDate: new Date("2023-03-08"),
+  quizDate: Date.parse("2023-03-08"),
   courseId: SEED_COURSE.id,
 };
 
@@ -249,7 +249,7 @@ export const SEED_GRADE_STUDENT: Grade = {
   studentId: SEED_STUDENT.id,
   quizId: SEED_QUIZ_TAKEN.id,
   grade: 8.7,
-  takenAt: new Date(),
+  takenAt: Date.now(),
 };
 
 // SEED_QUIZ_OPEN and SEED_QUIZ_OPEN_QUESTIONS are used
@@ -258,7 +258,7 @@ export const SEED_QUIZ_OPEN: Quiz = {
   id: "Quiz0005",
   name: "Quiz 2",
   isActive: true,
-  quizDate: new Date("2023-03-08"),
+  quizDate: Date.parse("2023-03-08"),
   courseId: SEED_COURSE.id,
 };
 

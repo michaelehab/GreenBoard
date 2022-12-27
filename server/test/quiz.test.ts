@@ -27,7 +27,7 @@ describe("Quiz and Quiz's Question tests", () => {
     quiz: {
       name: "MidTerm Quiz",
       isActive: true,
-      quizDate: new Date("2023-03-10"),
+      quizDate: Date.parse("2023-03-10"),
     },
     questions: [
       {
@@ -100,9 +100,7 @@ describe("Quiz and Quiz's Question tests", () => {
       expect(result.body).toBeDefined();
       expect(result.body.quiz.name).toEqual(quiz1.quiz.name);
       expect(result.body.quiz.isActive).toEqual(quiz1.quiz.isActive);
-      expect(result.body.quiz.quizDate).toEqual(
-        quiz1.quiz.quizDate.toISOString()
-      );
+      expect(result.body.quiz.quizDate).toEqual(quiz1.quiz.quizDate);
       for (let i = 0; i < quiz1.questions.length; i++) {
         expect(result.body.questions[i].question_number).toEqual(
           quiz1.questions[i].question_number
@@ -251,9 +249,7 @@ describe("Quiz and Quiz's Question tests", () => {
       expect(result.body).toBeDefined();
       expect(result.body.quiz.name).toEqual(quiz1.quiz.name);
       expect(result.body.quiz.isActive).toEqual(+quiz1.quiz.isActive);
-      expect(result.body.quiz.quizDate).toEqual(
-        quiz1.quiz.quizDate.toISOString()
-      );
+      expect(result.body.quiz.quizDate).toEqual(quiz1.quiz.quizDate);
       for (let i = 0; i < quiz1.questions.length; i++) {
         expect(result.body.questions[i].question_number).toEqual(
           quiz1.questions[i].question_number
@@ -290,9 +286,7 @@ describe("Quiz and Quiz's Question tests", () => {
       expect(result.body).toBeDefined();
       expect(result.body.quiz.name).toEqual(quiz1.quiz.name);
       expect(result.body.quiz.isActive).toEqual(+quiz1.quiz.isActive);
-      expect(result.body.quiz.quizDate).toEqual(
-        quiz1.quiz.quizDate.toISOString()
-      );
+      expect(result.body.quiz.quizDate).toEqual(quiz1.quiz.quizDate);
       for (let i = 0; i < quiz1.questions.length; i++) {
         expect(result.body.questions[i].question_number).toEqual(
           quiz1.questions[i].question_number

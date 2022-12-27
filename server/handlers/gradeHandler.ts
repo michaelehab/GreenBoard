@@ -89,7 +89,7 @@ export const SubmitQuiz: ExpressHandlerWithParams<
     studentId: existingStudent.id,
     quizId: req.params.quizId,
     grade: score,
-    takenAt: new Date(),
+    takenAt: Date.now(),
   };
 
   await db.createGrade(grade);

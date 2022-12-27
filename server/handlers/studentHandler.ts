@@ -52,7 +52,7 @@ export const SignUpStudent: ExpressHandler<
     password: getPasswordHashed(password),
     level,
     departmentId,
-    joinedAt: new Date(),
+    joinedAt: Date.now(),
   };
 
   await db.createStudent(student);
