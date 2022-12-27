@@ -1,9 +1,14 @@
 import { CollegeSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
+import {
+  SEED_INSTRUCTOR,
+  SEED_INSTRUCTOR_PASSWORD,
+} from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("College tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
+  let collegeId: string;
 
   const college: CollegeSignUpRequest = {
     name: "Cairo University",
@@ -71,6 +76,7 @@ describe("College tests", () => {
     expect(result.body.jwt).toBeDefined();
     expect(result.body.college.name).toEqual(college.name);
     expect(result.body.college.email).toEqual(college.email);
+    collegeId = result.body.college.id;
   });
 
   it("Signs in with invalid password -- POST /api/v1/college/signin returns 403", async () => {
@@ -96,9 +102,9 @@ describe("College tests", () => {
     expect(result.body.jwt).toBeUndefined();
     expect(result.body.college).toBeUndefined();
   });
-  it("Gets college profile by id -- GET /api/v1/college/profile expects 200", async () => {
+  it("Gets college profile by id as college-- GET /api/v1/college/:collegeId expects 200", async () => {
     const result = await client
-      .get("/api/v1/college/profile")
+      .get(`/api/v1/college/${collegeId}`)
       .set(
         await getAuthToken(
           "/api/v1/college/signin",
@@ -115,8 +121,41 @@ describe("College tests", () => {
     expect(result.body.college.phone).toEqual(college.phone);
   });
 
-  it("Gets college profile by id as unauthorized-- GET /api/v1/college/profile expects 401", async () => {
-    const result = await client.get("/api/v1/college/profile").expect(401);
+  it("Gets college profile by id as instructor-- GET /api/v1/college/:collegeId expects 200", async () => {
+    const result = await client
+      .get(`/api/v1/college/${collegeId}`)
+      .set(
+        await getAuthToken(
+          "/api/v1/instructor/signin",
+          SEED_INSTRUCTOR.email,
+          SEED_INSTRUCTOR_PASSWORD
+        )
+      )
+      .expect(200);
+    expect(result.body.college).toBeDefined();
+    expect(result.body.college.email).toEqual(college.email);
+    expect(result.body.college.name).toEqual(college.name);
+    expect(result.body.college.foundedAt).toEqual(college.foundedAt);
+    expect(result.body.college.location).toEqual(college.location);
+    expect(result.body.college.phone).toEqual(college.phone);
+  });
+
+  it("Gets college profile by id as unauthorized-- GET /api/v1/college/:collegeId expects 401", async () => {
+    const result = await client.get(`/api/v1/college/${collegeId}`).expect(401);
+    expect(result.body.college).toBeUndefined();
+  });
+
+  it("Gets college profile by id as instructor with invalidCollegeId-- GET /api/v1/college/:collegeId expects 404", async () => {
+    const result = await client
+      .get(`/api/v1/college/invalidCollegeId`)
+      .set(
+        await getAuthToken(
+          "/api/v1/instructor/signin",
+          SEED_INSTRUCTOR.email,
+          SEED_INSTRUCTOR_PASSWORD
+        )
+      )
+      .expect(404);
     expect(result.body.college).toBeUndefined();
   });
 

@@ -1,4 +1,8 @@
-import { CollegeJwtPayload, ExpressHandler } from "../types";
+import {
+  CollegeJwtPayload,
+  ExpressHandler,
+  ExpressHandlerWithParams,
+} from "../types";
 import {
   College,
   SignInRequest,
@@ -124,11 +128,15 @@ export const UpdateCollege: ExpressHandler<
   });
 };
 
-export const GetCollegeById: ExpressHandler<
+export const GetCollegeById: ExpressHandlerWithParams<
+  { collegeId: string },
   GetCollegeRequest,
   GetCollegeResponse
 > = async (req, res) => {
-  const existingCollege = await db.getCollegeById(res.locals.collegeId);
+  if (!req.params.collegeId) {
+    return res.status(400).send({ error: "collegeId is required" });
+  }
+  const existingCollege = await db.getCollegeById(req.params.collegeId);
 
   if (!existingCollege) {
     return res.status(404).send({ error: "College not found" });

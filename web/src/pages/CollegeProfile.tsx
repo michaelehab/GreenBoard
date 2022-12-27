@@ -12,7 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
-import { isLoggedInCollege, isLoggedInInstructor } from "../utils/auth";
+import {
+  getLocalCollegeId,
+  isLoggedInCollege,
+  isLoggedInInstructor,
+} from "../utils/auth";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { GetCollegeRequest, GetCollegeResponse } from "@greenboard/shared";
@@ -25,10 +29,11 @@ export const CollegeProfile = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
+  const { collegeId } = useParams();
 
   const { data: collegeData } = useQuery([`viewCollegeProfile`], () =>
     callEndpoint<GetCollegeRequest, GetCollegeResponse>(
-      `/college/profile`,
+      `/college/${collegeId}`,
       "GET",
       true
     )
@@ -63,17 +68,20 @@ export const CollegeProfile = () => {
             </Text>
             <Text fontSize="large"> Phone: {collegeData.college.phone}</Text>
           </Box>
-          <Box m="auto" my={12}>
-            <Button
-              colorScheme="green"
-              variant="solid"
-              type="submit"
-              display="block"
-              onClick={edit}
-            >
-              Edit
-            </Button>
-          </Box>
+          {isLoggedInCollege() && getLocalCollegeId() === collegeId && (
+            <Box m="auto" my={12}>
+              <Button
+                colorScheme="green"
+                variant="solid"
+                type="submit"
+                display="block"
+                onClick={edit}
+              >
+                Edit
+              </Button>
+            </Box>
+          )}
+
           {!!error && (
             <Alert status="error">
               <AlertIcon />

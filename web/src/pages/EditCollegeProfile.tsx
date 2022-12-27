@@ -50,7 +50,7 @@ export const EditCollegeProfile = () => {
   );
   const { data: collegeData } = useQuery([`viewCollegeProfile`], () =>
     callEndpoint<GetCollegeRequest, GetCollegeResponse>(
-      `/college/profile`,
+      `/college/${getLocalCollegeId()}`,
       "GET",
       true
     )
