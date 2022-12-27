@@ -72,11 +72,11 @@ export interface Post {
 }
 
 export interface CoursePost extends Post {
-  instructorId:string;
+  instructorId: string;
 }
 
 export interface StudentQuestion extends Post {
-  studentId:string;
+  studentId: string;
 }
 
 export interface Comment {
@@ -154,16 +154,21 @@ export interface UserRegistrationData {
   collegeName: string;
 }
 
-export interface UserDataAndComment extends Comment{
-  commentId:string;
-  postId:string;
-  comment:string;
-  postedAt:number;
-  firstName:string;
-  lastName:string;
+export interface UserDataAndComment extends Comment {
+  commentId: string;
+  postId: string;
+  comment: string;
+  postedAt: number;
+  firstName: string;
+  lastName: string;
 }
 
-export interface UserDataAndPost extends Post{
-  firstName:string;
-  lastName:string;
+export interface UserDataAndPost extends Post {
+  firstName: string;
+  lastName: string;
+}
+
+export interface QuizTrial {
+  studentId: string;
+  quizId: string;
 }
