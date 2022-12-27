@@ -143,7 +143,6 @@ export const GetCollegeById: ExpressHandlerWithParams<
   }
   return res.status(200).send({
     college: {
-      id: existingCollege.id,
       email: existingCollege.email,
       name: existingCollege.name,
       foundedAt: existingCollege.foundedAt,
