@@ -72,7 +72,7 @@ export const CreateQuiz = () => {
             courseId,
             name,
             isActive,
-            new Date(quizDate),
+            Date.parse(quizDate),
             formFields
           );
           navigate(`/courses/${courseId}`);

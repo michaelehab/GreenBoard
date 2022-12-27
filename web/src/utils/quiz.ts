@@ -11,7 +11,7 @@ export async function createQuiz(
   courseId: string,
   name: string,
   isActive: boolean,
-  quizDate: Date,
+  quizDate: number,
   questions: Pick<
     QuizQuestion,
     | "question_number"
