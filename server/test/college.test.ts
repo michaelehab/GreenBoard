@@ -96,6 +96,29 @@ describe("College tests", () => {
     expect(result.body.jwt).toBeUndefined();
     expect(result.body.college).toBeUndefined();
   });
+  it("Gets college profile by id -- GET /api/v1/college/profile expects 200", async () => {
+    const result = await client
+      .get("/api/v1/college/profile")
+      .set(
+        await getAuthToken(
+          "/api/v1/college/signin",
+          college.email,
+          college.adminPassword
+        )
+      )
+      .expect(200);
+    expect(result.body.college).toBeDefined();
+    expect(result.body.college.email).toEqual(college.email);
+    expect(result.body.college.name).toEqual(college.name);
+    expect(result.body.college.foundedAt).toEqual(college.foundedAt);
+    expect(result.body.college.location).toEqual(college.location);
+    expect(result.body.college.phone).toEqual(college.phone);
+  });
+
+  it("Gets college profile by id as unauthorized-- GET /api/v1/college/profile expects 401", async () => {
+    const result = await client.get("/api/v1/college/profile").expect(401);
+    expect(result.body.college).toBeUndefined();
+  });
 
   it("Updates signed in college name -- PUT /api/v1/college/update returns 200", async () => {
     const result = await client

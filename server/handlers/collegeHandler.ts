@@ -121,3 +121,24 @@ export const UpdateCollege: ExpressHandler<
     },
   });
 };
+
+export const GetCollegeById: ExpressHandler<
+  CollegeUpdateRequest,
+  CollegeUpdateResponse
+> = async (req, res) => {
+  const existingCollege = await db.getCollegeById(res.locals.collegeId);
+
+  if (!existingCollege) {
+    return res.status(404).send({ error: "College not found" });
+  }
+  return res.status(200).send({
+    college: {
+      id: existingCollege.id,
+      email: existingCollege.email,
+      name: existingCollege.name,
+      foundedAt: existingCollege.foundedAt,
+      location: existingCollege.location,
+      phone: existingCollege.phone,
+    },
+  });
+};
