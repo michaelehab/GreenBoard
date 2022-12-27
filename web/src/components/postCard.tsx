@@ -7,25 +7,39 @@ import {
   Avatar,
   WrapItem,
   Stack,
+  Badge,
 } from "@chakra-ui/react";
 import { UserDataAndPost } from "@greenboard/shared";
 import { Link } from "react-router-dom";
 import { format } from "timeago.js";
-import UserAvatar from "../assets/user.jpg";
 
 export const PostCard: React.FC<UserDataAndPost> = (post) => {
+  function getMinutesFromNow(postedAt: number) {
+    const now = new Date();
+    const endDate = new Date(postedAt);
+    const diff = now.getTime() - endDate.getTime();
+    return diff / 60000;
+  }
   return (
     <Center>
-      <Box
-        maxW="6xl"
+      <Flex
+        maxW="3xl"
         w={["sm", "xl", "3xl"]}
+        h={120}
         m={5}
         boxShadow="xl"
         p="6"
         rounded="md"
         bg="white"
+        justifyContent="space-between"
+        direction="column"
       >
         <Flex gap={2}>
+          {getMinutesFromNow(post.postedAt) <= 5 && (
+            <Badge borderRadius="full" px="2" colorScheme="green">
+              New
+            </Badge>
+          )}
           <Link to={`/courses/${post.courseId}/posts/${post.id}`}>
             <Text fontSize="md" fontWeight="bold">
               {post.title}
@@ -48,7 +62,7 @@ export const PostCard: React.FC<UserDataAndPost> = (post) => {
           </Stack>
           <Text color="#4d7e3e">{format(post.postedAt, "en_US")}</Text>
         </Flex>
-      </Box>
+      </Flex>
     </Center>
   );
 };

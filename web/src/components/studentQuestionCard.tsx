@@ -7,6 +7,7 @@ import {
   WrapItem,
   Stack,
   Flex,
+  Container,
 } from "@chakra-ui/react";
 import { Post, UserDataAndPost } from "@greenboard/shared";
 import { Link } from "react-router-dom";
@@ -15,14 +16,17 @@ import { format } from "timeago.js";
 export const StudentQuestionCard: React.FC<UserDataAndPost> = (question) => {
   return (
     <Center>
-      <Box
-        maxW="6xl"
+      <Flex
+        maxW={"3xl"}
         w={["sm", "xl", "3xl"]}
+        h={120}
         m={5}
         boxShadow="xl"
         p="6"
         rounded="md"
         bg="white"
+        justifyContent="space-between"
+        flexDirection="column"
       >
         <Flex gap={2}>
           <Link to={`/courses/${question.courseId}/questions/${question.id}`}>
@@ -50,7 +54,7 @@ export const StudentQuestionCard: React.FC<UserDataAndPost> = (question) => {
           </Stack>
           <Text color="#4d7e3e">{format(question.postedAt, "en_US")}</Text>
         </Flex>
-      </Box>
+      </Flex>
     </Center>
   );
 };

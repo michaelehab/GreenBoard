@@ -1,6 +1,6 @@
 import { Avatar, Flex, Stack, Text, WrapItem } from "@chakra-ui/react";
 import { format } from "timeago.js";
-import { Comment, UserDataAndComment } from "@greenboard/shared";
+import { UserDataAndComment } from "@greenboard/shared";
 
 export const CommentCard: React.FC<UserDataAndComment> = (comment) => {
   return (
