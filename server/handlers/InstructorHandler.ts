@@ -50,7 +50,7 @@ export const SignUpInstructor: ExpressHandler<
     lastName,
     password: getPasswordHashed(password),
     departmentId,
-    joinedAt: new Date(),
+    joinedAt: Date.now(),
   };
 
   await db.createInstructor(Instructor);

@@ -5,7 +5,7 @@ export interface User {
   phone: string;
   email: string;
   password: string;
-  joinedAt: Date;
+  joinedAt: number;
   departmentId: string;
 }
 
@@ -98,7 +98,7 @@ export interface InstructorAnswer extends Comment {
 export interface Quiz {
   id: string;
   name: string;
-  quizDate: Date;
+  quizDate: number;
   isActive: boolean;
   courseId: string;
 }
@@ -119,20 +119,20 @@ export interface Grade {
   grade: number;
   studentId: string;
   quizId: string;
-  takenAt: Date;
+  takenAt: number;
 }
 
 export interface GradeWithName {
   grade: number;
   quizName: string;
-  takenAt: Date;
+  takenAt: number;
   studentId: string;
 }
 
 export interface QuizWithName {
   id: string;
   quizName: string;
-  quizDate: Date;
+  quizDate: number;
   courseId: string;
 }
 
@@ -171,4 +171,5 @@ export interface UserDataAndPost extends Post {
 export interface QuizTrial {
   studentId: string;
   quizId: string;
+  trialDate: number;
 }

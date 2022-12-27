@@ -5,7 +5,7 @@ CREATE TABLE `users` (
   `email` varchar(255) UNIQUE NOT NULL,
   `password` varchar(255) NOT NULL,
   `phoneNumber` varchar(255) UNIQUE NOT NULL,
-  `joinedAt` datetime NOT NULL,
+  `joinedAt` int NOT NULL,
   `departmentId` varchar(255) NOT NULL,
   FOREIGN KEY (`departmentId`) REFERENCES `departments` (`id`)
 );

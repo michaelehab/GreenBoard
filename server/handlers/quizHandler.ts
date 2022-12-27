@@ -155,7 +155,7 @@ export const getQuiz: ExpressHandlerWithParams<
       return res.status(403).send({ error: "Quiz already taken" });
     }
 
-    await db.logQuizTrial(existingUser.id, req.params.quizId);
+    await db.logQuizTrial(existingUser.id, req.params.quizId, Date.now());
   }
 
   return res.send({
@@ -200,7 +200,7 @@ export const toggleQuizActivation: ExpressHandlerWithParams<
     return res.status(404).send({ error: "Quiz not found" });
   }
 
-  await db.toggleQuizAcivation(!quiz1.isActive, req.params.quizId);
+  await db.toggleQuizActivation(!quiz1.isActive, req.params.quizId);
 
   return res.status(200).send({
     isActive: !quiz1.isActive,

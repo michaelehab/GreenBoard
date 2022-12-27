@@ -477,7 +477,7 @@ export class SQLDataStore implements DataStore {
     );
   }
 
-  async toggleQuizAcivation(isActive: boolean, quizId: string): Promise<void> {
+  async toggleQuizActivation(isActive: boolean, quizId: string): Promise<void> {
     await this.db.run(
       "UPDATE quizzes SET isActive=? WHERE id=?",
       isActive,
@@ -517,16 +517,21 @@ export class SQLDataStore implements DataStore {
     courseId: string
   ): Promise<QuizWithName[]> {
     return await this.db.all<QuizWithName[]>(
-      "SELECT id, name as quizName, quizDate, courseId FROM quizzes where isActive = 1 AND courseId = ? ORDER BY quizDate ASC",
+      "SELECT id, name as quizName, quizDate, courseId FROM quizzes where isActive = 1 AND courseId = ? ORDER BY quizDate DESC",
       courseId
     );
   }
 
-  async logQuizTrial(studentId: string, quizId: string): Promise<void> {
+  async logQuizTrial(
+    studentId: string,
+    quizId: string,
+    trialDate: number
+  ): Promise<void> {
     await this.db.run(
-      "INSERT INTO quizzes_logs(studentId, quizId) VALUES (?,?)",
+      "INSERT INTO quizzes_logs(studentId, quizId, trialDate) VALUES (?,?,?)",
       studentId,
-      quizId
+      quizId,
+      trialDate
     );
   }
   async checkIfQuizTrialExist(
@@ -541,7 +546,7 @@ export class SQLDataStore implements DataStore {
   }
   async getQuizzesByCourseId(courseId: string): Promise<QuizWithName[]> {
     return await this.db.all<QuizWithName[]>(
-      "SELECT id, name as quizName, quizDate, courseId FROM quizzes where courseId = ? ORDER BY quizDate ASC",
+      "SELECT id, name as quizName, quizDate, courseId FROM quizzes where courseId = ? ORDER BY quizDate DESC",
       courseId
     );
   }
