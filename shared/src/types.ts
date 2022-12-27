@@ -173,3 +173,12 @@ export interface QuizTrial {
   quizId: string;
   trialDate: number;
 }
+
+export interface ClientQuizQuestion {
+  question: string;
+  choiceA: string;
+  choiceB: string;
+  choiceC: string;
+  choiceD: string;
+  weight: number;
+}

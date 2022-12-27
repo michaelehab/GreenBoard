@@ -128,11 +128,6 @@ export const getQuiz: ExpressHandlerWithParams<
     return res.status(404).send({ error: "Quiz not found" });
   }
 
-  const questions = await db.getQuizQuestionsByQuizId(req.params.quizId);
-  if (!questions) {
-    return res.status(404).send({ error: "Quiz Questions not found" });
-  }
-
   const existingEnrollment = await db.checkEnrollment(
     existingUser.id,
     req.params.courseId
@@ -141,6 +136,8 @@ export const getQuiz: ExpressHandlerWithParams<
   if (!existingEnrollment) {
     return res.status(403).send({ error: "Not enrolled in this course" });
   }
+
+  let questions;
 
   if (res.locals.role === "STUDENT") {
     if (!existingQuiz.isActive) {
@@ -156,6 +153,10 @@ export const getQuiz: ExpressHandlerWithParams<
     }
 
     await db.logQuizTrial(existingUser.id, req.params.quizId, Date.now());
+
+    questions = await db.getClientQuizQuestionsByQuizId(req.params.quizId);
+  } else {
+    questions = await db.getQuizQuestionsByQuizId(req.params.quizId);
   }
 
   return res.send({

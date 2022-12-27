@@ -11,13 +11,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { isLoggedInInstructor, isLoggedInUser } from "../utils/auth";
+import {
+  isLoggedInInstructor,
+  isLoggedInStudent,
+  isLoggedInUser,
+} from "../utils/auth";
 import { callEndpoint } from "../utils/callEndpoint";
 import { NotFound } from "./notFound";
 import { GetQuizRequest, GetQuizResponse } from "@greenboard/shared";
 import { submitQuiz } from "../utils/grade";
 import { ApiError } from "../utils/apiError";
 import { toggleQuiz } from "../utils/quiz";
+import { QuizQuestionCard } from "../components/quizQuestionCard";
 
 export const ViewQuiz = () => {
   const { courseId, quizId } = useParams();
@@ -133,7 +138,7 @@ export const ViewQuiz = () => {
             </Checkbox>
           )}
         </Box>
-        {!confirmSubmit && (
+        {!confirmSubmit && isLoggedInStudent() && (
           <Box>
             <Text>{quizData.questions[currentQuestion].question}</Text>
             <Stack direction="column">
@@ -186,7 +191,7 @@ export const ViewQuiz = () => {
             </Flex>
           </Box>
         )}
-        {confirmSubmit && (
+        {confirmSubmit && isLoggedInStudent() && (
           <Box>
             <Text>Are you sure you want to submit the quiz?</Text>
             <Button
@@ -211,6 +216,10 @@ export const ViewQuiz = () => {
             </Button>
           </Box>
         )}
+        {isLoggedInInstructor() &&
+          quizData.questions.map((question, i) => (
+            <QuizQuestionCard key={i} {...question} />
+          ))}
       </Flex>
     </Container>
   );

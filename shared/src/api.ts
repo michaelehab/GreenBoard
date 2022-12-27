@@ -21,6 +21,7 @@ import {
   QuizWithName,
   UserDataAndComment,
   UserDataAndPost,
+  ClientQuizQuestion,
 } from "./types";
 
 export interface SignInRequest {
@@ -289,7 +290,7 @@ export interface ToggleQuizActivationResponse {
 export interface GetQuizRequest {}
 export interface GetQuizResponse {
   quiz: Quiz;
-  questions: QuizQuestion[];
+  questions: Partial<QuizQuestion>[];
 }
 
 export interface SubmitQuizRequest {

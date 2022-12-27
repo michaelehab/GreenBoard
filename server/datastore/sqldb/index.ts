@@ -24,6 +24,7 @@ import {
   UserDataAndComment,
   UserDataAndPost,
   QuizTrial,
+  ClientQuizQuestion,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -504,11 +505,18 @@ export class SQLDataStore implements DataStore {
     return await this.db.get<Quiz>("SELECT * FROM quizzes where id= ?", id);
   }
 
-  async getQuizQuestionsByQuizId(
-    QuizId: string
-  ): Promise<QuizQuestion[] | undefined> {
+  async getQuizQuestionsByQuizId(QuizId: string): Promise<QuizQuestion[]> {
     return await this.db.all<QuizQuestion[]>(
       "SELECT * FROM quizzes_questions where quizId=?",
+      QuizId
+    );
+  }
+
+  async getClientQuizQuestionsByQuizId(
+    QuizId: string
+  ): Promise<ClientQuizQuestion[]> {
+    return await this.db.all<ClientQuizQuestion[]>(
+      "SELECT question, choiceA, choiceB, choiceC, choiceD, weight FROM quizzes_questions where quizId=?",
       QuizId
     );
   }
