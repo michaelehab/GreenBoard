@@ -209,7 +209,7 @@ export const studentSignUp = async (
   departmentId: string
 ) => {
   const res = await callEndpoint<StudentSignUpRequest, StudentSignUpResponse>(
-    "/student/signup",
+    "/students/signup",
     "POST",
     false,
     {

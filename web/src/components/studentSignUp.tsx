@@ -3,45 +3,51 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
 import { ApiError } from "../utils/apiError";
-import { isLoggedIn, getLocalDepartmentId, studentSignUp } from "../utils/auth";
+import {
+  isLoggedIn,
+  getLocalDepartmentId,
+  studentSignUp,
+  isLoggedInDepartment,
+} from "../utils/auth";
 export const StudentSignUp = () => {
   useTitle("Sign Up");
   const navigate = useNavigate();
-  const [Firstname, setFirstName] = useState("");
-  const [Lastname, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [level, setlevel] = useState(0);
-  const [adminPassword, setAdminPassword] = useState("");
-  const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
-  const departmentId: string = getLocalDepartmentId();
+  const [level, setLevel] = useState(0);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+
+  const departmentId: string = getLocalDepartmentId();
 
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       if (departmentId === "") setError("Please signin department first");
       if (
-        confirmAdminPassWord === "" ||
+        confirmPassword === "" ||
         phone === "" ||
-        Lastname === "" ||
-        Firstname === "" ||
+        lastName === "" ||
+        firstName === "" ||
         email === "" ||
-        adminPassword === "" ||
+        password === "" ||
         level === 0
       ) {
         setError("Please make sure all the fields are not empty!");
-      } else if (adminPassword !== confirmAdminPassWord) {
+      } else if (password !== confirmPassword) {
         setError("Confirm Password doesn't match password!");
       } else {
         try {
           await studentSignUp(
             email,
-            Firstname,
-            Lastname,
+            firstName,
+            lastName,
             phone,
             level,
-            adminPassword,
+            password,
             departmentId
           );
           navigate("/");
@@ -55,17 +61,17 @@ export const StudentSignUp = () => {
     [
       navigate,
       email,
-      Firstname,
-      Lastname,
+      firstName,
+      lastName,
       phone,
       level,
-      adminPassword,
-      confirmAdminPassWord,
+      password,
+      confirmPassword,
       departmentId,
     ]
   );
   useEffect(() => {
-    if (!isLoggedIn()) {
+    if (!isLoggedInDepartment()) {
       navigate("/");
     }
   }, [navigate]);
@@ -75,13 +81,13 @@ export const StudentSignUp = () => {
         <Flex gap={2}>
           <Input
             placeholder="First Name"
-            value={Firstname}
+            value={firstName}
             variant="outline"
             onChange={(e) => setFirstName(e.target.value)}
           />
           <Input
             placeholder="Last Name"
-            value={Lastname}
+            value={lastName}
             variant="outline"
             onChange={(e) => setLastName(e.target.value)}
           />
@@ -106,21 +112,21 @@ export const StudentSignUp = () => {
           value={level}
           type="number"
           variant="outline"
-          onChange={(e) => setlevel(e.target.valueAsNumber)}
+          onChange={(e) => setLevel(e.target.valueAsNumber)}
         />
         <Input
-          placeholder="Admin Password"
+          placeholder="Password"
           type="password"
           variant="outline"
-          value={adminPassword}
-          onChange={(e) => setAdminPassword(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <Input
-          placeholder="Confirm Admin Password"
+          placeholder="Confirm Password"
           type="password"
           variant="outline"
-          value={confirmAdminPassWord}
-          onChange={(e) => setConfirmAdminPassWord(e.target.value)}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
         <Box m="auto">
