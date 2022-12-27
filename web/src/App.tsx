@@ -16,6 +16,8 @@ import { NotFound } from "./pages/notFound";
 import { SchoolSignUp } from "./components/schoolSignUp";
 import { ViewCoursePost } from "./pages/viewCoursePost";
 import { DepartmentSignUp } from "./components/departmentSignUp";
+import { InstructorSignUp } from "./components/instructorSignUp";
+import { StudentSignUp } from "./components/studentSignUp";
 import { ViewStudentQuestion } from "./pages/viewStudentQuestion";
 import { CreateQuiz } from "./pages/createQuiz";
 import { ViewQuiz } from "./pages/viewQuiz";
@@ -53,6 +55,9 @@ export const App = () => {
         <Route path="/new/announcement" element={<CreateAnnouncement />} />
         <Route path="/new/school" element={<SchoolSignUp />} />
         <Route path="/new/department" element={<DepartmentSignUp />} />
+        <Route path="/new/instructor" element={<InstructorSignUp />} />
+        <Route path="/new/student" element={<StudentSignUp />} />
+
         <Route path="/courses/:courseId/new/quiz" element={<CreateQuiz />} />
         <Route
           path="/courses/:courseId/quizzes/:quizId"

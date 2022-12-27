@@ -6,10 +6,14 @@ import {
   DepartmentSignUpRequest,
   DepartmentSignUpResponse,
   InstructorSignInResponse,
+  InstructorSignUpRequest,
+  InstructorSignUpResponse,
   SchoolSignInResponse,
   SchoolSignUpRequest,
   SignInRequest,
   StudentSignInResponse,
+  StudentSignUpRequest,
+  StudentSignUpResponse,
 } from "@greenboard/shared";
 
 import { callEndpoint } from "./callEndpoint";
@@ -158,7 +162,7 @@ export const schoolSignUp = async (
 ) => {
   const res = await callEndpoint<SchoolSignUpRequest, SchoolSignInResponse>(
     "/school/signup",
-    "post",
+    "POST",
     false,
     {
       email,
@@ -170,6 +174,57 @@ export const schoolSignUp = async (
   );
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
 };
+export const getLocalDepartmentId = (): string => {
+  const getId = localStorage.getItem(LOCAL_STORAGE_DepartmentID);
+  return getId || "";
+};
+export const instructorSignUp = async (
+  email: string,
+  firstName: string,
+  lastName: string,
+  phone: string,
+  password: string,
+  departmentId: string
+) => {
+  const res = await callEndpoint<
+    InstructorSignUpRequest,
+    InstructorSignUpResponse
+  >("/instructor/signup", "POST", false, {
+    email,
+    firstName,
+    lastName,
+    phone,
+    password,
+    departmentId,
+  });
+  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+};
+export const studentSignUp = async (
+  email: string,
+  firstName: string,
+  lastName: string,
+  phone: string,
+  level: number,
+  password: string,
+  departmentId: string
+) => {
+  const res = await callEndpoint<StudentSignUpRequest, StudentSignUpResponse>(
+    "/students/signup",
+    "POST",
+    false,
+    {
+      email,
+      firstName,
+      lastName,
+      phone,
+      level,
+      password,
+      departmentId,
+    }
+  );
+  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+};
+
 export const getLocalSchoolId = (): string => {
   const getId = localStorage.getItem(LOCAL_STORAGE_SchoolID);
   return getId || "";
@@ -183,7 +238,7 @@ export const departmentSignUp = async (
   const res = await callEndpoint<
     DepartmentSignUpRequest,
     DepartmentSignUpResponse
-  >("/department/signup", "post", false, {
+  >("/department/signup", "POST", false, {
     email,
     name,
     schoolId,
@@ -201,7 +256,7 @@ export const collegeSignUp = async (
 ) => {
   const res = await callEndpoint<CollegeSignUpRequest, CollegeSignUpResponse>(
     "/college/signup",
-    "post",
+    "POST",
     false,
     {
       email,

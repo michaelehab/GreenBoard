@@ -23,6 +23,7 @@ import {
   isLoggedIn,
   isLoggedInAdmin,
   isLoggedInCollege,
+  isLoggedInDepartment,
   isLoggedInSchool,
   isLoggedInUser,
   signOut,
@@ -92,6 +93,32 @@ export const NavBar = () => {
                     Create Department
                   </Button>
                 </Link>
+              )}
+              {isLoggedInDepartment() && (
+                <>
+                  <Link to={"/new/instructor"}>
+                    <Button
+                      variant={"solid"}
+                      colorScheme="green"
+                      size={"sm"}
+                      mr={4}
+                      leftIcon={<AddIcon />}
+                    >
+                      Add Instructor
+                    </Button>
+                  </Link>
+                  <Link to={"/new/student"}>
+                    <Button
+                      variant={"solid"}
+                      colorScheme="green"
+                      size={"sm"}
+                      mr={4}
+                      leftIcon={<AddIcon />}
+                    >
+                      Add Student
+                    </Button>
+                  </Link>
+                </>
               )}
 
               {isLoggedInUser() && isLargerThan600 && (
