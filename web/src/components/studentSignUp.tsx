@@ -26,7 +26,6 @@ export const StudentSignUp = () => {
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
-      if (departmentId === "") setError("Please signin department first");
       if (
         confirmPassword === "" ||
         phone === "" ||
@@ -36,8 +35,10 @@ export const StudentSignUp = () => {
         password === "" ||
         level === 0
       ) {
+        setSuccess("");
         setError("Please make sure all the fields are not empty!");
       } else if (password !== confirmPassword) {
+        setSuccess("");
         setError("Confirm Password doesn't match password!");
       } else {
         try {
@@ -50,9 +51,11 @@ export const StudentSignUp = () => {
             password,
             departmentId
           );
+          setError("");
           setSuccess("Student Registered Successfully");
         } catch (err) {
           if (err instanceof ApiError) {
+            setSuccess("");
             setError(err.message);
           }
         }

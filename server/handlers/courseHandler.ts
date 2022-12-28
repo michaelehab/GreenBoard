@@ -16,7 +16,6 @@ import {
 import { db } from "../datastore";
 import crypto from "crypto";
 import { getPasswordHashed } from "../utils";
-import e from "express";
 
 export const CreateCourse: ExpressHandler<
   CreateCourseRequest,

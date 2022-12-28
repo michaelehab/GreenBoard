@@ -17,7 +17,7 @@ import {
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
-import { getPasswordHashed } from "../utils";
+import { getPasswordHashed, validateEmail } from "../utils";
 import { signJwt } from "../auth";
 
 export const SignUpStudent: ExpressHandler<
@@ -43,6 +43,9 @@ export const SignUpStudent: ExpressHandler<
     !departmentId
   ) {
     return res.status(400).send({ error: "All Fields are required!" });
+  }
+  if (!validateEmail(email)) {
+    return res.status(400).send({ error: "Email is not valid" });
   }
   let existingStudent = await db.getStudentByEmail(email);
 
@@ -141,6 +144,9 @@ export const UpdateStudent: ExpressHandler<
   if (firstName) existingStudent.firstName = firstName;
   if (lastName) existingStudent.lastName = lastName;
   if (email) {
+    if (!validateEmail(email)) {
+      return res.status(400).send({ error: "Email is not valid" });
+    }
     const studentWithSameEmail = await db.getStudentByEmail(email);
     if (studentWithSameEmail && email !== existingStudent.email) {
       return res.status(400).send({ error: "Student with same email exists" });

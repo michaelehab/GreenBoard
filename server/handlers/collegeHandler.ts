@@ -18,7 +18,7 @@ import {
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
-import { getPasswordHashed } from "../utils";
+import { getPasswordHashed, validateEmail } from "../utils";
 import { signJwt } from "../auth";
 
 export const SignUpCollege: ExpressHandler<
@@ -33,6 +33,10 @@ export const SignUpCollege: ExpressHandler<
 
   if (existingCollege) {
     return res.status(403).send({ error: "College already exists!" });
+  }
+
+  if (!validateEmail(email)) {
+    return res.status(400).send({ error: "Email is not valid" });
   }
 
   const college: College = {
@@ -115,6 +119,9 @@ export const UpdateCollege: ExpressHandler<
 
   if (name) existingCollege.name = name;
   if (email) {
+    if (!validateEmail(email)) {
+      return res.status(400).send({ error: "Email is not valid" });
+    }
     const collegeWithSameEmail = await db.getCollegeByEmail(email);
     if (collegeWithSameEmail && email !== existingCollege.email) {
       return res.status(400).send({ error: "College with same email exists" });

@@ -23,17 +23,20 @@ export const DepartmentSignUp = () => {
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
-      if (schoolId === "") setError("Please signin school first");
       if (name === "" || email === "" || adminPassword === "") {
+        setSuccess("");
         setError("Please make sure all the fields are not empty!");
       } else if (adminPassword !== confirmAdminPassWord) {
+        setSuccess("");
         setError("Confirm Password doesn't match password!");
       } else {
         try {
           await departmentSignUp(email, name, schoolId, adminPassword);
+          setError("");
           setSuccess("Department Registered Successfully");
         } catch (err) {
           if (err instanceof ApiError) {
+            setSuccess("");
             setError(err.message);
           }
         }

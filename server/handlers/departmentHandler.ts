@@ -19,7 +19,7 @@ import {
 import { db } from "../datastore";
 import crypto from "crypto";
 import { signJwt } from "../auth";
-import { getPasswordHashed } from "../utils";
+import { getPasswordHashed, validateEmail } from "../utils";
 
 export const SignUpDepartment: ExpressHandler<
   DepartmentSignUpRequest,
@@ -33,6 +33,10 @@ export const SignUpDepartment: ExpressHandler<
 
   if (existingDepartment) {
     return res.status(403).send({ error: "Department already exists!" });
+  }
+
+  if (!validateEmail(email)) {
+    return res.status(400).send({ error: "Email is not valid" });
   }
 
   const department: Department = {
@@ -109,6 +113,9 @@ export const UpdateDepartment: ExpressHandler<
 
   if (name) existingDepartment.name = name;
   if (email) {
+    if (!validateEmail(email)) {
+      return res.status(400).send({ error: "Email is not valid" });
+    }
     const departmentWithSameEmail = await db.getDepartmentByEmail(email);
     if (departmentWithSameEmail && email !== existingDepartment.email) {
       return res

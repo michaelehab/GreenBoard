@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useTitle } from "../utils/useTitle";
 import { Link } from "react-router-dom";
+import { isLoggedIn } from "../utils/auth";
 
 export const Home = () => {
   useTitle("Home");
@@ -43,20 +44,22 @@ export const Home = () => {
             GreenBoard helps you teach your students, learn from your courses,
             manage your college
           </Text>
-          <Stack direction={{ base: "column", md: "row" }} spacing={4}>
-            <Link to={"/signup"}>
-              <Button
-                rounded={"full"}
-                bg={"#4d7e3e"}
-                color={"white"}
-                _hover={{
-                  bg: "green.500",
-                }}
-              >
-                Join Now
-              </Button>
-            </Link>
-          </Stack>
+          {!isLoggedIn() && (
+            <Stack direction={{ base: "column", md: "row" }} spacing={4}>
+              <Link to={"/signup"}>
+                <Button
+                  rounded={"full"}
+                  bg={"#4d7e3e"}
+                  color={"white"}
+                  _hover={{
+                    bg: "green.500",
+                  }}
+                >
+                  Join Now
+                </Button>
+              </Link>
+            </Stack>
+          )}
         </Stack>
       </Flex>
       <Flex flex={1}>

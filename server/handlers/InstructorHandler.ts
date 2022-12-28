@@ -16,7 +16,7 @@ import {
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
-import { getPasswordHashed } from "../utils";
+import { getPasswordHashed, validateEmail } from "../utils";
 import { signJwt } from "../auth";
 import { emit } from "process";
 
@@ -35,6 +35,9 @@ export const SignUpInstructor: ExpressHandler<
     !departmentId
   ) {
     return res.status(400).send({ error: "All Fields are required!" });
+  }
+  if (!validateEmail(email)) {
+    return res.status(400).send({ error: "Email is not valid" });
   }
   let existingInstructor = await db.getInstructorByEmail(email);
 
@@ -134,8 +137,30 @@ export const UpdateInstructor: ExpressHandler<
 
   if (firstName) existingInstructor.firstName = firstName;
   if (lastName) existingInstructor.lastName = lastName;
-  if (email) existingInstructor.email = email;
-  if (phoneNumber) existingInstructor.phoneNumber = phoneNumber;
+  if (email) {
+    if (!validateEmail(email)) {
+      return res.status(400).send({ error: "Email is not valid" });
+    }
+    const instructorWithSameEmail = await db.getInstructorByEmail(email);
+    if (instructorWithSameEmail && email !== existingInstructor.email) {
+      return res.status(400).send({ error: "Student with same email exists" });
+    }
+    existingInstructor.email = email;
+  }
+  if (phoneNumber) {
+    const instructorWithSamePhoneNumber = await db.getInstructorByPhoneNumber(
+      phoneNumber
+    );
+    if (
+      instructorWithSamePhoneNumber &&
+      phoneNumber !== existingInstructor.phoneNumber
+    ) {
+      return res
+        .status(400)
+        .send({ error: "Student with same phone number exists" });
+    }
+    existingInstructor.phoneNumber = phoneNumber;
+  }
 
   await db.updateInstructorData(existingInstructor);
   return res.status(200).send({

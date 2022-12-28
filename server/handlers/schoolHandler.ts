@@ -19,8 +19,7 @@ import {
 import { db } from "../datastore";
 import crypto from "crypto";
 import { signJwt } from "../auth";
-import { getPasswordHashed } from "../utils";
-import { GetEffectiveTypeRootsHost } from "typescript";
+import { getPasswordHashed, validateEmail } from "../utils";
 
 export const SignUpSchool: ExpressHandler<
   SchoolSignUpRequest,
@@ -41,6 +40,10 @@ export const SignUpSchool: ExpressHandler<
   const validCollege = await db.getCollegeById(collegeId);
   if (!validCollege) {
     return res.status(403).send({ error: "College ID is invalid!" });
+  }
+
+  if (!validateEmail(email)) {
+    return res.status(400).send({ error: "Email is not valid" });
   }
 
   const school: School = {
@@ -121,6 +124,9 @@ export const UpdateSchool: ExpressHandler<
 
   if (name) existingSchool.name = name;
   if (email) {
+    if (!validateEmail(email)) {
+      return res.status(400).send({ error: "Email is not valid" });
+    }
     const schoolWithSameEmail = await db.getSchoolByEmail(email);
     if (schoolWithSameEmail && email !== existingSchool.email) {
       return res.status(400).send({ error: "School with same email exists" });

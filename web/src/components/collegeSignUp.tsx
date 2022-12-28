@@ -40,8 +40,10 @@ export const CollegeSignUp = () => {
         foundedAt === 0 ||
         adminPassword === ""
       ) {
+        setSuccess("");
         setError("Please make sure all the fields are not empty!");
       } else if (adminPassword !== confirmAdminPassWord) {
+        setSuccess("");
         setError("Confirm Password doesn't match password!");
       } else {
         try {
@@ -53,9 +55,11 @@ export const CollegeSignUp = () => {
             location,
             adminPassword
           );
+          setError("");
           setSuccess("College Signed Up Successfully");
         } catch (err) {
           if (err instanceof ApiError) {
+            setSuccess("");
             setError(err.message);
           }
         }
