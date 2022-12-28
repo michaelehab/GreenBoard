@@ -38,6 +38,7 @@ import { useCallback } from "react";
 export const NavBar = () => {
   const navigate = useNavigate();
   const [isLargerThan600] = useMediaQuery("(min-width: 600px)");
+  const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
 
   const onSignOut = useCallback(() => {
     signOut();
@@ -59,7 +60,7 @@ export const NavBar = () => {
           </HStack>
           {isLoggedIn() ? (
             <Flex alignItems={"center"}>
-              {isLoggedInAdmin() && (
+              {isLoggedInAdmin() && isLargerThan600 && (
                 <Link to={"/new/announcement"}>
                   <Button
                     variant={"solid"}
@@ -72,7 +73,7 @@ export const NavBar = () => {
                   </Button>
                 </Link>
               )}
-              {isLoggedInCollege() && (
+              {isLoggedInCollege() && isLargerThan600 && (
                 <Link to={"/new/school"}>
                   <Button
                     variant={"solid"}
@@ -85,7 +86,7 @@ export const NavBar = () => {
                   </Button>
                 </Link>
               )}
-              {isLoggedInSchool() && (
+              {isLoggedInSchool() && isLargerThan600 && (
                 <Link to={"/new/department"}>
                   <Button
                     variant={"solid"}
@@ -98,7 +99,7 @@ export const NavBar = () => {
                   </Button>
                 </Link>
               )}
-              {isLoggedInDepartment() && (
+              {isLoggedInDepartment() && isLargerThan800 && (
                 <>
                   <Link to={"/new/instructor"}>
                     <Button
@@ -172,6 +173,31 @@ export const NavBar = () => {
                       </MenuItem>
                       <MenuItem>
                         <Link to={"/courses"}>My Courses</Link>
+                      </MenuItem>
+                    </>
+                  )}
+                  {!isLargerThan600 && isLoggedInAdmin() && (
+                    <MenuItem>
+                      <Link to={"/new/announcement"}>Create Announcement</Link>
+                    </MenuItem>
+                  )}
+                  {!isLargerThan600 && isLoggedInCollege() && (
+                    <MenuItem>
+                      <Link to={"/new/school"}>Create School</Link>
+                    </MenuItem>
+                  )}
+                  {!isLargerThan600 && isLoggedInSchool() && (
+                    <MenuItem>
+                      <Link to={"/new/department"}>Create Department</Link>
+                    </MenuItem>
+                  )}
+                  {!isLargerThan800 && isLoggedInDepartment() && (
+                    <>
+                      <MenuItem>
+                        <Link to={"/new/instructor"}>Add Instructor</Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link to={"/new/student"}>Add Student</Link>
                       </MenuItem>
                     </>
                   )}
