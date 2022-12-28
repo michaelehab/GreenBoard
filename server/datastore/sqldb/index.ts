@@ -100,7 +100,7 @@ export class SQLDataStore implements DataStore {
       user.lastName,
       user.email,
       user.password,
-      user.phone,
+      user.phoneNumber,
       user.joinedAt,
       user.departmentId
     );
@@ -287,6 +287,24 @@ export class SQLDataStore implements DataStore {
       "SELECT * FROM users JOIN instructors ON users.id = instructors.id WHERE users.phoneNumber = ?",
       phone
     );
+  }
+
+  async updateUserData(user: User): Promise<void> {
+    await this.db.run(
+      "UPDATE users SET firstName=?,lastName=?,email=?,phoneNumber=? WHERE id=?",
+      user.firstName,
+      user.lastName,
+      user.email,
+      user.phoneNumber,
+      user.id
+    );
+  }
+  async updateInstructorData(instructor: Instructor): Promise<void> {
+    await this.updateUserData(instructor);
+  }
+
+  async updateStudentData(student: Student): Promise<void> {
+    await this.updateUserData(student);
   }
 
   async updateSchool(school: School): Promise<void> {
