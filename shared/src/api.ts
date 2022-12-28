@@ -127,6 +127,12 @@ export interface SchoolSignInResponse {
   jwt: string;
 }
 
+export interface GetSchoolRequest {}
+export interface GetSchoolResponse {
+  school: Pick<School, "name" | "phone" | "email" >;
+  collegeName:string;
+}
+
 export type SchoolUpdateRequest = Partial<School>;
 export interface SchoolUpdateResponse {
   school: Pick<School, "id" | "email" | "collegeId" | "name" | "phone">;
@@ -150,6 +156,12 @@ export interface DepartmentSignUpResponse {
 export interface DepartmentSignInResponse {
   department: Pick<Department, "id" | "email" | "name" | "schoolId">;
   jwt: string;
+}
+
+export interface GetDepartmentRequest {}
+export interface GetDepartmentResponse {
+  department: Pick<Department, "name" | "email" >;
+  schoolName:string;
 }
 
 export type DepartmentUpdateRequest = Partial<Department>;
