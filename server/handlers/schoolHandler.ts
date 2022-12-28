@@ -1,4 +1,8 @@
-import { ExpressHandler, SchoolJwtPayload } from "../types";
+import {
+  ExpressHandler,
+  ExpressHandlerWithParams,
+  SchoolJwtPayload,
+} from "../types";
 import {
   School,
   SchoolSignInResponse,
@@ -6,12 +10,15 @@ import {
   SchoolSignUpResponse,
   SignInRequest,
   SchoolUpdateRequest,
-  SchoolUpdateResponse
+  SchoolUpdateResponse,
+  GetSchoolRequest,
+  GetSchoolResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
 import { signJwt } from "../auth";
 import { getPasswordHashed } from "../utils";
+import { GetEffectiveTypeRootsHost } from "typescript";
 
 export const SignUpSchool: ExpressHandler<
   SchoolSignUpRequest,
@@ -91,8 +98,8 @@ export const SignInSchool: ExpressHandler<
 };
 
 export const UpdateSchool: ExpressHandler<
-SchoolUpdateRequest,
-SchoolUpdateResponse
+  SchoolUpdateRequest,
+  SchoolUpdateResponse
 > = async (req, res) => {
   const { name, email, phone } = req.body;
 
@@ -117,12 +124,36 @@ SchoolUpdateResponse
   await db.updateSchool(existingSchool);
   return res.status(200).send({
     school: {
-      id: existingSchool.id,
       email: existingSchool.email,
       name: existingSchool.name,
       phone: existingSchool.phone,
-      collegeId:existingSchool.collegeId
+      collegeId: existingSchool.collegeId,
     },
   });
 };
 
+export const GetSchoolById: ExpressHandlerWithParams<
+  { schoolId: string },
+  GetSchoolRequest,
+  GetSchoolResponse
+> = async (req, res) => {
+  if (!req.params.schoolId) {
+    return res.status(400).send({ error: "schoolId is required" });
+  }
+  const existingSchool = await db.getSchoolById(req.params.schoolId);
+
+  if (!existingSchool) {
+    return res.status(404).send({ error: "School not found" });
+  }
+
+  const existingCollege = await db.getCollegeById(existingSchool.collegeId);
+
+  return res.status(200).send({
+    school: {
+      email: existingSchool.email,
+      name: existingSchool.name,
+      phone: existingSchool.phone,
+    },
+    collegeName: existingCollege?.name,
+  });
+};

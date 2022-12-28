@@ -24,6 +24,10 @@ import { ViewQuiz } from "./pages/viewQuiz";
 import { ViewGrades } from "./components/viewGrades";
 import { EditCollegeProfile } from "./pages/EditCollegeProfile";
 import { CollegeProfile } from "./pages/CollegeProfile";
+import { SchoolProfile } from "./pages/schoolProfile";
+import { EditSchoolProfile } from "./pages/EditSchoolProfile";
+import { DepartmentProfile } from "./pages/departmentProfile";
+import { EditDepartmentProfile } from "./pages/EditDepartmentProfile";
 
 export const App = () => {
   return (
@@ -67,6 +71,13 @@ export const App = () => {
         />
         <Route path="/colleges/:collegeId" element={<CollegeProfile />} />
         <Route path="/colleges/edit" element={<EditCollegeProfile />} />
+        <Route path="/schools/:schoolId" element={<SchoolProfile />} />
+        <Route path="/school/edit" element={<EditSchoolProfile />} />
+        <Route
+          path="/departments/:departmentId"
+          element={<DepartmentProfile />}
+        />
+        <Route path="/department/edit" element={<EditDepartmentProfile />} />
         <Route path="/courses/:courseId/grades" element={<ViewGrades />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

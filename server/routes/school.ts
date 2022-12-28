@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { SignUpSchool, SignInSchool,UpdateSchool } from "../handlers/schoolHandler";
+import { SignUpSchool, SignInSchool,UpdateSchool, GetSchoolById } from "../handlers/schoolHandler";
 import {
     parseJwtMiddleware,
     requireJwtMiddleware,
@@ -11,5 +11,6 @@ router.post("/signin", SignInSchool);
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
 router.put("/update", UpdateSchool);
+router.get("/:schoolId",GetSchoolById);
 
 export default router;

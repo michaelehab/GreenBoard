@@ -1,4 +1,8 @@
-import { DepartmentJwtPayload, ExpressHandler } from "../types";
+import {
+  DepartmentJwtPayload,
+  ExpressHandler,
+  ExpressHandlerWithParams,
+} from "../types";
 import {
   Department,
   DepartmentSignUpRequest,
@@ -6,7 +10,9 @@ import {
   SignInRequest,
   DepartmentSignInResponse,
   DepartmentUpdateRequest,
-  DepartmentUpdateResponse
+  DepartmentUpdateResponse,
+  GetDepartmentRequest,
+  GetDepartmentResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -77,7 +83,7 @@ export const SignInDepartment: ExpressHandler<
       name: existingDepartment.name,
       schoolId: existingDepartment.schoolId,
     },
-    jwt: signJwt( tokenPayload ),
+    jwt: signJwt(tokenPayload),
   });
 };
 
@@ -87,14 +93,13 @@ export const UpdateDepartment: ExpressHandler<
 > = async (req, res) => {
   const { name, email } = req.body;
 
-  if (
-    (!name || name === "") &&
-    (!email || email === "") 
-  ) {
+  if ((!name || name === "") && (!email || email === "")) {
     return res.status(400).send({ error: "At least one field is required" });
   }
 
-  const existingDepartment = await db.getDepartmentById(res.locals.departmentId);
+  const existingDepartment = await db.getDepartmentById(
+    res.locals.departmentId
+  );
 
   if (!existingDepartment) {
     return res.status(404).send({ error: "Department not found" });
@@ -106,10 +111,36 @@ export const UpdateDepartment: ExpressHandler<
   await db.updateDepartment(existingDepartment);
   return res.status(200).send({
     department: {
-      id: existingDepartment.id,
       email: existingDepartment.email,
       name: existingDepartment.name,
-      schoolId:existingDepartment.schoolId
+      schoolId: existingDepartment.schoolId,
     },
+  });
+};
+
+export const GetDepartmentById: ExpressHandlerWithParams<
+  { departmentId: string },
+  GetDepartmentRequest,
+  GetDepartmentResponse
+> = async (req, res) => {
+  if (!req.params.departmentId) {
+    return res.status(400).send({ error: "departmentId is required" });
+  }
+  const existingDepartment = await db.getDepartmentById(
+    req.params.departmentId
+  );
+
+  if (!existingDepartment) {
+    return res.status(404).send({ error: "Department not found" });
+  }
+
+  const existingSchool = await db.getSchoolById(existingDepartment.schoolId);
+
+  return res.status(200).send({
+    department: {
+      email: existingDepartment.email,
+      name: existingDepartment.name,
+    },
+    schoolName: existingSchool?.name,
   });
 };
