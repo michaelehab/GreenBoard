@@ -1,6 +1,12 @@
 import { StudentSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
-import { SEED_DEPARTMENT } from "../datastore/sqldb/seeds";
+import {
+  SEED_COLLEGE,
+  SEED_DEPARTMENT,
+  SEED_INSTRUCTOR,
+  SEED_INSTRUCTOR_PASSWORD,
+  SEED_SCHOOL,
+} from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("Student tests", () => {
@@ -9,6 +15,7 @@ describe("Student tests", () => {
   const newLastName: string = "updatedLastName";
   const newPhone: string = "updatedPhone";
   const newEmail: string = "Email@google.com";
+  let studentId: string;
 
   const student: StudentSignUpRequest = {
     email: "test@outlook.com",
@@ -74,6 +81,7 @@ describe("Student tests", () => {
     expect(result.body.jwt).toBeDefined();
     expect(result.body.student.firstName).toEqual(student.firstName);
     expect(result.body.student.email).toEqual(student.email);
+    studentId = result.body.student.id;
   });
 
   it("Signs in with invalid password -- /api/v1/students/signin returns 403", async () => {
@@ -99,6 +107,70 @@ describe("Student tests", () => {
     expect(result.body.jwt).toBeUndefined();
     expect(result.body.student).toBeUndefined();
   });
+
+  it("Gets student profile by id as student-- GET /api/v1/students/:studentId expects 200", async () => {
+    const result = await client
+      .get(`/api/v1/students/${studentId}`)
+      .set(
+        await getAuthToken(
+          "/api/v1/students/signin",
+          student.email,
+          student.password
+        )
+      )
+      .expect(200);
+    expect(result.body.student).toBeDefined();
+    expect(result.body.student.email).toEqual(student.email);
+    expect(result.body.student.firstName).toEqual(student.firstName);
+    expect(result.body.student.lastName).toEqual(student.lastName);
+    expect(result.body.student.phoneNumber).toEqual(student.phoneNumber);
+    expect(result.body.departmentName).toEqual(SEED_DEPARTMENT.name);
+    expect(result.body.collegeName).toEqual(SEED_COLLEGE.name);
+    expect(result.body.schoolName).toEqual(SEED_SCHOOL.name);
+  });
+
+  it("Gets student profile by id as instructor-- GET /api/v1/students/:studentId expects 200", async () => {
+    const result = await client
+      .get(`/api/v1/students/${studentId}`)
+      .set(
+        await getAuthToken(
+          "/api/v1/instructor/signin",
+          SEED_INSTRUCTOR.email,
+          SEED_INSTRUCTOR_PASSWORD
+        )
+      )
+      .expect(200);
+    expect(result.body.student).toBeDefined();
+    expect(result.body.student.email).toEqual(student.email);
+    expect(result.body.student.firstName).toEqual(student.firstName);
+    expect(result.body.student.lastName).toEqual(student.lastName);
+    expect(result.body.student.phoneNumber).toEqual(student.phoneNumber);
+    expect(result.body.departmentName).toEqual(SEED_DEPARTMENT.name);
+    expect(result.body.collegeName).toEqual(SEED_COLLEGE.name);
+    expect(result.body.schoolName).toEqual(SEED_SCHOOL.name);
+  });
+
+  it("Gets student profile by id as unauthorized-- GET /api/v1/students/:studentId expects 401", async () => {
+    const result = await client
+      .get(`/api/v1/students/${studentId}`)
+      .expect(401);
+    expect(result.body.student).toBeUndefined();
+  });
+
+  it("Gets student profile by id as instructor with invalidStudentId-- GET /api/v1/students/:studentId expects 404", async () => {
+    const result = await client
+      .get(`/api/v1/students/invalidStudentId`)
+      .set(
+        await getAuthToken(
+          "/api/v1/instructor/signin",
+          SEED_INSTRUCTOR.email,
+          SEED_INSTRUCTOR_PASSWORD
+        )
+      )
+      .expect(404);
+    expect(result.body.student).toBeUndefined();
+  });
+
   it("Updates signed in student Name -- PUT /api/v1/students/update returns 200", async () => {
     const result = await client
       .put("/api/v1/students/update")

@@ -63,6 +63,15 @@ export type StudentUpdateRequest = Partial<Student>;
 export interface StudentUpdateResponse {
   student: Pick<Student, "email" | "firstName" | "lastName" | "phoneNumber">;
 }
+
+export interface GetStudentRequest {}
+export interface GetStudentResponse {
+  student: Pick<Student, "firstName" | "lastName" | "phoneNumber" | "email">;
+  departmentName: string;
+  schoolName: string;
+  collegeName: string;
+}
+
 // Instructor APIs
 export type InstructorSignUpRequest = Pick<
   Instructor,
@@ -92,6 +101,17 @@ export interface InstructorUpdateResponse {
     Instructor,
     "email" | "firstName" | "lastName" | "phoneNumber"
   >;
+}
+
+export interface GetInstructorRequest {}
+export interface GetInstructorResponse {
+  instructor: Pick<
+    Instructor,
+    "firstName" | "lastName" | "phoneNumber" | "email"
+  >;
+  departmentName: string;
+  schoolName: string;
+  collegeName: string;
 }
 
 // College APIs

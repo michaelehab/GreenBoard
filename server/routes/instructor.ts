@@ -3,6 +3,7 @@ import {
   SignUpInstructor,
   SignInInstructor,
   UpdateInstructor,
+  GetInstructorById,
 } from "../handlers/InstructorHandler";
 import {
   parseJwtMiddleware,
@@ -15,4 +16,6 @@ router.post("/signin", SignInInstructor);
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
 router.put("/update", UpdateInstructor);
+router.get("/:instructorId", GetInstructorById);
+
 export default router;

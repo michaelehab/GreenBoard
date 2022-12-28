@@ -3,6 +3,7 @@ import {
   SignUpStudent,
   SignInStudent,
   UpdateStudent,
+  GetStudentById,
 } from "../handlers/studentHandler";
 import {
   parseJwtMiddleware,
@@ -15,5 +16,6 @@ router.post("/signin", SignInStudent);
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
 router.put("/update", UpdateStudent);
+router.get("/:studentId", GetStudentById);
 
 export default router;

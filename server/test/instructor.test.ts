@@ -1,6 +1,12 @@
 import { InstructorSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
-import { SEED_DEPARTMENT } from "../datastore/sqldb/seeds";
+import {
+  SEED_COLLEGE,
+  SEED_DEPARTMENT,
+  SEED_INSTRUCTOR,
+  SEED_INSTRUCTOR_PASSWORD,
+  SEED_SCHOOL,
+} from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("Instructor tests", () => {
@@ -9,6 +15,7 @@ describe("Instructor tests", () => {
   const newLastName: string = "updatedLastName";
   const newPhone: string = "updatedPhone";
   const newEmail: string = "Email@google.com";
+  let instructorId: string;
 
   const instructor: InstructorSignUpRequest = {
     email: "test@outlook.com",
@@ -72,6 +79,7 @@ describe("Instructor tests", () => {
     expect(result.body.jwt).toBeDefined();
     expect(result.body.instructor.firstName).toEqual(instructor.firstName);
     expect(result.body.instructor.email).toEqual(instructor.email);
+    instructorId = result.body.instructor.id;
   });
 
   it("Signs in with invalid password -- /api/v1/instructor/signin returns 403", async () => {
@@ -95,6 +103,69 @@ describe("Instructor tests", () => {
       })
       .expect(403);
     expect(result.body.jwt).toBeUndefined();
+    expect(result.body.instructor).toBeUndefined();
+  });
+
+  it("Gets instructor profile by id as instructor-- GET /api/v1/instructor/:instructorId expects 200", async () => {
+    const result = await client
+      .get(`/api/v1/instructor/${instructorId}`)
+      .set(
+        await getAuthToken(
+          "/api/v1/instructor/signin",
+          instructor.email,
+          instructor.password
+        )
+      )
+      .expect(200);
+    expect(result.body.instructor).toBeDefined();
+    expect(result.body.instructor.email).toEqual(instructor.email);
+    expect(result.body.instructor.firstName).toEqual(instructor.firstName);
+    expect(result.body.instructor.lastName).toEqual(instructor.lastName);
+    expect(result.body.instructor.phoneNumber).toEqual(instructor.phoneNumber);
+    expect(result.body.departmentName).toEqual(SEED_DEPARTMENT.name);
+    expect(result.body.collegeName).toEqual(SEED_COLLEGE.name);
+    expect(result.body.schoolName).toEqual(SEED_SCHOOL.name);
+  });
+
+  it("Gets instructor profile by id as other instructor-- GET /api/v1/instructor/:instructorId expects 200", async () => {
+    const result = await client
+      .get(`/api/v1/instructor/${instructorId}`)
+      .set(
+        await getAuthToken(
+          "/api/v1/instructor/signin",
+          SEED_INSTRUCTOR.email,
+          SEED_INSTRUCTOR_PASSWORD
+        )
+      )
+      .expect(200);
+    expect(result.body.instructor).toBeDefined();
+    expect(result.body.instructor.email).toEqual(instructor.email);
+    expect(result.body.instructor.firstName).toEqual(instructor.firstName);
+    expect(result.body.instructor.lastName).toEqual(instructor.lastName);
+    expect(result.body.instructor.phoneNumber).toEqual(instructor.phoneNumber);
+    expect(result.body.departmentName).toEqual(SEED_DEPARTMENT.name);
+    expect(result.body.collegeName).toEqual(SEED_COLLEGE.name);
+    expect(result.body.schoolName).toEqual(SEED_SCHOOL.name);
+  });
+
+  it("Gets instructor profile by id as unauthorized-- GET /api/v1/instructor/:instructorId expects 401", async () => {
+    const result = await client
+      .get(`/api/v1/instructor/${instructorId}`)
+      .expect(401);
+    expect(result.body.instructor).toBeUndefined();
+  });
+
+  it("Gets instructor profile by id as instructor with invalidInstructorId-- GET /api/v1/instructor/:instructorId expects 404", async () => {
+    const result = await client
+      .get(`/api/v1/instructor/invalidInstructorId`)
+      .set(
+        await getAuthToken(
+          "/api/v1/instructor/signin",
+          SEED_INSTRUCTOR.email,
+          SEED_INSTRUCTOR_PASSWORD
+        )
+      )
+      .expect(404);
     expect(result.body.instructor).toBeUndefined();
   });
   it("Updates signed in instructor Name -- PUT /api/v1/instructor/update returns 200", async () => {
