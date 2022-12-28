@@ -8,17 +8,23 @@ CREATE TABLE `users` (
   `joinedAt` int NOT NULL,
   `departmentId` varchar(255) NOT NULL,
   FOREIGN KEY (`departmentId`) REFERENCES `departments` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE `students` (
   `id` varchar(255) PRIMARY KEY,
   `level` int NOT NULL,
   FOREIGN KEY (`id`) REFERENCES `users` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE `instructors` (
   `id` varchar(255) PRIMARY KEY,
   FOREIGN KEY (`id`) REFERENCES `users` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE `courses` (
@@ -28,14 +34,20 @@ CREATE TABLE `courses` (
   `password` varchar(255),
   `departmentId` varchar(255) NOT NULL,
   FOREIGN KEY (`departmentId`) REFERENCES `departments` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE `enrollments` (
   `id` varchar(255) PRIMARY KEY,
   `userId` varchar(255) NOT NULL,
   `courseId` varchar(255) NOT NULL,
-  FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`id`) 
+  ON UPDATE CASCADE 
+  ON DELETE CASCADE,
   FOREIGN KEY (`courseId`) REFERENCES `courses` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE `quizzes` (
@@ -45,6 +57,9 @@ CREATE TABLE `quizzes` (
   `isActive` bit NOT NULL,
   `courseId` varchar(255) NOT NULL,
   FOREIGN KEY (`courseId`) REFERENCES `courses` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+
 );
 
 CREATE TABLE `quizzes_questions` (
@@ -58,6 +73,9 @@ CREATE TABLE `quizzes_questions` (
   `quizId` varchar(255),
   `weight` int,
   FOREIGN KEY (`quizId`) REFERENCES `quizzes` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+
 );
 
 CREATE TABLE `posts` (
@@ -68,21 +86,33 @@ CREATE TABLE `posts` (
   `postedAt` int NOT NULL,
   `courseId` varchar(255) NOT NULL,
   FOREIGN KEY (`courseId`) REFERENCES `courses` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+
 );
 
 CREATE TABLE `students_questions` (
   `id` varchar(255)  NOT NULL PRIMARY KEY,
-  `studentId` varchar(255) NOT NULL,
-  FOREIGN KEY (`id`) REFERENCES `posts` (`id`),
+  `studentId` varchar(255) NOT NULL ,
+  FOREIGN KEY (`id`) REFERENCES `posts` (`id`)   
+  ON UPDATE CASCADE
+  ON DELETE CASCADE,
   FOREIGN KEY (`studentId`) REFERENCES `students` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 
 );
 
 CREATE TABLE `course_posts` (
   `id` varchar(255) NOT NULL PRIMARY KEY,
   `instructorId` varchar(255) NOT NULL,
-  FOREIGN KEY (`id`) REFERENCES `posts` (`id`),
+  FOREIGN KEY (`id`) REFERENCES `posts` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
   FOREIGN KEY (`instructorId`) REFERENCES `instructors` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+
 );
 
 CREATE TABLE `grades` (
@@ -90,8 +120,13 @@ CREATE TABLE `grades` (
   `studentId` varchar(255) NOT NULL,
   `quizId` varchar(255) NOT NULL,
   `takenAt` datetime NOT NULL,
-  FOREIGN KEY (`studentId`) REFERENCES `students` (`id`),
+  FOREIGN KEY (`studentId`) REFERENCES `students` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
   FOREIGN KEY (`quizId`) REFERENCES `quizzes` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+
 );
 
 CREATE TABLE `comments` (
@@ -104,18 +139,31 @@ CREATE TABLE `post_comments` (
   `id` varchar(255) PRIMARY KEY,
   `userId` varchar(255) NOT NULL,
   `postId` varchar(255) NOT NULL,
-  FOREIGN KEY (`id`) REFERENCES `comments` (`id`),
-  FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  FOREIGN KEY (`id`) REFERENCES `comments` (`id`)
+    ON UPDATE CASCADE 
+    ON DELETE CASCADE,
+  FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
   FOREIGN KEY (`postId`) REFERENCES `course_posts` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+
 );
 
 CREATE TABLE `instructors_answers` (
   `id` varchar(255) PRIMARY KEY,
   `instructorId` varchar(255) NOT NULL,
   `questionId` varchar(255) NOT NULL,
-  FOREIGN KEY (`id`) REFERENCES `comments` (`id`),
-  FOREIGN KEY (`instructorId`) REFERENCES `instructors` (`id`),
+  FOREIGN KEY (`id`) REFERENCES `comments` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (`instructorId`) REFERENCES `instructors` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE,
   FOREIGN KEY (`questionId`) REFERENCES `students_questions` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE `colleges` (
@@ -136,6 +184,8 @@ CREATE TABLE `schools` (
   `adminPassword` varchar(255) NOT NULL,
   `collegeId` varchar(255) NOT NULL,
   FOREIGN KEY (`collegeId`) REFERENCES `colleges` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE `departments` (
@@ -145,6 +195,8 @@ CREATE TABLE `departments` (
   `adminPassword` varchar(255) NOT NULL,
   `schoolId` varchar(255) NOT NULL,
   FOREIGN KEY (`schoolId`) REFERENCES `schools` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE `announcements` (
@@ -155,9 +207,15 @@ CREATE TABLE `announcements` (
   `departmentId` varchar(255) DEFAULT(NULL),
   `schoolId` varchar(255) DEFAULT(NULL),
   `collegeId` varchar(255) NOT NULL,
-  FOREIGN KEY (`departmentId`) REFERENCES `departments` (`id`),
-  FOREIGN KEY (`schoolId`) REFERENCES `schools` (`id`),
+  FOREIGN KEY (`departmentId`) REFERENCES `departments` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE,
+  FOREIGN KEY (`schoolId`) REFERENCES `schools` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE,
   FOREIGN KEY (`collegeId`) REFERENCES `colleges` (`id`)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE UNIQUE INDEX `quizzes_questions_index_0` ON `quizzes_questions` (`question_number`, `quizId`);
