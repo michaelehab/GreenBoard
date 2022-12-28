@@ -283,9 +283,9 @@ describe("Student tests", () => {
     expect(result.body.student).toBeUndefined();
   });
 
-  it("Changes student Password with wrong old password -- PUT /api/v1/user/password returns 400", async () => {
+  it("Changes student Password with wrong old password -- PUT /api/v1/students/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/user/password`)
+      .put(`/api/v1/students/password`)
       .send({
         oldPassword: "WrongOldPassword",
         newPassword: newPass,
@@ -296,9 +296,9 @@ describe("Student tests", () => {
       .expect(400);
   });
 
-  it("Changes student Password with wrong empty old password -- PUT /api/v1/user/password returns 400", async () => {
+  it("Changes student Password with wrong empty old password -- PUT /api/v1/students/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/user/password`)
+      .put(`/api/v1/students/password`)
       .send({
         oldPassword: "",
         newPassword: newPass,
@@ -309,9 +309,9 @@ describe("Student tests", () => {
       .expect(400);
   });
 
-  it("Changes student Password with wrong empty new password -- PUT /api/v1/user/password returns 400", async () => {
+  it("Changes student Password with wrong empty new password -- PUT /api/v1/students/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/user/password`)
+      .put(`/api/v1/students/password`)
       .send({
         oldPassword: student.password,
         newPassword: "",
@@ -322,9 +322,9 @@ describe("Student tests", () => {
       .expect(400);
   });
 
-  it("Changes student Password with right old password -- PUT /api/v1/user/password returns 200", async () => {
+  it("Changes student Password with right old password -- PUT /api/v1/students/password returns 200", async () => {
     const result = await client
-      .put(`/api/v1/user/password`)
+      .put(`/api/v1/students/password`)
       .send({
         oldPassword: student.password,
         newPassword: newPass,
