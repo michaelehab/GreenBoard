@@ -288,9 +288,7 @@ describe("Quiz and Quiz's Question tests", () => {
       expect(result.body.quiz.isActive).toEqual(+quiz1.quiz.isActive);
       expect(result.body.quiz.quizDate).toEqual(quiz1.quiz.quizDate);
       for (let i = 0; i < quiz1.questions.length; i++) {
-        expect(result.body.questions[i].question_number).toEqual(
-          quiz1.questions[i].question_number
-        );
+        expect(result.body.questions[i].question_number).toBeUndefined();
         expect(result.body.questions[i].question).toEqual(
           quiz1.questions[i].question
         );
@@ -306,9 +304,7 @@ describe("Quiz and Quiz's Question tests", () => {
         expect(result.body.questions[i].choiceD).toEqual(
           quiz1.questions[i].choiceD
         );
-        expect(result.body.questions[i].rightChoice).toEqual(
-          quiz1.questions[i].rightChoice
-        );
+        expect(result.body.questions[i].rightChoice).toBeUndefined();
         expect(result.body.questions[i].weight).toEqual(
           quiz1.questions[i].weight
         );
