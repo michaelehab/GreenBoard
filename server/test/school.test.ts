@@ -28,33 +28,33 @@ describe("School tests", () => {
     client = await getTestServer();
   });
 
-  it("Adds a new valid school -- /api/v1/school/signup returns 200", async () => {
+  it("Adds a new valid school -- /api/v1/schools/signup returns 200", async () => {
     const result = await client
-      .post("/api/v1/school/signup")
+      .post("/api/v1/schools/signup")
       .send(school)
       .expect(200);
     expect(result.body.jwt).toBeDefined();
   });
 
-  it("Tries adding the same school again -- /api/v1/school/signup returns 403", async () => {
+  it("Tries adding the same school again -- /api/v1/schools/signup returns 403", async () => {
     const result = await client
-      .post("/api/v1/school/signup")
+      .post("/api/v1/schools/signup")
       .send(school)
       .expect(403);
     expect(result.body.jwt).toBeUndefined();
   });
 
-  it("Sends an empty object -- /api/v1/school/signup returns 400", async () => {
+  it("Sends an empty object -- /api/v1/schools/signup returns 400", async () => {
     const result = await client
-      .post("/api/v1/school/signup")
+      .post("/api/v1/schools/signup")
       .send({})
       .expect(400);
     expect(result.body.jwt).toBeUndefined();
   });
 
-  it("Sends with a missing field -- /api/v1/school/signup returns 400", async () => {
+  it("Sends with a missing field -- /api/v1/schools/signup returns 400", async () => {
     const result = await client
-      .post("/api/v1/school/signup")
+      .post("/api/v1/schools/signup")
       .send({
         name: "Faculty of Engineering",
         phone: "+20123456789",
@@ -65,9 +65,9 @@ describe("School tests", () => {
     expect(result.body.jwt).toBeUndefined();
   });
 
-  it("Signs in with valid credentials -- /api/v1/school/signin returns 200", async () => {
+  it("Signs in with valid credentials -- /api/v1/schools/signin returns 200", async () => {
     const result = await client
-      .post("/api/v1/school/signin")
+      .post("/api/v1/schools/signin")
       .send({
         email: school.email,
         password: school.adminPassword,
@@ -79,9 +79,9 @@ describe("School tests", () => {
     schoolId = result.body.school.id;
   });
 
-  it("Signs in with invalid password -- /api/v1/school/signin returns 403", async () => {
+  it("Signs in with invalid password -- /api/v1/schools/signin returns 403", async () => {
     const result = await client
-      .post("/api/v1/school/signin")
+      .post("/api/v1/schools/signin")
       .send({
         email: school.email,
         password: "WrongPassword",
@@ -91,9 +91,9 @@ describe("School tests", () => {
     expect(result.body.school).toBeUndefined();
   });
 
-  it("Signs in with invalid email -- /api/v1/school/signin returns 403", async () => {
+  it("Signs in with invalid email -- /api/v1/schools/signin returns 403", async () => {
     const result = await client
-      .post("/api/v1/school/signin")
+      .post("/api/v1/schools/signin")
       .send({
         email: "WrongEmail",
         password: school.adminPassword,
@@ -103,12 +103,12 @@ describe("School tests", () => {
     expect(result.body.school).toBeUndefined();
   });
 
-  it("Gets school profile by id as school-- GET /api/v1/school/:schoolId expects 200", async () => {
+  it("Gets school profile by id as school-- GET /api/v1/schools/:schoolId expects 200", async () => {
     const result = await client
-      .get(`/api/v1/school/${schoolId}`)
+      .get(`/api/v1/schools/${schoolId}`)
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           school.email,
           school.adminPassword
         )
@@ -121,12 +121,12 @@ describe("School tests", () => {
     expect(result.body.collegeName).toEqual(SEED_COLLEGE.name);
   });
 
-  it("Gets school profile by id as instructor-- GET /api/v1/school/:schoolId expects 200", async () => {
+  it("Gets school profile by id as instructor-- GET /api/v1/schools/:schoolId expects 200", async () => {
     const result = await client
-      .get(`/api/v1/school/${schoolId}`)
+      .get(`/api/v1/schools/${schoolId}`)
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           SEED_INSTRUCTOR.email,
           SEED_INSTRUCTOR_PASSWORD
         )
@@ -139,17 +139,17 @@ describe("School tests", () => {
     expect(result.body.collegeName).toEqual(SEED_COLLEGE.name);
   });
 
-  it("Gets school profile by id as unauthorized-- GET /api/v1/school/:schoolId expects 401", async () => {
-    const result = await client.get(`/api/v1/school/${schoolId}`).expect(401);
+  it("Gets school profile by id as unauthorized-- GET /api/v1/schools/:schoolId expects 401", async () => {
+    const result = await client.get(`/api/v1/schools/${schoolId}`).expect(401);
     expect(result.body.school).toBeUndefined();
   });
 
-  it("Gets school profile by id as instructor with invalidSchoolId-- GET /api/v1/school/:schoolId expects 404", async () => {
+  it("Gets school profile by id as instructor with invalidSchoolId-- GET /api/v1/schools/:schoolId expects 404", async () => {
     const result = await client
-      .get(`/api/v1/school/invalidSchoolId`)
+      .get(`/api/v1/schools/invalidSchoolId`)
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           SEED_INSTRUCTOR.email,
           SEED_INSTRUCTOR_PASSWORD
         )
@@ -158,15 +158,15 @@ describe("School tests", () => {
     expect(result.body.school).toBeUndefined();
   });
 
-  it("Updates signed in school name -- PUT /api/v1/school/update returns 200", async () => {
+  it("Updates signed in school name -- PUT /api/v1/schools/update returns 200", async () => {
     const result = await client
-      .put("/api/v1/school/update")
+      .put("/api/v1/schools/update")
       .send({
         name: newName,
       })
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           school.email,
           school.adminPassword
         )
@@ -178,9 +178,9 @@ describe("School tests", () => {
     expect(result.body.school.phone).toEqual(school.phone);
   });
 
-  it("Updates signed in school not signed in -- PUT /api/v1/school/update returns 403", async () => {
+  it("Updates signed in school not signed in -- PUT /api/v1/schools/update returns 403", async () => {
     const result = await client
-      .put("/api/v1/school/update")
+      .put("/api/v1/schools/update")
       .send({
         name: newName,
       })
@@ -188,15 +188,15 @@ describe("School tests", () => {
     expect(result.body.school).toBeUndefined();
   });
 
-  it("Updates signed in school name with empty -- PUT /api/v1/school/update returns 400", async () => {
+  it("Updates signed in school name with empty -- PUT /api/v1/schools/update returns 400", async () => {
     const result = await client
-      .put("/api/v1/school/update")
+      .put("/api/v1/schools/update")
       .send({
         name: "",
       })
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           school.email,
           school.adminPassword
         )
@@ -205,15 +205,15 @@ describe("School tests", () => {
     expect(result.body.school).toBeUndefined();
   });
 
-  it("Updates signed in school email -- PUT /api/v1/school/update returns 200", async () => {
+  it("Updates signed in school email -- PUT /api/v1/schools/update returns 200", async () => {
     const result = await client
-      .put("/api/v1/school/update")
+      .put("/api/v1/schools/update")
       .send({
         email: newEmail,
       })
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           school.email,
           school.adminPassword
         )
@@ -225,15 +225,15 @@ describe("School tests", () => {
     expect(result.body.school.phone).toEqual(school.phone);
   });
 
-  it("Updates signed in school email with empty -- PUT /api/v1/school/update returns 400", async () => {
+  it("Updates signed in school email with empty -- PUT /api/v1/schools/update returns 400", async () => {
     const result = await client
-      .put("/api/v1/school/update")
+      .put("/api/v1/schools/update")
       .send({
         email: "",
       })
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           newEmail,
           school.adminPassword
         )
@@ -242,15 +242,15 @@ describe("School tests", () => {
     expect(result.body.school).toBeUndefined();
   });
 
-  it("Updates signed in school phone -- PUT /api/v1/school/update returns 200", async () => {
+  it("Updates signed in school phone -- PUT /api/v1/schools/update returns 200", async () => {
     const result = await client
-      .put("/api/v1/school/update")
+      .put("/api/v1/schools/update")
       .send({
         phone: newPhone,
       })
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           newEmail,
           school.adminPassword
         )
@@ -262,15 +262,15 @@ describe("School tests", () => {
     expect(result.body.school.phone).toEqual(newPhone);
   });
 
-  it("Updates signed in school phone with empty -- PUT /api/v1/school/update returns 400", async () => {
+  it("Updates signed in school phone with empty -- PUT /api/v1/schools/update returns 400", async () => {
     const result = await client
-      .put("/api/v1/school/update")
+      .put("/api/v1/schools/update")
       .send({
         phone: "",
       })
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           newEmail,
           school.adminPassword
         )
@@ -278,16 +278,16 @@ describe("School tests", () => {
       .expect(400);
     expect(result.body.school).toBeUndefined();
   });
-  it("Changes school Password with wrong old password -- PUT /api/v1/school/password returns 400", async () => {
+  it("Changes school Password with wrong old password -- PUT /api/v1/schools/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/school/password`)
+      .put(`/api/v1/schools/password`)
       .send({
         oldPassword: "WrongOldPassword",
         newPassword: newPass,
       })
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           newEmail,
           school.adminPassword
         )
@@ -295,16 +295,16 @@ describe("School tests", () => {
       .expect(400);
   });
 
-  it("Changes school Password with wrong empty old password -- PUT /api/v1/school/password returns 400", async () => {
+  it("Changes school Password with wrong empty old password -- PUT /api/v1/schools/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/school/password`)
+      .put(`/api/v1/schools/password`)
       .send({
         oldPassword: "",
         newPassword: newPass,
       })
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           newEmail,
           school.adminPassword
         )
@@ -312,16 +312,16 @@ describe("School tests", () => {
       .expect(400);
   });
 
-  it("Changes school Password with wrong empty new password -- PUT /api/v1/school/password returns 400", async () => {
+  it("Changes school Password with wrong empty new password -- PUT /api/v1/schools/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/school/password`)
+      .put(`/api/v1/schools/password`)
       .send({
         oldPassword: school.adminPassword,
         newPassword: "",
       })
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           newEmail,
           school.adminPassword
         )
@@ -329,16 +329,16 @@ describe("School tests", () => {
       .expect(400);
   });
 
-  it("Changes school Password with right old password -- PUT /api/v1/school/password returns 200", async () => {
+  it("Changes school Password with right old password -- PUT /api/v1/schools/password returns 200", async () => {
     const result = await client
-      .put(`/api/v1/school/password`)
+      .put(`/api/v1/schools/password`)
       .send({
         oldPassword: school.adminPassword,
         newPassword: newPass,
       })
       .set(
         await getAuthToken(
-          "/api/v1/school/signin",
+          "/api/v1/schools/signin",
           newEmail,
           school.adminPassword
         )

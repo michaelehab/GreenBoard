@@ -39,7 +39,7 @@ describe("Course tests", () => {
     );
 
     instructorAuthHeader = await getAuthToken(
-      "/api/v1/instructor/signin",
+      "/api/v1/instructors/signin",
       SEED_INSTRUCTOR.email,
       SEED_INSTRUCTOR_PASSWORD
     );
@@ -51,7 +51,7 @@ describe("Course tests", () => {
     );
 
     instructorNotInSameDeptAuthHeader = await getAuthToken(
-      "/api/v1/instructor/signin",
+      "/api/v1/instructors/signin",
       SEED_INSTRUCTOR2.email,
       SEED_INSTRUCTOR_PASSWORD
     );

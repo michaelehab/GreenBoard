@@ -44,7 +44,7 @@ describe("Posts tests", () => {
     );
 
     instructorAuthHeader = await getAuthToken(
-      "/api/v1/instructor/signin",
+      "/api/v1/instructors/signin",
       SEED_INSTRUCTOR.email,
       SEED_INSTRUCTOR_PASSWORD
     );
@@ -56,7 +56,7 @@ describe("Posts tests", () => {
     );
 
     instructorNotInCourseAuthHeader = await getAuthToken(
-      "/api/v1/instructor/signin",
+      "/api/v1/instructors/signin",
       SEED_INSTRUCTOR2.email,
       SEED_INSTRUCTOR_PASSWORD
     );
@@ -143,10 +143,12 @@ describe("Posts tests", () => {
       expect(result.body.postComment[0].comment).toBe(postComment.comment);
       expect(result.body.postComment[0].firstName).toBe(SEED_STUDENT.firstName);
       expect(result.body.postComment[0].lastName).toBe(SEED_STUDENT.lastName);
-      expect(result.body.postComment[1].firstName).toBe(SEED_INSTRUCTOR.firstName);
-      expect(result.body.postComment[1].lastName).toBe(SEED_INSTRUCTOR.lastName);
-
-
+      expect(result.body.postComment[1].firstName).toBe(
+        SEED_INSTRUCTOR.firstName
+      );
+      expect(result.body.postComment[1].lastName).toBe(
+        SEED_INSTRUCTOR.lastName
+      );
     });
 
     it("Get Post commets as student not in course -- GET /api/v1/courses/:courseId/posts/:id/comments returns 403", async () => {
@@ -178,9 +180,12 @@ describe("Posts tests", () => {
       expect(result.body.postComment[0].comment).toBe(postComment.comment);
       expect(result.body.postComment[0].firstName).toBe(SEED_STUDENT.firstName);
       expect(result.body.postComment[0].lastName).toBe(SEED_STUDENT.lastName);
-      expect(result.body.postComment[1].firstName).toBe(SEED_INSTRUCTOR.firstName);
-      expect(result.body.postComment[1].lastName).toBe(SEED_INSTRUCTOR.lastName);
-
+      expect(result.body.postComment[1].firstName).toBe(
+        SEED_INSTRUCTOR.firstName
+      );
+      expect(result.body.postComment[1].lastName).toBe(
+        SEED_INSTRUCTOR.lastName
+      );
     });
 
     it("Get Posts comments as instructor not in course -- GET /api/v1/courses/:courseId/posts/:id/comments returns 403", async () => {
@@ -237,7 +242,6 @@ describe("Posts tests", () => {
       expect(result.body.postComment.comment).toBe(postComment.comment);
       expect(result.body.postComment.firstName).toBe(SEED_INSTRUCTOR.firstName);
       expect(result.body.postComment.lastName).toBe(SEED_INSTRUCTOR.lastName);
-
     });
     it("Get Specific Post comment as student not in course -- GET /api/v1/courses/:courseId/posts/:id/comments/:id returns 403", async () => {
       const result = await client
@@ -259,7 +263,6 @@ describe("Posts tests", () => {
       expect(result.body.postComment.comment).toBe(postComment.comment);
       expect(result.body.postComment.firstName).toBe(SEED_INSTRUCTOR.firstName);
       expect(result.body.postComment.lastName).toBe(SEED_INSTRUCTOR.lastName);
-
     });
     it("Get Specific Post comment as instructor in course (wrong course) -- GET /api/v1/courses/:courseId/posts/:id/comments/:id returns 404", async () => {
       const result = await client
@@ -389,9 +392,12 @@ describe("Posts tests", () => {
       expect(result.body.InstructorDataAndAnswer[0].comment).toBe(
         instructorAnswer.comment
       );
-      expect(result.body.InstructorDataAndAnswer[0].firstName).toBe(SEED_INSTRUCTOR.firstName)
-      expect(result.body.InstructorDataAndAnswer[0].lastName).toBe(SEED_INSTRUCTOR.lastName)
-
+      expect(result.body.InstructorDataAndAnswer[0].firstName).toBe(
+        SEED_INSTRUCTOR.firstName
+      );
+      expect(result.body.InstructorDataAndAnswer[0].lastName).toBe(
+        SEED_INSTRUCTOR.lastName
+      );
     });
 
     it("Get instructor answer as student not in course -- GET /api/v1/courses/:courseId/question/:id/answer returns 403", async () => {
@@ -425,8 +431,12 @@ describe("Posts tests", () => {
       expect(result.body.InstructorDataAndAnswer[0].comment).toBe(
         instructorAnswer.comment
       );
-      expect(result.body.InstructorDataAndAnswer[0].firstName).toBe(SEED_INSTRUCTOR.firstName)
-      expect(result.body.InstructorDataAndAnswer[0].lastName).toBe(SEED_INSTRUCTOR.lastName)
+      expect(result.body.InstructorDataAndAnswer[0].firstName).toBe(
+        SEED_INSTRUCTOR.firstName
+      );
+      expect(result.body.InstructorDataAndAnswer[0].lastName).toBe(
+        SEED_INSTRUCTOR.lastName
+      );
     });
 
     it("Get instructor answer as instructor not in course -- GET /api/v1/courses/:courseId/question/:id/answer returns 403", async () => {
@@ -487,8 +497,12 @@ describe("Posts tests", () => {
       expect(result.body.InstructorDataAndAnswer.comment).toBe(
         instructorAnswer.comment
       );
-      expect(result.body.InstructorDataAndAnswer.firstName).toBe(SEED_INSTRUCTOR.firstName)
-      expect(result.body.InstructorDataAndAnswer.lastName).toBe(SEED_INSTRUCTOR.lastName)
+      expect(result.body.InstructorDataAndAnswer.firstName).toBe(
+        SEED_INSTRUCTOR.firstName
+      );
+      expect(result.body.InstructorDataAndAnswer.lastName).toBe(
+        SEED_INSTRUCTOR.lastName
+      );
     });
     it("Get Specific instructor answer as student not in course -- GET /api/v1/courses/:courseId/question/:id/answer/:id returns 403", async () => {
       const result = await client
@@ -510,8 +524,12 @@ describe("Posts tests", () => {
       expect(result.body.InstructorDataAndAnswer.comment).toBe(
         instructorAnswer.comment
       );
-      expect(result.body.InstructorDataAndAnswer.firstName).toBe(SEED_INSTRUCTOR.firstName)
-      expect(result.body.InstructorDataAndAnswer.lastName).toBe(SEED_INSTRUCTOR.lastName)
+      expect(result.body.InstructorDataAndAnswer.firstName).toBe(
+        SEED_INSTRUCTOR.firstName
+      );
+      expect(result.body.InstructorDataAndAnswer.lastName).toBe(
+        SEED_INSTRUCTOR.lastName
+      );
     });
     it("Get Specific instructor answer as instructor in course (wrong course) -- GET /api/v1/courses/:courseId/question/:id/answer/:id returns 404", async () => {
       const result = await client

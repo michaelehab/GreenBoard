@@ -40,7 +40,7 @@ describe("Posts tests", () => {
     );
 
     instructorAuthHeader = await getAuthToken(
-      "/api/v1/instructor/signin",
+      "/api/v1/instructors/signin",
       SEED_INSTRUCTOR.email,
       SEED_INSTRUCTOR_PASSWORD
     );
@@ -52,7 +52,7 @@ describe("Posts tests", () => {
     );
 
     instructorNotInCourseAuthHeader = await getAuthToken(
-      "/api/v1/instructor/signin",
+      "/api/v1/instructors/signin",
       SEED_INSTRUCTOR2.email,
       SEED_INSTRUCTOR_PASSWORD
     );
@@ -146,7 +146,6 @@ describe("Posts tests", () => {
       expect(result.body.posts[0].lastName).toBe(SEED_INSTRUCTOR.lastName);
       expect(result.body.posts[1].firstName).toBe(SEED_INSTRUCTOR.firstName);
       expect(result.body.posts[1].lastName).toBe(SEED_INSTRUCTOR.lastName);
-
     });
 
     it("Get Course Posts as student not in course -- GET /api/v1/courses/:id/posts returns 403", async () => {
@@ -204,7 +203,6 @@ describe("Posts tests", () => {
       expect(result.body.post.url).toBe(coursePost.url);
       expect(result.body.post.firstName).toBe(SEED_INSTRUCTOR.firstName);
       expect(result.body.post.lastName).toBe(SEED_INSTRUCTOR.lastName);
-     
     });
     it("Get Specific Course Post as student not in course -- GET /api/v1/courses/:id/posts/:id returns 403", async () => {
       const result = await client

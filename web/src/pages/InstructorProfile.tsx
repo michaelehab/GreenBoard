@@ -1,17 +1,5 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  Alert,
-  AlertIcon,
-  Heading,
-  Center,
-  Textarea,
-  Text,
-} from "@chakra-ui/react";
-import { FormEvent, useCallback, useEffect, useState } from "react";
-import { ApiError } from "../utils/apiError";
+import { Box, Button, Flex, Heading, Center, Text } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { getLocalUserId, isLoggedInInstructor } from "../utils/auth";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -23,7 +11,6 @@ import {
 } from "@greenboard/shared";
 export const InstructorProfile = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
   const { instructorId } = useParams();
 
   const { data: instructorData } = useQuery([`viewInstructorProfile`], () =>
@@ -95,13 +82,6 @@ export const InstructorProfile = () => {
                 </Button>
               </Link>
             </Flex>
-          )}
-
-          {!!error && (
-            <Alert status="error">
-              <AlertIcon />
-              {error}
-            </Alert>
           )}
         </Flex>
       </Box>
