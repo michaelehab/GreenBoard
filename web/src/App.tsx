@@ -30,6 +30,8 @@ import { DepartmentProfile } from "./pages/departmentProfile";
 import { EditDepartmentProfile } from "./pages/EditDepartmentProfile";
 import { StudentProfile } from "./pages/studentProfile";
 import { EditStudentProfile } from "./pages/EditStudentProfile";
+import { InstructorProfile } from "./pages/InstructorProfile";
+import { EditInstructorProfile } from "./pages/EditInstructorProfile";
 
 export const App = () => {
   return (
@@ -82,6 +84,11 @@ export const App = () => {
         <Route path="/department/edit" element={<EditDepartmentProfile />} />
         <Route path="/students/:studentId" element={<StudentProfile />} />
         <Route path="/students/edit" element={<EditStudentProfile />} />
+        <Route
+          path="/instructors/:instructorId"
+          element={<InstructorProfile />}
+        />
+        <Route path="/instructors/edit" element={<EditInstructorProfile />} />
         <Route path="/courses/:courseId/grades" element={<ViewGrades />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
