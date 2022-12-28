@@ -182,7 +182,7 @@ export const instructorSignUp = async (
   email: string,
   firstName: string,
   lastName: string,
-  phone: string,
+  phoneNumber: string,
   password: string,
   departmentId: string
 ) => {
@@ -193,7 +193,7 @@ export const instructorSignUp = async (
     email,
     firstName,
     lastName,
-    phone,
+    phoneNumber,
     password,
     departmentId,
   });
@@ -203,7 +203,7 @@ export const studentSignUp = async (
   email: string,
   firstName: string,
   lastName: string,
-  phone: string,
+  phoneNumber: string,
   level: number,
   password: string,
   departmentId: string
@@ -216,7 +216,7 @@ export const studentSignUp = async (
       email,
       firstName,
       lastName,
-      phone,
+      phoneNumber,
       level,
       password,
       departmentId,
@@ -227,6 +227,11 @@ export const studentSignUp = async (
 
 export const getLocalSchoolId = (): string => {
   const getId = localStorage.getItem(LOCAL_STORAGE_SchoolID);
+  return getId || "";
+};
+
+export const getLocalUserId = (): string => {
+  const getId = localStorage.getItem(LOCAL_STORAGE_UserID);
   return getId || "";
 };
 export const departmentSignUp = async (

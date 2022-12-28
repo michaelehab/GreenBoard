@@ -69,7 +69,7 @@ export const SEED_INSTRUCTOR: Instructor = {
   id: "INSTR001",
   firstName: "FName",
   lastName: "LName",
-  phone: "Phone1",
+  phoneNumber: "Phone1",
   email: "Email1",
   password: "", // getPasswordHashed(SEED_INSTRUCTOR_PASSWORD)
   joinedAt: Date.now(),
@@ -80,7 +80,7 @@ export const SEED_INSTRUCTOR2: Instructor = {
   id: "INSTR002",
   firstName: "FName2",
   lastName: "LName2",
-  phone: "Phone2",
+  phoneNumber: "Phone2",
   email: "Email2",
   password: "", // getPasswordHashed(SEED_INSTRUCTOR_PASSWORD)
   joinedAt: Date.now(),
@@ -93,7 +93,7 @@ export const SEED_STUDENT: Student = {
   id: "STD001",
   firstName: "FName1",
   lastName: "LName1",
-  phone: "Phone123",
+  phoneNumber: "Phone123",
   email: "Email123",
   password: "", // getPasswordHashed(SEED_STUDENT_PASSWORD)
   joinedAt: Date.now(),
@@ -105,7 +105,7 @@ export const SEED_STUDENT2: Student = {
   id: "STD002",
   firstName: "FName2",
   lastName: "LName2",
-  phone: "Phone1234",
+  phoneNumber: "Phone1234",
   email: "Email1234",
   password: "", // getPasswordHashed(SEED_STUDENT_PASSWORD)
   joinedAt: Date.now(),

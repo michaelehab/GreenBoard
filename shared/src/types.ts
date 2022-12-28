@@ -2,7 +2,7 @@ export interface User {
   id: string;
   firstName: string;
   lastName: string;
-  phone: string;
+  phoneNumber: string;
   email: string;
   password: string;
   joinedAt: number;

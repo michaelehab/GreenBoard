@@ -36,7 +36,7 @@ export type StudentSignUpRequest = Pick<
   | "firstName"
   | "lastName"
   | "password"
-  | "phone"
+  | "phoneNumber"
   | "level"
   | "departmentId"
 >;
@@ -52,17 +52,35 @@ export interface StudentSignInResponse {
     | "email"
     | "firstName"
     | "lastName"
-    | "phone"
+    | "phoneNumber"
     | "level"
     | "departmentId"
   >;
   jwt: string;
 }
 
+export type StudentUpdateRequest = Partial<Student>;
+export interface StudentUpdateResponse {
+  student: Pick<Student, "email" | "firstName" | "lastName" | "phoneNumber">;
+}
+
+export interface GetStudentRequest {}
+export interface GetStudentResponse {
+  student: Pick<Student, "firstName" | "lastName" | "phoneNumber" | "email">;
+  departmentName: string;
+  schoolName: string;
+  collegeName: string;
+}
+
 // Instructor APIs
 export type InstructorSignUpRequest = Pick<
   Instructor,
-  "email" | "firstName" | "lastName" | "password" | "phone" | "departmentId"
+  | "email"
+  | "firstName"
+  | "lastName"
+  | "password"
+  | "phoneNumber"
+  | "departmentId"
 >;
 
 export interface InstructorSignUpResponse {
@@ -72,9 +90,28 @@ export interface InstructorSignUpResponse {
 export interface InstructorSignInResponse {
   instructor: Pick<
     Instructor,
-    "email" | "firstName" | "lastName" | "id" | "phone" | "departmentId"
+    "email" | "firstName" | "lastName" | "id" | "phoneNumber" | "departmentId"
   >;
   jwt: string;
+}
+
+export type InstructorUpdateRequest = Partial<Instructor>;
+export interface InstructorUpdateResponse {
+  instructor: Pick<
+    Instructor,
+    "email" | "firstName" | "lastName" | "phoneNumber"
+  >;
+}
+
+export interface GetInstructorRequest {}
+export interface GetInstructorResponse {
+  instructor: Pick<
+    Instructor,
+    "firstName" | "lastName" | "phoneNumber" | "email"
+  >;
+  departmentName: string;
+  schoolName: string;
+  collegeName: string;
 }
 
 // College APIs

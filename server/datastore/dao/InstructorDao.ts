@@ -5,4 +5,5 @@ export interface InstructorDao {
   getInstructorById(id: string): Promise<Instructor | undefined>;
   getInstructorByEmail(email: string): Promise<Instructor | undefined>;
   getInstructorByPhoneNumber(phone: string): Promise<Instructor | undefined>;
+  updateInstructorData(instructor: Instructor): Promise<void>;
 }
