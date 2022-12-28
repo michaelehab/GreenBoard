@@ -9,6 +9,7 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { useTitle } from "../utils/useTitle";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
   useTitle("Home");
@@ -43,16 +44,18 @@ export const Home = () => {
             manage your college
           </Text>
           <Stack direction={{ base: "column", md: "row" }} spacing={4}>
-            <Button
-              rounded={"full"}
-              bg={"#4d7e3e"}
-              color={"white"}
-              _hover={{
-                bg: "green.500",
-              }}
-            >
-              Join Now
-            </Button>
+            <Link to={"/signup"}>
+              <Button
+                rounded={"full"}
+                bg={"#4d7e3e"}
+                color={"white"}
+                _hover={{
+                  bg: "green.500",
+                }}
+              >
+                Join Now
+              </Button>
+            </Link>
           </Stack>
         </Stack>
       </Flex>
