@@ -11,7 +11,6 @@ export const ChangeUserPassword: ExpressHandler<
   UserChangePasswordResponse
 > = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
-  console.log("lol");
 
   if (
     !newPassword ||
