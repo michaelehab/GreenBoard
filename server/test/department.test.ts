@@ -4,11 +4,12 @@ import {
   SchoolSignUpRequest,
 } from "@greenboard/shared";
 import supertest from "supertest";
-import { SEED_SCHOOL } from "../datastore/sqldb/seeds";
+import { SEED_INSTRUCTOR, SEED_INSTRUCTOR_PASSWORD, SEED_SCHOOL } from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("Department tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
+  let departmentId:string;
 
   const department: DepartmentSignUpRequest = {
     name: "Computer Engineering",
@@ -71,6 +72,7 @@ describe("Department tests", () => {
     expect(result.body.jwt).toBeDefined();
     expect(result.body.department.name).toEqual(department.name);
     expect(result.body.department.email).toEqual(department.email);
+    departmentId=result.body.department.id;
   });
 
   it("Signs in with invalid password -- /api/v1/department/signin returns 403", async () => {
@@ -94,6 +96,59 @@ describe("Department tests", () => {
       })
       .expect(403);
     expect(result.body.jwt).toBeUndefined();
+    expect(result.body.department).toBeUndefined();
+  });
+
+  it("Gets department profile by id as department-- GET /api/v1/department/:departmentId expects 200", async () => {
+    const result = await client
+      .get(`/api/v1/department/${departmentId}`)
+      .set(
+        await getAuthToken(
+          "/api/v1/department/signin",
+          department.email,
+          department.adminPassword
+        )
+      )
+      .expect(200);
+    expect(result.body.department).toBeDefined();
+    expect(result.body.department.email).toEqual(department.email);
+    expect(result.body.department.name).toEqual(department.name);
+    expect(result.body.schoolName).toEqual(SEED_SCHOOL.name);
+  });
+
+  it("Gets department profile by id as instructor-- GET /api/v1/department/:departmentId expects 200", async () => {
+    const result = await client
+      .get(`/api/v1/department/${departmentId}`)
+      .set(
+        await getAuthToken(
+          "/api/v1/instructor/signin",
+          SEED_INSTRUCTOR.email,
+          SEED_INSTRUCTOR_PASSWORD
+        )
+      )
+      .expect(200);
+      expect(result.body.department).toBeDefined();
+      expect(result.body.department.email).toEqual(department.email);
+      expect(result.body.department.name).toEqual(department.name);
+      expect(result.body.schoolName).toEqual(SEED_SCHOOL.name);
+  });
+
+  it("Gets department profile by id as unauthorized-- GET /api/v1/department/:departmentId expects 401", async () => {
+    const result = await client.get(`/api/v1/department/${departmentId}`).expect(401);
+    expect(result.body.department).toBeUndefined();
+  });
+
+  it("Gets department profile by id as instructor with invalidDepartmentId-- GET /api/v1/department/:departmentId expects 404", async () => {
+    const result = await client
+      .get(`/api/v1/department/invalidDepartmentId`)
+      .set(
+        await getAuthToken(
+          "/api/v1/instructor/signin",
+          SEED_INSTRUCTOR.email,
+          SEED_INSTRUCTOR_PASSWORD
+        )
+      )
+      .expect(404);
     expect(result.body.department).toBeUndefined();
   });
 
