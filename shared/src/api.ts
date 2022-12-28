@@ -1,4 +1,3 @@
-import { type } from "os";
 import {
   College,
   Course,
@@ -114,6 +113,13 @@ export interface GetInstructorResponse {
   collegeName: string;
 }
 
+// User APIs
+export interface UserChangePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+}
+export interface UserChangePasswordResponse {}
+
 // College APIs
 export type CollegeSignUpRequest = Pick<
   College,
@@ -208,10 +214,11 @@ export interface DepartmentUpdateResponse {
   department: Pick<Department, "email" | "schoolId" | "name">;
 }
 
-export interface DepartmentResetPasswordRequest {
+export interface DepartmentChangePasswordRequest {
+  oldPassword: string;
   newPassword: string;
 }
-export interface DepartmentResetPasswordResponse {}
+export interface DepartmentChangePasswordResponse {}
 
 // Course APIs
 export type CreateCourseRequest = Pick<

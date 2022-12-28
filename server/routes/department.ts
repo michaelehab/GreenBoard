@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  ChangeDepartmentPassword,
   GetDepartmentById,
   SignInDepartment,
   SignUpDepartment,
@@ -17,5 +18,6 @@ router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
 router.put("/update", UpdateDepartment);
 router.get("/:departmentId", GetDepartmentById);
+router.put("/password", ChangeDepartmentPassword);
 
 export default router;
