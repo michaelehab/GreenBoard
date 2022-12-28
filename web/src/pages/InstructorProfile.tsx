@@ -13,7 +13,7 @@ import {
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
 import { getLocalUserId, isLoggedInInstructor } from "../utils/auth";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { callEndpoint } from "../utils/callEndpoint";
 import { NotFound } from "./notFound";
@@ -33,9 +33,6 @@ export const InstructorProfile = () => {
       true
     )
   );
-  const edit = () => {
-    navigate(`/instructors/edit`);
-  };
   useEffect(() => {
     if (!isLoggedInInstructor()) {
       navigate("/");
@@ -54,45 +51,50 @@ export const InstructorProfile = () => {
         <Flex maxW="sm" mx="auto" my={12} direction="column" gap={3}>
           <Box m="auto">
             <Text fontSize="large">
-              {" "}
               First Name: {instructorData.instructor.firstName}
             </Text>
             <Text fontSize="large">
-              {" "}
               Last Name: {instructorData.instructor.lastName}
             </Text>
             <Text fontSize="large">
-              {" "}
               Email: {instructorData.instructor.email}
             </Text>
             <Text fontSize="large">
-              {" "}
               Phone: {instructorData.instructor.phoneNumber}
             </Text>
             <Text fontSize="large">
-              {" "}
               Department Name: {instructorData.departmentName}
             </Text>
             <Text fontSize="large">
               School Name: {instructorData.schoolName}
             </Text>
             <Text fontSize="large">
-              {" "}
               College Name: {instructorData.collegeName}
             </Text>
           </Box>
           {isLoggedInInstructor() && getLocalUserId() === instructorId && (
-            <Box m="auto" my={12}>
-              <Button
-                colorScheme="green"
-                variant="solid"
-                type="submit"
-                display="block"
-                onClick={edit}
-              >
-                Edit
-              </Button>
-            </Box>
+            <Flex gap={2}>
+              <Link to={`/students/edit`}>
+                <Button
+                  colorScheme="green"
+                  variant="solid"
+                  type="submit"
+                  display="block"
+                >
+                  Edit
+                </Button>
+              </Link>
+              <Link to={`/change-password`}>
+                <Button
+                  colorScheme="green"
+                  variant="solid"
+                  type="submit"
+                  display="block"
+                >
+                  Change Password
+                </Button>
+              </Link>
+            </Flex>
           )}
 
           {!!error && (

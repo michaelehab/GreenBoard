@@ -20,6 +20,8 @@ import {
   StudentSignInResponse,
   StudentSignUpRequest,
   StudentSignUpResponse,
+  UserChangePasswordRequest,
+  UserChangePasswordResponse,
 } from "@greenboard/shared";
 
 import { callEndpoint } from "./callEndpoint";
@@ -320,6 +322,21 @@ export const updateDepartmentPassword = async (
     oldPassword: currentPassword,
     newPassword,
   });
+};
+
+export const updateUserPassword = async (
+  currentPassword: string,
+  newPassword: string
+) => {
+  await callEndpoint<UserChangePasswordRequest, UserChangePasswordResponse>(
+    "/user/password",
+    "PUT",
+    true,
+    {
+      oldPassword: currentPassword,
+      newPassword,
+    }
+  );
 };
 
 export const signOut = () => {

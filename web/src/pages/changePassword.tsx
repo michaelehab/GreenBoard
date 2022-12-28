@@ -16,13 +16,18 @@ import {
   getLocalCollegeId,
   getLocalDepartmentId,
   getLocalSchoolId,
+  getLocalUserId,
   isLoggedIn,
   isLoggedInCollege,
   isLoggedInDepartment,
+  isLoggedInInstructor,
   isLoggedInSchool,
+  isLoggedInStudent,
+  isLoggedInUser,
   updateCollegePassword,
   updateDepartmentPassword,
   updateSchoolPassword,
+  updateUserPassword,
 } from "../utils/auth";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -57,6 +62,13 @@ export const ChangePassword = () => {
           } else if (isLoggedInDepartment()) {
             await updateDepartmentPassword(currentPassword, newPassword);
             navigate(`/departments/${getLocalDepartmentId()}`);
+          } else if (isLoggedInUser()) {
+            await updateUserPassword(currentPassword, newPassword);
+            if (isLoggedInStudent()) {
+              navigate(`/students/${getLocalUserId()}`);
+            } else if (isLoggedInInstructor()) {
+              navigate(`/instructors/${getLocalUserId()}`);
+            }
           }
         } catch (err) {
           if (err instanceof ApiError) {

@@ -17,7 +17,7 @@ import {
   getLocalUserId,
   isLoggedInStudent,
 } from "../utils/auth";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { GetStudentRequest, GetStudentResponse } from "@greenboard/shared";
 import { callEndpoint } from "../utils/callEndpoint";
@@ -34,9 +34,6 @@ export const StudentProfile = () => {
       true
     )
   );
-  const edit = () => {
-    navigate(`/students/edit`);
-  };
   useEffect(() => {
     if (!isLoggedInStudent()) {
       navigate("/");
@@ -55,40 +52,46 @@ export const StudentProfile = () => {
         <Flex maxW="sm" mx="auto" my={12} direction="column" gap={3}>
           <Box m="auto">
             <Text fontSize="large">
-              {" "}
               First Name: {studentData.student.firstName}
             </Text>
             <Text fontSize="large">
-              {" "}
               Last Name: {studentData.student.lastName}
             </Text>
             <Text fontSize="large"> Email: {studentData.student.email}</Text>
             <Text fontSize="large">
-              {" "}
               Phone: {studentData.student.phoneNumber}
             </Text>
             <Text fontSize="large">
-              {" "}
               Department Name: {studentData.departmentName}
             </Text>
             <Text fontSize="large">School Name: {studentData.schoolName}</Text>
             <Text fontSize="large">
-              {" "}
               College Name: {studentData.collegeName}
             </Text>
           </Box>
           {isLoggedInStudent() && getLocalUserId() === studentId && (
-            <Box m="auto" my={12}>
-              <Button
-                colorScheme="green"
-                variant="solid"
-                type="submit"
-                display="block"
-                onClick={edit}
-              >
-                Edit
-              </Button>
-            </Box>
+            <Flex gap={2}>
+              <Link to={`/students/edit`}>
+                <Button
+                  colorScheme="green"
+                  variant="solid"
+                  type="submit"
+                  display="block"
+                >
+                  Edit
+                </Button>
+              </Link>
+              <Link to={`/change-password`}>
+                <Button
+                  colorScheme="green"
+                  variant="solid"
+                  type="submit"
+                  display="block"
+                >
+                  Change Password
+                </Button>
+              </Link>
+            </Flex>
           )}
 
           {!!error && (
