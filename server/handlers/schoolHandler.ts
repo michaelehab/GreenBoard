@@ -1,4 +1,8 @@
-import { ExpressHandler, ExpressHandlerWithParams, SchoolJwtPayload } from "../types";
+import {
+  ExpressHandler,
+  ExpressHandlerWithParams,
+  SchoolJwtPayload,
+} from "../types";
 import {
   School,
   SchoolSignInResponse,
@@ -8,7 +12,7 @@ import {
   SchoolUpdateRequest,
   SchoolUpdateResponse,
   GetSchoolRequest,
-  GetSchoolResponse
+  GetSchoolResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -94,8 +98,8 @@ export const SignInSchool: ExpressHandler<
 };
 
 export const UpdateSchool: ExpressHandler<
-SchoolUpdateRequest,
-SchoolUpdateResponse
+  SchoolUpdateRequest,
+  SchoolUpdateResponse
 > = async (req, res) => {
   const { name, email, phone } = req.body;
 
@@ -120,11 +124,10 @@ SchoolUpdateResponse
   await db.updateSchool(existingSchool);
   return res.status(200).send({
     school: {
-      id: existingSchool.id,
       email: existingSchool.email,
       name: existingSchool.name,
       phone: existingSchool.phone,
-      collegeId:existingSchool.collegeId
+      collegeId: existingSchool.collegeId,
     },
   });
 };
@@ -143,15 +146,14 @@ export const GetSchoolById: ExpressHandlerWithParams<
     return res.status(404).send({ error: "School not found" });
   }
 
-  const existingCollege=await db.getCollegeById(existingSchool.collegeId);
-  
+  const existingCollege = await db.getCollegeById(existingSchool.collegeId);
+
   return res.status(200).send({
     school: {
       email: existingSchool.email,
       name: existingSchool.name,
       phone: existingSchool.phone,
     },
-    collegeName:existingCollege?.name
+    collegeName: existingCollege?.name,
   });
 };
-

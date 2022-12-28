@@ -129,13 +129,13 @@ export interface SchoolSignInResponse {
 
 export interface GetSchoolRequest {}
 export interface GetSchoolResponse {
-  school: Pick<School, "name" | "phone" | "email" >;
-  collegeName:string;
+  school: Pick<School, "name" | "phone" | "email">;
+  collegeName: string;
 }
 
 export type SchoolUpdateRequest = Partial<School>;
 export interface SchoolUpdateResponse {
-  school: Pick<School, "id" | "email" | "collegeId" | "name" | "phone">;
+  school: Pick<School, "email" | "collegeId" | "name" | "phone">;
 }
 
 export interface SchoolResetPasswordRequest {
@@ -160,13 +160,13 @@ export interface DepartmentSignInResponse {
 
 export interface GetDepartmentRequest {}
 export interface GetDepartmentResponse {
-  department: Pick<Department, "name" | "email" >;
-  schoolName:string;
+  department: Pick<Department, "name" | "email">;
+  schoolName: string;
 }
 
 export type DepartmentUpdateRequest = Partial<Department>;
 export interface DepartmentUpdateResponse {
-  department: Pick<Department, "id" | "email" | "schoolId" | "name">;
+  department: Pick<Department, "email" | "schoolId" | "name">;
 }
 
 export interface DepartmentResetPasswordRequest {

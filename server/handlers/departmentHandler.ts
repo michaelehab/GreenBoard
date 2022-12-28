@@ -111,7 +111,6 @@ export const UpdateDepartment: ExpressHandler<
   await db.updateDepartment(existingDepartment);
   return res.status(200).send({
     department: {
-      id: existingDepartment.id,
       email: existingDepartment.email,
       name: existingDepartment.name,
       schoolId: existingDepartment.schoolId,

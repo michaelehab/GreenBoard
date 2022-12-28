@@ -28,6 +28,8 @@ import {
   isLoggedInUser,
   signOut,
   getLocalCollegeId,
+  getLocalSchoolId,
+  getLocalDepartmentId,
 } from "../utils/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
@@ -185,6 +187,16 @@ export const NavBar = () => {
                   )}
                   {isLoggedInCollege() && (
                     <Link to={`/colleges/${getLocalCollegeId()}`}>
+                      <MenuItem>Profile</MenuItem>
+                    </Link>
+                  )}
+                  {isLoggedInSchool() && (
+                    <Link to={`/schools/${getLocalSchoolId()}`}>
+                      <MenuItem>Profile</MenuItem>
+                    </Link>
+                  )}
+                  {isLoggedInDepartment() && (
+                    <Link to={`/departments/${getLocalDepartmentId()}`}>
                       <MenuItem>Profile</MenuItem>
                     </Link>
                   )}
