@@ -142,7 +142,7 @@ export const UpdateStudent: ExpressHandler<
   if (lastName) existingStudent.lastName = lastName;
   if (email) {
     const studentWithSameEmail = await db.getStudentByEmail(email);
-    if (studentWithSameEmail) {
+    if (studentWithSameEmail && email !== existingStudent.email) {
       return res.status(400).send({ error: "Student with same email exists" });
     }
     existingStudent.email = email;
@@ -151,7 +151,10 @@ export const UpdateStudent: ExpressHandler<
     const studentWithSamePhoneNumber = await db.getStudentByPhoneNumber(
       phoneNumber
     );
-    if (studentWithSamePhoneNumber) {
+    if (
+      studentWithSamePhoneNumber &&
+      phoneNumber !== existingStudent.phoneNumber
+    ) {
       return res
         .status(400)
         .send({ error: "Student with same phone number exists" });

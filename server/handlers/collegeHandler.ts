@@ -116,7 +116,7 @@ export const UpdateCollege: ExpressHandler<
   if (name) existingCollege.name = name;
   if (email) {
     const collegeWithSameEmail = await db.getCollegeByEmail(email);
-    if (collegeWithSameEmail) {
+    if (collegeWithSameEmail && email !== existingCollege.email) {
       return res.status(400).send({ error: "College with same email exists" });
     }
     existingCollege.email = email;
