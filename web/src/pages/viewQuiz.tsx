@@ -6,6 +6,11 @@ import {
   Container,
   Stack,
   Checkbox,
+  Tabs,
+  Tab,
+  TabPanels,
+  TabPanel,
+  TabList,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +28,7 @@ import { submitQuiz } from "../utils/grade";
 import { ApiError } from "../utils/apiError";
 import { toggleQuiz } from "../utils/quiz";
 import { QuizQuestionCard } from "../components/quizQuestionCard";
+import { ViewStudentsGrades } from "../components/viewStudentsGrades";
 
 export const ViewQuiz = () => {
   const { courseId, quizId } = useParams();
@@ -216,10 +222,26 @@ export const ViewQuiz = () => {
             </Button>
           </Box>
         )}
-        {isLoggedInInstructor() &&
-          quizData.questions.map((question, i) => (
-            <QuizQuestionCard key={i} {...question} />
-          ))}
+        {isLoggedInInstructor() && (
+          <Box>
+            <Tabs align="center" colorScheme={"green"}>
+              <TabList>
+                <Tab>Quiz Questions</Tab>
+                <Tab>Students Grades</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  {quizData.questions.map((question, i) => (
+                    <QuizQuestionCard key={i} {...question} />
+                  ))}
+                </TabPanel>
+                <TabPanel>
+                  <ViewStudentsGrades />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Box>
+        )}
       </Flex>
     </Container>
   );

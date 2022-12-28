@@ -639,14 +639,14 @@ export class SQLDataStore implements DataStore {
     courseId: string
   ): Promise<GradeWithName[]> {
     return await this.db.all<GradeWithName[]>(
-      "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, grades.studentId from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.studentId = ? AND quizzes.courseId = ?",
+      "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, users.firstName as studentFirstName, users.lastName as studentLastName, grades.studentId from grades, quizzes, users WHERE quizzes.id = grades.quizId AND users.id = grades.studentId AND grades.studentId = ? AND quizzes.courseId = ?",
       studentId,
       courseId
     );
   }
   async getQuizGradesWithNameById(quizId: string): Promise<GradeWithName[]> {
     return await this.db.all<GradeWithName[]>(
-      "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, grades.studentId from grades JOIN quizzes ON quizzes.id = grades.quizId WHERE grades.quizId = ?",
+      "SELECT grades.grade, quizzes.name as quizName, grades.takenAt, users.firstName as studentFirstName, users.lastName as studentLastName, grades.studentId from grades, quizzes, users WHERE quizzes.id = grades.quizId AND users.id = grades.studentId AND grades.quizId = ?",
       quizId
     );
   }

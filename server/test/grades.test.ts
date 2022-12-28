@@ -55,6 +55,8 @@ describe("Quiz Grades tests", () => {
     takenAt: SEED_GRADE_STUDENT.takenAt,
     grade: SEED_GRADE_STUDENT.grade,
     studentId: SEED_STUDENT.id,
+    studentFirstName: SEED_STUDENT.firstName,
+    studentLastName: SEED_STUDENT.lastName,
   };
 
   beforeAll(async () => {
