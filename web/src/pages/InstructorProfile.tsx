@@ -15,7 +15,7 @@ export const InstructorProfile = () => {
 
   const { data: instructorData } = useQuery([`viewInstructorProfile`], () =>
     callEndpoint<GetInstructorRequest, GetInstructorResponse>(
-      `/instructor/${instructorId}`,
+      `/instructors/${instructorId}`,
       "GET",
       true
     )
@@ -61,7 +61,7 @@ export const InstructorProfile = () => {
           </Box>
           {isLoggedInInstructor() && getLocalUserId() === instructorId && (
             <Flex gap={2}>
-              <Link to={`/students/edit`}>
+              <Link to={`/instructors/edit`}>
                 <Button
                   colorScheme="green"
                   variant="solid"

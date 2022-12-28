@@ -58,7 +58,7 @@ export const EditDepartmentProfile = () => {
   );
   const { data: departmentData } = useQuery([`viewDepartmentProfile`], () =>
     callEndpoint<GetDepartmentRequest, GetDepartmentResponse>(
-      `/department/${getLocalDepartmentId()}`,
+      `/departments/${getLocalDepartmentId()}`,
       "GET",
       true
     )

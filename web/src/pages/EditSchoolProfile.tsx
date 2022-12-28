@@ -58,7 +58,7 @@ export const EditSchoolProfile = () => {
   );
   const { data: schoolData } = useQuery([`viewSchoolProfile`], () =>
     callEndpoint<GetSchoolRequest, GetSchoolResponse>(
-      `/school/${getLocalSchoolId()}`,
+      `/schools/${getLocalSchoolId()}`,
       "GET",
       true
     )

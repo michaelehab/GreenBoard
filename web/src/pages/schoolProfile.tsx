@@ -31,7 +31,7 @@ export const SchoolProfile = () => {
 
   const { data: schoolData } = useQuery([`viewSchoolProfile`], () =>
     callEndpoint<GetSchoolRequest, GetSchoolResponse>(
-      `/school/${schoolId}`,
+      `/schools/${schoolId}`,
       "GET",
       true
     )

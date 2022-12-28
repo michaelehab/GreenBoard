@@ -12,6 +12,7 @@ import {
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
 import {
+  isLoggedInAdmin,
   isLoggedInCollege,
   isLoggedInDepartment,
   isLoggedInSchool,
@@ -44,11 +45,7 @@ export const CreateAnnouncement = () => {
   );
 
   useEffect(() => {
-    if (
-      !isLoggedInCollege() &&
-      !isLoggedInSchool() &&
-      !isLoggedInDepartment()
-    ) {
+    if (!isLoggedInAdmin()) {
       navigate("/");
     }
   }, [navigate]);

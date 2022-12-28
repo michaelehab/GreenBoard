@@ -6,7 +6,7 @@ import { callEndpoint } from "./callEndpoint";
 
 export async function updateDepartment(name: string, email: string) {
   await callEndpoint<DepartmentUpdateRequest, DepartmentUpdateResponse>(
-    `/department/update`,
+    `/departments/update`,
     "PUT",
     false,
     {
