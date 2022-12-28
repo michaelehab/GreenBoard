@@ -9,4 +9,5 @@ export interface UserDao {
     departmentId: string
   ): Promise<UserRegistrationData | undefined>;
   updateUserData(user: User): Promise<void>;
+  changeUserPassword(userId: string, newPassword: string): Promise<void>;
 }

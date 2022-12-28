@@ -124,6 +124,14 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async changeUserPassword(userId: string, newPassword: string): Promise<void> {
+    await this.db.run(
+      "UPDATE users SET password = ? WHERE id = ?",
+      newPassword,
+      userId
+    );
+  }
+
   async createStudent(student: Student): Promise<void> {
     await this.createUser(student);
 
@@ -226,6 +234,17 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async changeSchoolPassword(
+    schoolId: string,
+    newPassword: string
+  ): Promise<void> {
+    await this.db.run(
+      "UPDATE schools SET adminPassword = ? WHERE id = ?",
+      newPassword,
+      schoolId
+    );
+  }
+
   async createDepartment(department: Department): Promise<void> {
     await this.db.run(
       "INSERT INTO departments(id, name, email, adminPassword, schoolId) VALUES (?,?,?,?,?)",
@@ -257,6 +276,17 @@ export class SQLDataStore implements DataStore {
       department.name,
       department.email,
       department.id
+    );
+  }
+
+  async changeDepartmentPassword(
+    departmentId: string,
+    newPassword: string
+  ): Promise<void> {
+    await this.db.run(
+      "UPDATE departments SET adminPassword = ? WHERE id = ?",
+      newPassword,
+      departmentId
     );
   }
 
