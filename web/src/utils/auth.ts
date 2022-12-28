@@ -10,6 +10,8 @@ import {
   InstructorSignInResponse,
   InstructorSignUpRequest,
   InstructorSignUpResponse,
+  SchoolChangePasswordRequest,
+  SchoolChangePasswordResponse,
   SchoolSignInResponse,
   SchoolSignUpRequest,
   SignInRequest,
@@ -288,6 +290,21 @@ export const updateCollegePassword = async (
     oldPassword: currentPassword,
     newPassword,
   });
+};
+
+export const updateSchoolPassword = async (
+  currentPassword: string,
+  newPassword: string
+) => {
+  await callEndpoint<SchoolChangePasswordRequest, SchoolChangePasswordResponse>(
+    "/school/password",
+    "PUT",
+    true,
+    {
+      oldPassword: currentPassword,
+      newPassword,
+    }
+  );
 };
 
 export const signOut = () => {

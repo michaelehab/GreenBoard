@@ -19,7 +19,7 @@ import {
   isLoggedInInstructor,
   isLoggedInSchool,
 } from "../utils/auth";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { GetSchoolRequest, GetSchoolResponse } from "@greenboard/shared";
 import { callEndpoint } from "../utils/callEndpoint";
@@ -36,9 +36,7 @@ export const SchoolProfile = () => {
       true
     )
   );
-  const edit = () => {
-    navigate(`/school/edit`);
-  };
+
   useEffect(() => {
     if (!isLoggedInSchool()) {
       navigate("/");
@@ -62,17 +60,28 @@ export const SchoolProfile = () => {
             <Text fontSize="large">Phone: {schoolData.school.phone}</Text>
           </Box>
           {isLoggedInSchool() && getLocalSchoolId() === schoolId && (
-            <Box m="auto" my={12}>
-              <Button
-                colorScheme="green"
-                variant="solid"
-                type="submit"
-                display="block"
-                onClick={edit}
-              >
-                Edit
-              </Button>
-            </Box>
+            <Flex gap={2}>
+              <Link to={`/schools/edit`}>
+                <Button
+                  colorScheme="green"
+                  variant="solid"
+                  type="submit"
+                  display="block"
+                >
+                  Edit
+                </Button>
+              </Link>
+              <Link to={`/change-password`}>
+                <Button
+                  colorScheme="green"
+                  variant="solid"
+                  type="submit"
+                  display="block"
+                >
+                  Change Password
+                </Button>
+              </Link>
+            </Flex>
           )}
 
           {!!error && (

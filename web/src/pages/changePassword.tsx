@@ -19,6 +19,7 @@ import {
   isLoggedInCollege,
   isLoggedInSchool,
   updateCollegePassword,
+  updateSchoolPassword,
 } from "../utils/auth";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -48,8 +49,8 @@ export const ChangePassword = () => {
             await updateCollegePassword(currentPassword, newPassword);
             navigate(`/colleges/${getLocalCollegeId()}`);
           } else if (isLoggedInSchool()) {
-            //await updateSchoolPassword(currentPassword, newPassword);
-            console.log("To Be Implemented");
+            await updateSchoolPassword(currentPassword, newPassword);
+            navigate(`/schools/${getLocalSchoolId()}`);
           }
         } catch (err) {
           if (err instanceof ApiError) {
