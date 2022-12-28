@@ -22,6 +22,7 @@ describe("College tests", () => {
   const newName = "Ain Shams University";
   const newEmail = "newemail@email.com";
   const newPhone = "0103456789";
+  const newPass = "NewPassword";
 
   beforeAll(async () => {
     client = await getTestServer();
@@ -281,5 +282,73 @@ describe("College tests", () => {
       )
       .expect(400);
     expect(result.body.college).toBeUndefined();
+  });
+
+  it("Changes College Password with wrong old password -- PUT /api/v1/college/password returns 400", async () => {
+    const result = await client
+      .put(`/api/v1/college/password`)
+      .send({
+        oldPassword: "WrongOldPassword",
+        newPassword: newPass,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/college/signin",
+          newEmail,
+          college.adminPassword
+        )
+      )
+      .expect(400);
+  });
+
+  it("Changes College Password with wrong empty old password -- PUT /api/v1/college/password returns 400", async () => {
+    const result = await client
+      .put(`/api/v1/college/password`)
+      .send({
+        oldPassword: "",
+        newPassword: newPass,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/college/signin",
+          newEmail,
+          college.adminPassword
+        )
+      )
+      .expect(400);
+  });
+
+  it("Changes College Password with wrong empty new password -- PUT /api/v1/college/password returns 400", async () => {
+    const result = await client
+      .put(`/api/v1/college/password`)
+      .send({
+        oldPassword: college.adminPassword,
+        newPassword: "",
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/college/signin",
+          newEmail,
+          college.adminPassword
+        )
+      )
+      .expect(400);
+  });
+
+  it("Changes College Password with right old password -- PUT /api/v1/college/password returns 200", async () => {
+    const result = await client
+      .put(`/api/v1/college/password`)
+      .send({
+        oldPassword: college.adminPassword,
+        newPassword: newPass,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/college/signin",
+          newEmail,
+          college.adminPassword
+        )
+      )
+      .expect(200);
   });
 });

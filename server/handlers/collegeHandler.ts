@@ -13,6 +13,8 @@ import {
   CollegeUpdateResponse,
   GetCollegeRequest,
   GetCollegeResponse,
+  CollegeChangePasswordRequest,
+  CollegeChangePasswordResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -150,4 +152,37 @@ export const GetCollegeById: ExpressHandlerWithParams<
       phone: existingCollege.phone,
     },
   });
+};
+
+export const ChangeCollegePassword: ExpressHandler<
+  CollegeChangePasswordRequest,
+  CollegeChangePasswordResponse
+> = async (req, res) => {
+  const { newPassword, oldPassword } = req.body;
+
+  if (
+    !newPassword ||
+    !oldPassword ||
+    newPassword === "" ||
+    oldPassword === ""
+  ) {
+    return res.status(400).send({ error: "At least one field is required" });
+  }
+
+  const existingCollege = await db.getCollegeById(res.locals.collegeId);
+
+  if (!existingCollege) {
+    return res.status(404).send({ error: "College not found" });
+  }
+
+  if (getPasswordHashed(oldPassword) !== existingCollege.adminPassword) {
+    return res.status(400).send({ error: "Old Password is not correct" });
+  }
+
+  await db.changeCollegePassword(
+    existingCollege.id,
+    getPasswordHashed(newPassword)
+  );
+
+  return res.sendStatus(200);
 };

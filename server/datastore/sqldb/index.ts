@@ -192,6 +192,17 @@ export class SQLDataStore implements DataStore {
     );
   }
 
+  async changeCollegePassword(
+    collegeId: string,
+    newPassword: string
+  ): Promise<void> {
+    await this.db.run(
+      "UPDATE colleges SET adminPassword = ? WHERE id = ?",
+      newPassword,
+      collegeId
+    );
+  }
+
   async createSchool(school: School): Promise<void> {
     await this.db.run(
       "INSERT INTO schools(id, name, phone, email, adminPassword, collegeId) VALUES (?,?,?,?,?,?)",
