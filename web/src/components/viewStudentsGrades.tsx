@@ -20,7 +20,7 @@ export const ViewStudentsGrades = () => {
   );
 
   if (!courseId || !quizGrades) {
-    <NotFound />;
+    return <NotFound />;
   }
 
   return (

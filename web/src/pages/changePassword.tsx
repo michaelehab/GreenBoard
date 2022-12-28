@@ -7,8 +7,6 @@ import {
   AlertIcon,
   Heading,
   Center,
-  Textarea,
-  Container,
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
@@ -16,15 +14,20 @@ import {
   getLocalCollegeId,
   getLocalDepartmentId,
   getLocalSchoolId,
+  getLocalUserId,
   isLoggedIn,
   isLoggedInCollege,
   isLoggedInDepartment,
+  isLoggedInInstructor,
   isLoggedInSchool,
+  isLoggedInStudent,
+  isLoggedInUser,
   updateCollegePassword,
   updateDepartmentPassword,
   updateSchoolPassword,
+  updateUserPassword,
 } from "../utils/auth";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const ChangePassword = () => {
   const navigate = useNavigate();
@@ -57,6 +60,13 @@ export const ChangePassword = () => {
           } else if (isLoggedInDepartment()) {
             await updateDepartmentPassword(currentPassword, newPassword);
             navigate(`/departments/${getLocalDepartmentId()}`);
+          } else if (isLoggedInUser()) {
+            await updateUserPassword(currentPassword, newPassword);
+            if (isLoggedInStudent()) {
+              navigate(`/students/${getLocalUserId()}`);
+            } else if (isLoggedInInstructor()) {
+              navigate(`/instructors/${getLocalUserId()}`);
+            }
           }
         } catch (err) {
           if (err instanceof ApiError) {

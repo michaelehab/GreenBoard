@@ -20,6 +20,8 @@ import {
   StudentSignInResponse,
   StudentSignUpRequest,
   StudentSignUpResponse,
+  UserChangePasswordRequest,
+  UserChangePasswordResponse,
 } from "@greenboard/shared";
 
 import { callEndpoint } from "./callEndpoint";
@@ -81,7 +83,7 @@ export const isLoggedInAdmin = (): boolean => {
 
 export async function collegeSignIn(email: string, password: string) {
   const res = await callEndpoint<SignInRequest, CollegeSignInResponse>(
-    "/college/signin",
+    "/colleges/signin",
     "POST",
     false,
     {
@@ -96,7 +98,7 @@ export async function collegeSignIn(email: string, password: string) {
 
 export async function schoolSignIn(email: string, password: string) {
   const res = await callEndpoint<SignInRequest, SchoolSignInResponse>(
-    "/school/signin",
+    "/schools/signin",
     "POST",
     false,
     {
@@ -111,7 +113,7 @@ export async function schoolSignIn(email: string, password: string) {
 
 export async function departmentSignIn(email: string, password: string) {
   const res = await callEndpoint<SignInRequest, DepartmentSignInResponse>(
-    "/department/signin",
+    "/departments/signin",
     "POST",
     false,
     {
@@ -141,7 +143,7 @@ export async function studentSignIn(email: string, password: string) {
 
 export async function instructorSignIn(email: string, password: string) {
   const res = await callEndpoint<SignInRequest, InstructorSignInResponse>(
-    "/instructor/signin",
+    "/instructors/signin",
     "POST",
     false,
     {
@@ -167,7 +169,7 @@ export const schoolSignUp = async (
   adminPassword: string
 ) => {
   const res = await callEndpoint<SchoolSignUpRequest, SchoolSignInResponse>(
-    "/school/signup",
+    "/schools/signup",
     "POST",
     false,
     {
@@ -195,7 +197,7 @@ export const instructorSignUp = async (
   const res = await callEndpoint<
     InstructorSignUpRequest,
     InstructorSignUpResponse
-  >("/instructor/signup", "POST", false, {
+  >("/instructors/signup", "POST", false, {
     email,
     firstName,
     lastName,
@@ -249,7 +251,7 @@ export const departmentSignUp = async (
   const res = await callEndpoint<
     DepartmentSignUpRequest,
     DepartmentSignUpResponse
-  >("/department/signup", "POST", false, {
+  >("/departments/signup", "POST", false, {
     email,
     name,
     schoolId,
@@ -266,7 +268,7 @@ export const collegeSignUp = async (
   adminPassword: string
 ) => {
   const res = await callEndpoint<CollegeSignUpRequest, CollegeSignUpResponse>(
-    "/college/signup",
+    "/colleges/signup",
     "POST",
     false,
     {
@@ -288,7 +290,7 @@ export const updateCollegePassword = async (
   await callEndpoint<
     CollegeChangePasswordRequest,
     CollegeChangePasswordResponse
-  >("/college/password", "PUT", true, {
+  >("/colleges/password", "PUT", true, {
     oldPassword: currentPassword,
     newPassword,
   });
@@ -299,7 +301,7 @@ export const updateSchoolPassword = async (
   newPassword: string
 ) => {
   await callEndpoint<SchoolChangePasswordRequest, SchoolChangePasswordResponse>(
-    "/school/password",
+    "/schools/password",
     "PUT",
     true,
     {
@@ -316,10 +318,25 @@ export const updateDepartmentPassword = async (
   await callEndpoint<
     DepartmentChangePasswordRequest,
     DepartmentChangePasswordResponse
-  >("/department/password", "PUT", true, {
+  >("/departments/password", "PUT", true, {
     oldPassword: currentPassword,
     newPassword,
   });
+};
+
+export const updateUserPassword = async (
+  currentPassword: string,
+  newPassword: string
+) => {
+  await callEndpoint<UserChangePasswordRequest, UserChangePasswordResponse>(
+    "/users/password",
+    "PUT",
+    true,
+    {
+      oldPassword: currentPassword,
+      newPassword,
+    }
+  );
 };
 
 export const signOut = () => {

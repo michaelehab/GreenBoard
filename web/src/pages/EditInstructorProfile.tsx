@@ -55,7 +55,7 @@ export const EditInstructorProfile = () => {
   );
   const { data: instructorData } = useQuery([`viewInstructorProfile`], () =>
     callEndpoint<GetInstructorRequest, GetInstructorResponse>(
-      `/instructor/${getLocalUserId()}`,
+      `/instructors/${getLocalUserId()}`,
       "GET",
       true
     )

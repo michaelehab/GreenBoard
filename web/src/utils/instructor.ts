@@ -11,7 +11,7 @@ export async function updateInstructor(
   email: string
 ) {
   await callEndpoint<InstructorUpdateRequest, InstructorUpdateResponse>(
-    `/instructor/update`,
+    `/instructors/update`,
     "PUT",
     false,
     {

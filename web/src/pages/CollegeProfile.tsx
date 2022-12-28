@@ -33,7 +33,7 @@ export const CollegeProfile = () => {
 
   const { data: collegeData } = useQuery([`viewCollegeProfile`], () =>
     callEndpoint<GetCollegeRequest, GetCollegeResponse>(
-      `/college/${collegeId}`,
+      `/colleges/${collegeId}`,
       "GET",
       true
     )

@@ -30,33 +30,33 @@ describe("Department tests", () => {
     client = await getTestServer();
   });
 
-  it("Adds a new valid department -- /api/v1/department/signup returns 200", async () => {
+  it("Adds a new valid department -- /api/v1/departments/signup returns 200", async () => {
     const result = await client
-      .post("/api/v1/department/signup")
+      .post("/api/v1/departments/signup")
       .send(department)
       .expect(200);
     expect(result.body.jwt).toBeDefined();
   });
 
-  it("Tries adding the same department again -- /api/v1/department/signup returns 403", async () => {
+  it("Tries adding the same department again -- /api/v1/departments/signup returns 403", async () => {
     const result = await client
-      .post("/api/v1/department/signup")
+      .post("/api/v1/departments/signup")
       .send(department)
       .expect(403);
     expect(result.body.jwt).toBeUndefined();
   });
 
-  it("Sends an empty object -- /api/v1/department/signup returns 400", async () => {
+  it("Sends an empty object -- /api/v1/departments/signup returns 400", async () => {
     const result = await client
-      .post("/api/v1/department/signup")
+      .post("/api/v1/departments/signup")
       .send({})
       .expect(400);
     expect(result.body.jwt).toBeUndefined();
   });
 
-  it("Sends with a missing field -- /api/v1/department/signup returns 400", async () => {
+  it("Sends with a missing field -- /api/v1/departments/signup returns 400", async () => {
     const result = await client
-      .post("/api/v1/department/signup")
+      .post("/api/v1/departments/signup")
       .send({
         name: "Computer Engineering",
         adminPassword: "password",
@@ -66,9 +66,9 @@ describe("Department tests", () => {
     expect(result.body.jwt).toBeUndefined();
   });
 
-  it("Signs in with valid credentials -- /api/v1/department/signin returns 200", async () => {
+  it("Signs in with valid credentials -- /api/v1/departments/signin returns 200", async () => {
     const result = await client
-      .post("/api/v1/department/signin")
+      .post("/api/v1/departments/signin")
       .send({
         email: department.email,
         password: department.adminPassword,
@@ -80,9 +80,9 @@ describe("Department tests", () => {
     departmentId = result.body.department.id;
   });
 
-  it("Signs in with invalid password -- /api/v1/department/signin returns 403", async () => {
+  it("Signs in with invalid password -- /api/v1/departments/signin returns 403", async () => {
     const result = await client
-      .post("/api/v1/department/signin")
+      .post("/api/v1/departments/signin")
       .send({
         email: department.email,
         password: "WrongPassword",
@@ -92,9 +92,9 @@ describe("Department tests", () => {
     expect(result.body.department).toBeUndefined();
   });
 
-  it("Signs in with invalid email -- /api/v1/department/signin returns 403", async () => {
+  it("Signs in with invalid email -- /api/v1/departments/signin returns 403", async () => {
     const result = await client
-      .post("/api/v1/department/signin")
+      .post("/api/v1/departments/signin")
       .send({
         email: "WrongEmail",
         password: department.adminPassword,
@@ -104,12 +104,12 @@ describe("Department tests", () => {
     expect(result.body.department).toBeUndefined();
   });
 
-  it("Gets department profile by id as department-- GET /api/v1/department/:departmentId expects 200", async () => {
+  it("Gets department profile by id as department-- GET /api/v1/departments/:departmentId expects 200", async () => {
     const result = await client
-      .get(`/api/v1/department/${departmentId}`)
+      .get(`/api/v1/departments/${departmentId}`)
       .set(
         await getAuthToken(
-          "/api/v1/department/signin",
+          "/api/v1/departments/signin",
           department.email,
           department.adminPassword
         )
@@ -121,12 +121,12 @@ describe("Department tests", () => {
     expect(result.body.schoolName).toEqual(SEED_SCHOOL.name);
   });
 
-  it("Gets department profile by id as instructor-- GET /api/v1/department/:departmentId expects 200", async () => {
+  it("Gets department profile by id as instructor-- GET /api/v1/departments/:departmentId expects 200", async () => {
     const result = await client
-      .get(`/api/v1/department/${departmentId}`)
+      .get(`/api/v1/departments/${departmentId}`)
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           SEED_INSTRUCTOR.email,
           SEED_INSTRUCTOR_PASSWORD
         )
@@ -138,19 +138,19 @@ describe("Department tests", () => {
     expect(result.body.schoolName).toEqual(SEED_SCHOOL.name);
   });
 
-  it("Gets department profile by id as unauthorized-- GET /api/v1/department/:departmentId expects 401", async () => {
+  it("Gets department profile by id as unauthorized-- GET /api/v1/departments/:departmentId expects 401", async () => {
     const result = await client
-      .get(`/api/v1/department/${departmentId}`)
+      .get(`/api/v1/departments/${departmentId}`)
       .expect(401);
     expect(result.body.department).toBeUndefined();
   });
 
-  it("Gets department profile by id as instructor with invalidDepartmentId-- GET /api/v1/department/:departmentId expects 404", async () => {
+  it("Gets department profile by id as instructor with invalidDepartmentId-- GET /api/v1/departments/:departmentId expects 404", async () => {
     const result = await client
-      .get(`/api/v1/department/invalidDepartmentId`)
+      .get(`/api/v1/departments/invalidDepartmentId`)
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           SEED_INSTRUCTOR.email,
           SEED_INSTRUCTOR_PASSWORD
         )
@@ -159,15 +159,15 @@ describe("Department tests", () => {
     expect(result.body.department).toBeUndefined();
   });
 
-  it("Updates signed in department name -- PUT /api/v1/department/update returns 200", async () => {
+  it("Updates signed in department name -- PUT /api/v1/departments/update returns 200", async () => {
     const result = await client
-      .put("/api/v1/department/update")
+      .put("/api/v1/departments/update")
       .send({
         name: newName,
       })
       .set(
         await getAuthToken(
-          "/api/v1/department/signin",
+          "/api/v1/departments/signin",
           department.email,
           department.adminPassword
         )
@@ -178,9 +178,9 @@ describe("Department tests", () => {
     expect(result.body.department.email).toEqual(department.email);
   });
 
-  it("Updates signed in department not signed in -- PUT /api/v1/department/update returns 403", async () => {
+  it("Updates signed in department not signed in -- PUT /api/v1/departments/update returns 403", async () => {
     const result = await client
-      .put("/api/v1/department/update")
+      .put("/api/v1/departments/update")
       .send({
         name: newName,
       })
@@ -188,15 +188,15 @@ describe("Department tests", () => {
     expect(result.body.department).toBeUndefined();
   });
 
-  it("Updates signed in department name with empty -- PUT /api/v1/department/update returns 400", async () => {
+  it("Updates signed in department name with empty -- PUT /api/v1/departments/update returns 400", async () => {
     const result = await client
-      .put("/api/v1/department/update")
+      .put("/api/v1/departments/update")
       .send({
         name: "",
       })
       .set(
         await getAuthToken(
-          "/api/v1/department/signin",
+          "/api/v1/departments/signin",
           department.email,
           department.adminPassword
         )
@@ -205,15 +205,15 @@ describe("Department tests", () => {
     expect(result.body.department).toBeUndefined();
   });
 
-  it("Updates signed in department email -- PUT /api/v1/department/update returns 200", async () => {
+  it("Updates signed in department email -- PUT /api/v1/departments/update returns 200", async () => {
     const result = await client
-      .put("/api/v1/department/update")
+      .put("/api/v1/departments/update")
       .send({
         email: newEmail,
       })
       .set(
         await getAuthToken(
-          "/api/v1/department/signin",
+          "/api/v1/departments/signin",
           department.email,
           department.adminPassword
         )
@@ -224,15 +224,15 @@ describe("Department tests", () => {
     expect(result.body.department.email).toEqual(newEmail);
   });
 
-  it("Updates signed in department email with empty -- PUT /api/v1/department/update returns 400", async () => {
+  it("Updates signed in department email with empty -- PUT /api/v1/departments/update returns 400", async () => {
     const result = await client
-      .put("/api/v1/department/update")
+      .put("/api/v1/departments/update")
       .send({
         email: "",
       })
       .set(
         await getAuthToken(
-          "/api/v1/department/signin",
+          "/api/v1/departments/signin",
           newEmail,
           department.adminPassword
         )
@@ -241,15 +241,15 @@ describe("Department tests", () => {
     expect(result.body.department).toBeUndefined();
   });
 
-  it("Updates signed in department phone with empty -- PUT /api/v1/department/update returns 400", async () => {
+  it("Updates signed in department phone with empty -- PUT /api/v1/departments/update returns 400", async () => {
     const result = await client
-      .put("/api/v1/department/update")
+      .put("/api/v1/departments/update")
       .send({
         phone: "",
       })
       .set(
         await getAuthToken(
-          "/api/v1/department/signin",
+          "/api/v1/departments/signin",
           newEmail,
           department.adminPassword
         )
@@ -258,16 +258,16 @@ describe("Department tests", () => {
     expect(result.body.department).toBeUndefined();
   });
 
-  it("Changes department Password with wrong old password -- PUT /api/v1/department/password returns 400", async () => {
+  it("Changes department Password with wrong old password -- PUT /api/v1/departments/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/department/password`)
+      .put(`/api/v1/departments/password`)
       .send({
         oldPassword: "WrongOldPassword",
         newPassword: newPass,
       })
       .set(
         await getAuthToken(
-          "/api/v1/department/signin",
+          "/api/v1/departments/signin",
           newEmail,
           department.adminPassword
         )
@@ -275,16 +275,16 @@ describe("Department tests", () => {
       .expect(400);
   });
 
-  it("Changes department Password with wrong empty old password -- PUT /api/v1/department/password returns 400", async () => {
+  it("Changes department Password with wrong empty old password -- PUT /api/v1/departments/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/department/password`)
+      .put(`/api/v1/departments/password`)
       .send({
         oldPassword: "",
         newPassword: newPass,
       })
       .set(
         await getAuthToken(
-          "/api/v1/department/signin",
+          "/api/v1/departments/signin",
           newEmail,
           department.adminPassword
         )
@@ -292,16 +292,16 @@ describe("Department tests", () => {
       .expect(400);
   });
 
-  it("Changes department Password with wrong empty new password -- PUT /api/v1/department/password returns 400", async () => {
+  it("Changes department Password with wrong empty new password -- PUT /api/v1/departments/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/department/password`)
+      .put(`/api/v1/departments/password`)
       .send({
         oldPassword: department.adminPassword,
         newPassword: "",
       })
       .set(
         await getAuthToken(
-          "/api/v1/department/signin",
+          "/api/v1/departments/signin",
           newEmail,
           department.adminPassword
         )
@@ -309,16 +309,16 @@ describe("Department tests", () => {
       .expect(400);
   });
 
-  it("Changes department Password with right old password -- PUT /api/v1/department/password returns 200", async () => {
+  it("Changes department Password with right old password -- PUT /api/v1/departments/password returns 200", async () => {
     const result = await client
-      .put(`/api/v1/department/password`)
+      .put(`/api/v1/departments/password`)
       .send({
         oldPassword: department.adminPassword,
         newPassword: newPass,
       })
       .set(
         await getAuthToken(
-          "/api/v1/department/signin",
+          "/api/v1/departments/signin",
           newEmail,
           department.adminPassword
         )

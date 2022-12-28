@@ -73,7 +73,7 @@ describe("Quiz and Quiz's Question tests", () => {
     );
 
     instructorAuthHeader = await getAuthToken(
-      "/api/v1/instructor/signin",
+      "/api/v1/instructors/signin",
       SEED_INSTRUCTOR.email,
       SEED_INSTRUCTOR_PASSWORD
     );
@@ -85,7 +85,7 @@ describe("Quiz and Quiz's Question tests", () => {
     );
 
     instructorNotInCourseAuthHeader = await getAuthToken(
-      "/api/v1/instructor/signin",
+      "/api/v1/instructors/signin",
       SEED_INSTRUCTOR2.email,
       SEED_INSTRUCTOR_PASSWORD
     );

@@ -7,6 +7,7 @@ import {
   GetCourseStudentsQuestionsResponse,
 } from "@greenboard/shared";
 import { StudentQuestionCard } from "./studentQuestionCard";
+import { NotFound } from "../pages/notFound";
 
 export const ViewStudentsQuestions = () => {
   const { courseId } = useParams();
@@ -21,7 +22,7 @@ export const ViewStudentsQuestions = () => {
   );
 
   if (!courseId || !studentsQuestions) {
-    <p>Not Found</p>;
+    return <NotFound />;
   }
 
   return (

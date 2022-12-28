@@ -31,33 +31,33 @@ describe("Instructor tests", () => {
     client = await getTestServer();
   });
 
-  it("Adds a new valid instructor -- /api/v1/instructor/signup returns 200", async () => {
+  it("Adds a new valid instructor -- /api/v1/instructors/signup returns 200", async () => {
     const result = await client
-      .post("/api/v1/instructor/signup")
+      .post("/api/v1/instructors/signup")
       .send(instructor)
       .expect(200);
     expect(result.body.jwt).toBeDefined();
   });
 
-  it("Tries adding the same instructor again -- /api/v1/instructor/signup returns 403", async () => {
+  it("Tries adding the same instructor again -- /api/v1/instructors/signup returns 403", async () => {
     const result = await client
-      .post("/api/v1/instructor/signup")
+      .post("/api/v1/instructors/signup")
       .send(instructor)
       .expect(403);
     expect(result.body.jwt).toBeUndefined();
   });
 
-  it("Sends an empty object -- /api/v1/instructor/signup returns 400", async () => {
+  it("Sends an empty object -- /api/v1/instructors/signup returns 400", async () => {
     const result = await client
-      .post("/api/v1/instructor/signup")
+      .post("/api/v1/instructors/signup")
       .send({})
       .expect(400);
     expect(result.body.jwt).toBeUndefined();
   });
 
-  it("Sends with a missing field -- /api/v1/instructor/signup returns 400", async () => {
+  it("Sends with a missing field -- /api/v1/instructors/signup returns 400", async () => {
     const result = await client
-      .post("/api/v1/instructor/signup")
+      .post("/api/v1/instructors/signup")
       .send({
         email: "test@outlook.com",
         firstName: "John",
@@ -69,9 +69,9 @@ describe("Instructor tests", () => {
     expect(result.body.jwt).toBeUndefined();
   });
 
-  it("Signs in with valid credentials -- /api/v1/instructor/signin returns 200", async () => {
+  it("Signs in with valid credentials -- /api/v1/instructors/signin returns 200", async () => {
     const result = await client
-      .post("/api/v1/instructor/signin")
+      .post("/api/v1/instructors/signin")
       .send({
         email: instructor.email,
         password: instructor.password,
@@ -83,9 +83,9 @@ describe("Instructor tests", () => {
     instructorId = result.body.instructor.id;
   });
 
-  it("Signs in with invalid password -- /api/v1/instructor/signin returns 403", async () => {
+  it("Signs in with invalid password -- /api/v1/instructors/signin returns 403", async () => {
     const result = await client
-      .post("/api/v1/instructor/signin")
+      .post("/api/v1/instructors/signin")
       .send({
         email: instructor.email,
         password: "WrongPassword",
@@ -95,9 +95,9 @@ describe("Instructor tests", () => {
     expect(result.body.instructor).toBeUndefined();
   });
 
-  it("Signs in with invalid email -- /api/v1/instructor/signin returns 403", async () => {
+  it("Signs in with invalid email -- /api/v1/instructors/signin returns 403", async () => {
     const result = await client
-      .post("/api/v1/instructor/signin")
+      .post("/api/v1/instructors/signin")
       .send({
         email: "WrongEmail",
         password: instructor.password,
@@ -107,12 +107,12 @@ describe("Instructor tests", () => {
     expect(result.body.instructor).toBeUndefined();
   });
 
-  it("Gets instructor profile by id as instructor-- GET /api/v1/instructor/:instructorId expects 200", async () => {
+  it("Gets instructor profile by id as instructor-- GET /api/v1/instructors/:instructorId expects 200", async () => {
     const result = await client
-      .get(`/api/v1/instructor/${instructorId}`)
+      .get(`/api/v1/instructors/${instructorId}`)
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           instructor.email,
           instructor.password
         )
@@ -128,12 +128,12 @@ describe("Instructor tests", () => {
     expect(result.body.schoolName).toEqual(SEED_SCHOOL.name);
   });
 
-  it("Gets instructor profile by id as other instructor-- GET /api/v1/instructor/:instructorId expects 200", async () => {
+  it("Gets instructor profile by id as other instructor-- GET /api/v1/instructors/:instructorId expects 200", async () => {
     const result = await client
-      .get(`/api/v1/instructor/${instructorId}`)
+      .get(`/api/v1/instructors/${instructorId}`)
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           SEED_INSTRUCTOR.email,
           SEED_INSTRUCTOR_PASSWORD
         )
@@ -149,19 +149,19 @@ describe("Instructor tests", () => {
     expect(result.body.schoolName).toEqual(SEED_SCHOOL.name);
   });
 
-  it("Gets instructor profile by id as unauthorized-- GET /api/v1/instructor/:instructorId expects 401", async () => {
+  it("Gets instructor profile by id as unauthorized-- GET /api/v1/instructors/:instructorId expects 401", async () => {
     const result = await client
-      .get(`/api/v1/instructor/${instructorId}`)
+      .get(`/api/v1/instructors/${instructorId}`)
       .expect(401);
     expect(result.body.instructor).toBeUndefined();
   });
 
-  it("Gets instructor profile by id as instructor with invalidInstructorId-- GET /api/v1/instructor/:instructorId expects 404", async () => {
+  it("Gets instructor profile by id as instructor with invalidInstructorId-- GET /api/v1/instructors/:instructorId expects 404", async () => {
     const result = await client
-      .get(`/api/v1/instructor/invalidInstructorId`)
+      .get(`/api/v1/instructors/invalidInstructorId`)
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           SEED_INSTRUCTOR.email,
           SEED_INSTRUCTOR_PASSWORD
         )
@@ -169,16 +169,16 @@ describe("Instructor tests", () => {
       .expect(404);
     expect(result.body.instructor).toBeUndefined();
   });
-  it("Updates signed in instructor Name -- PUT /api/v1/instructor/update returns 200", async () => {
+  it("Updates signed in instructor Name -- PUT /api/v1/instructors/update returns 200", async () => {
     const result = await client
-      .put("/api/v1/instructor/update")
+      .put("/api/v1/instructors/update")
       .send({
         firstName: newFirstName,
         lastName: newLastName,
       })
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           instructor.email,
           instructor.password
         )
@@ -191,9 +191,9 @@ describe("Instructor tests", () => {
     expect(result.body.instructor.phoneNumber).toEqual(instructor.phoneNumber);
   });
 
-  it("Updates signed in instructor not signed in -- PUT /api/v1/instructor/update returns 403", async () => {
+  it("Updates signed in instructor not signed in -- PUT /api/v1/instructors/update returns 403", async () => {
     const result = await client
-      .put("/api/v1/instructor/update")
+      .put("/api/v1/instructors/update")
       .send({
         firstName: newFirstName,
       })
@@ -201,9 +201,9 @@ describe("Instructor tests", () => {
     expect(result.body.instructor).toBeUndefined();
   });
 
-  it("Updates signed in instructor name with empty -- PUT /api/v1/instructor/update returns 400", async () => {
+  it("Updates signed in instructor name with empty -- PUT /api/v1/instructors/update returns 400", async () => {
     const result = await client
-      .put("/api/v1/instructor/update")
+      .put("/api/v1/instructors/update")
       .send({
         firstName: "",
         lastName: "",
@@ -212,7 +212,7 @@ describe("Instructor tests", () => {
       })
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           instructor.email,
           instructor.password
         )
@@ -221,15 +221,15 @@ describe("Instructor tests", () => {
     expect(result.body.instructor).toBeUndefined();
   });
 
-  it("Updates signed in instructor email -- PUT /api/v1/instructor/update returns 200", async () => {
+  it("Updates signed in instructor email -- PUT /api/v1/instructors/update returns 200", async () => {
     const result = await client
-      .put("/api/v1/instructor/update")
+      .put("/api/v1/instructors/update")
       .send({
         email: newEmail,
       })
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           instructor.email,
           instructor.password
         )
@@ -242,15 +242,15 @@ describe("Instructor tests", () => {
     expect(result.body.instructor.phoneNumber).toEqual(instructor.phoneNumber);
   });
 
-  it("Updates signed in instructor phoneNumber -- PUT /api/v1/instructor/update returns 200", async () => {
+  it("Updates signed in instructor phoneNumber -- PUT /api/v1/instructors/update returns 200", async () => {
     const result = await client
-      .put("/api/v1/instructor/update")
+      .put("/api/v1/instructors/update")
       .send({
         phoneNumber: newPhone,
       })
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           newEmail,
           instructor.password
         )
@@ -263,15 +263,15 @@ describe("Instructor tests", () => {
     expect(result.body.instructor.phoneNumber).toEqual(newPhone);
   });
 
-  it("Updates signed in instructor phoneNumber with empty -- PUT /api/v1/instructor/update returns 400", async () => {
+  it("Updates signed in instructor phoneNumber with empty -- PUT /api/v1/instructors/update returns 400", async () => {
     const result = await client
-      .put("/api/v1/instructor/update")
+      .put("/api/v1/instructors/update")
       .send({
         phoneNumber: "",
       })
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           newEmail,
           instructor.password
         )
@@ -280,16 +280,16 @@ describe("Instructor tests", () => {
     expect(result.body.instructor).toBeUndefined();
   });
 
-  it("Changes instructor Password with wrong old password -- PUT /api/v1/user/password returns 400", async () => {
+  it("Changes instructor Password with wrong old password -- PUT /api/v1/users/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/user/password`)
+      .put(`/api/v1/users/password`)
       .send({
         oldPassword: "WrongOldPassword",
         newPassword: newPass,
       })
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           newEmail,
           instructor.password
         )
@@ -297,16 +297,16 @@ describe("Instructor tests", () => {
       .expect(400);
   });
 
-  it("Changes instructor Password with wrong empty old password -- PUT /api/v1/user/password returns 400", async () => {
+  it("Changes instructor Password with wrong empty old password -- PUT /api/v1/users/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/user/password`)
+      .put(`/api/v1/users/password`)
       .send({
         oldPassword: "",
         newPassword: newPass,
       })
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           newEmail,
           instructor.password
         )
@@ -314,16 +314,16 @@ describe("Instructor tests", () => {
       .expect(400);
   });
 
-  it("Changes instructor Password with wrong empty new password -- PUT /api/v1/user/password returns 400", async () => {
+  it("Changes instructor Password with wrong empty new password -- PUT /api/v1/users/password returns 400", async () => {
     const result = await client
-      .put(`/api/v1/user/password`)
+      .put(`/api/v1/users/password`)
       .send({
         oldPassword: instructor.password,
         newPassword: "",
       })
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           newEmail,
           instructor.password
         )
@@ -331,16 +331,16 @@ describe("Instructor tests", () => {
       .expect(400);
   });
 
-  it("Changes instructor Password with right old password -- PUT /api/v1/user/password returns 200", async () => {
+  it("Changes instructor Password with right old password -- PUT /api/v1/users/password returns 200", async () => {
     const result = await client
-      .put(`/api/v1/user/password`)
+      .put(`/api/v1/users/password`)
       .send({
         oldPassword: instructor.password,
         newPassword: newPass,
       })
       .set(
         await getAuthToken(
-          "/api/v1/instructor/signin",
+          "/api/v1/instructors/signin",
           newEmail,
           instructor.password
         )

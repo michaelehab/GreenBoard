@@ -10,7 +10,7 @@ export async function updateCollege(
   phone: string
 ) {
   await callEndpoint<CollegeUpdateRequest, CollegeUpdateResponse>(
-    `/college/update`,
+    `/colleges/update`,
     "PUT",
     false,
     {

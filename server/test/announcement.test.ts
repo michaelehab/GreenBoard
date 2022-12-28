@@ -51,25 +51,25 @@ describe("Announcements tests", () => {
     );
 
     instructorAuthHeader = await getAuthToken(
-      "/api/v1/instructor/signin",
+      "/api/v1/instructors/signin",
       SEED_INSTRUCTOR.email,
       SEED_INSTRUCTOR_PASSWORD
     );
 
     collegeAuthHeader = await getAuthToken(
-      "/api/v1/college/signin",
+      "/api/v1/colleges/signin",
       SEED_COLLEGE.email,
       SEED_COLLEGE_PASSWORD
     );
 
     schoolAuthHeader = await getAuthToken(
-      "/api/v1/school/signin",
+      "/api/v1/schools/signin",
       SEED_SCHOOL.email,
       SEED_SCHOOL_PASSWORD
     );
 
     departmentAuthHeader = await getAuthToken(
-      "/api/v1/department/signin",
+      "/api/v1/departments/signin",
       SEED_DEPARTMENT.email,
       SEED_DEPARTMENT_PASSWORD
     );

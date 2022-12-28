@@ -7,6 +7,7 @@ import {
   ListCoursePostsResponse,
 } from "@greenboard/shared";
 import { PostCard } from "../components/postCard";
+import { NotFound } from "../pages/notFound";
 
 export const ViewCoursePosts = () => {
   const { courseId } = useParams();
@@ -20,7 +21,7 @@ export const ViewCoursePosts = () => {
   );
 
   if (!courseId || !coursePosts) {
-    <p>Not Found</p>;
+    return <NotFound />;
   }
 
   return (
