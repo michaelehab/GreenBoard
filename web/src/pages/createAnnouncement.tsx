@@ -11,12 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
-import {
-  isLoggedInAdmin,
-  isLoggedInCollege,
-  isLoggedInDepartment,
-  isLoggedInSchool,
-} from "../utils/auth";
+import { isLoggedInAdmin } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
 import { createAnnouncement } from "../utils/announcement";
 export const CreateAnnouncement = () => {

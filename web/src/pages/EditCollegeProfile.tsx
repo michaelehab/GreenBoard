@@ -7,16 +7,11 @@ import {
   AlertIcon,
   Heading,
   Center,
-  Textarea,
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
-import {
-  getLocalCollegeId,
-  isLoggedInCollege,
-  isLoggedInInstructor,
-} from "../utils/auth";
-import { useNavigate, useParams } from "react-router-dom";
+import { getLocalCollegeId, isLoggedInCollege } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { GetCollegeRequest, GetCollegeResponse } from "@greenboard/shared";
 import { callEndpoint } from "../utils/callEndpoint";

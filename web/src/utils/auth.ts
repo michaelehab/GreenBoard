@@ -168,7 +168,7 @@ export const schoolSignUp = async (
   collegeId: string,
   adminPassword: string
 ) => {
-  const res = await callEndpoint<SchoolSignUpRequest, SchoolSignInResponse>(
+  await callEndpoint<SchoolSignUpRequest, SchoolSignInResponse>(
     "/schools/signup",
     "POST",
     false,
@@ -180,7 +180,6 @@ export const schoolSignUp = async (
       adminPassword,
     }
   );
-  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
 };
 export const getLocalDepartmentId = (): string => {
   const getId = localStorage.getItem(LOCAL_STORAGE_DepartmentID);
@@ -194,18 +193,19 @@ export const instructorSignUp = async (
   password: string,
   departmentId: string
 ) => {
-  const res = await callEndpoint<
-    InstructorSignUpRequest,
-    InstructorSignUpResponse
-  >("/instructors/signup", "POST", false, {
-    email,
-    firstName,
-    lastName,
-    phoneNumber,
-    password,
-    departmentId,
-  });
-  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+  await callEndpoint<InstructorSignUpRequest, InstructorSignUpResponse>(
+    "/instructors/signup",
+    "POST",
+    false,
+    {
+      email,
+      firstName,
+      lastName,
+      phoneNumber,
+      password,
+      departmentId,
+    }
+  );
 };
 export const studentSignUp = async (
   email: string,
@@ -216,7 +216,7 @@ export const studentSignUp = async (
   password: string,
   departmentId: string
 ) => {
-  const res = await callEndpoint<StudentSignUpRequest, StudentSignUpResponse>(
+  await callEndpoint<StudentSignUpRequest, StudentSignUpResponse>(
     "/students/signup",
     "POST",
     false,
@@ -230,7 +230,6 @@ export const studentSignUp = async (
       departmentId,
     }
   );
-  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
 };
 
 export const getLocalSchoolId = (): string => {
@@ -248,16 +247,17 @@ export const departmentSignUp = async (
   schoolId: string,
   adminPassword: string
 ) => {
-  const res = await callEndpoint<
-    DepartmentSignUpRequest,
-    DepartmentSignUpResponse
-  >("/departments/signup", "POST", false, {
-    email,
-    name,
-    schoolId,
-    adminPassword,
-  });
-  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+  await callEndpoint<DepartmentSignUpRequest, DepartmentSignUpResponse>(
+    "/departments/signup",
+    "POST",
+    false,
+    {
+      email,
+      name,
+      schoolId,
+      adminPassword,
+    }
+  );
 };
 export const collegeSignUp = async (
   email: string,
@@ -267,7 +267,7 @@ export const collegeSignUp = async (
   location: string,
   adminPassword: string
 ) => {
-  const res = await callEndpoint<CollegeSignUpRequest, CollegeSignUpResponse>(
+  await callEndpoint<CollegeSignUpRequest, CollegeSignUpResponse>(
     "/colleges/signup",
     "POST",
     false,
@@ -280,7 +280,6 @@ export const collegeSignUp = async (
       adminPassword,
     }
   );
-  localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
 };
 
 export const updateCollegePassword = async (

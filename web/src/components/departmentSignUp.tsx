@@ -15,8 +15,10 @@ export const DepartmentSignUp = () => {
   const [email, setEmail] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
-  const schoolId: string = getLocalSchoolId();
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const schoolId: string = getLocalSchoolId();
 
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
@@ -29,7 +31,7 @@ export const DepartmentSignUp = () => {
       } else {
         try {
           await departmentSignUp(email, name, schoolId, adminPassword);
-          navigate("/");
+          setSuccess("Department Registered Successfully");
         } catch (err) {
           if (err instanceof ApiError) {
             setError(err.message);
@@ -37,7 +39,7 @@ export const DepartmentSignUp = () => {
         }
       }
     },
-    [navigate, email, name, adminPassword, confirmAdminPassWord, schoolId]
+    [email, name, adminPassword, confirmAdminPassWord, schoolId]
   );
   useEffect(() => {
     if (!isLoggedInSchool()) {
@@ -95,6 +97,12 @@ export const DepartmentSignUp = () => {
           <Alert status="error">
             <AlertIcon />
             {error}
+          </Alert>
+        )}
+        {!!success && (
+          <Alert status="success">
+            <AlertIcon />
+            {success}
           </Alert>
         )}
       </Flex>

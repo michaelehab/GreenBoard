@@ -1,34 +1,14 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  Alert,
-  AlertIcon,
-  Heading,
-  Center,
-  Textarea,
-  Text,
-} from "@chakra-ui/react";
-import { FormEvent, useCallback, useEffect, useState } from "react";
-import { ApiError } from "../utils/apiError";
-import {
-  getLocalCollegeId,
-  isLoggedInCollege,
-  isLoggedInInstructor,
-} from "../utils/auth";
+import { Box, Button, Flex, Heading, Center, Text } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { getLocalCollegeId, isLoggedInCollege } from "../utils/auth";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { GetCollegeRequest, GetCollegeResponse } from "@greenboard/shared";
 import { callEndpoint } from "../utils/callEndpoint";
 import { NotFound } from "./notFound";
-import { updateCollege } from "../utils/college";
+
 export const CollegeProfile = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [error, setError] = useState("");
   const { collegeId } = useParams();
 
   const { data: collegeData } = useQuery([`viewCollegeProfile`], () =>
@@ -86,13 +66,6 @@ export const CollegeProfile = () => {
               </Button>
             </Link>
           </Flex>
-        )}
-
-        {!!error && (
-          <Alert status="error">
-            <AlertIcon />
-            {error}
-          </Alert>
         )}
       </Flex>
     </Center>

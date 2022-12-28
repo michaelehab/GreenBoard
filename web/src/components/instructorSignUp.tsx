@@ -19,6 +19,7 @@ export const InstructorSignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const departmentId: string = getLocalDepartmentId();
 
@@ -47,7 +48,7 @@ export const InstructorSignUp = () => {
             password,
             departmentId
           );
-          navigate("/");
+          setSuccess("Instructor Registered Successfully");
         } catch (err) {
           if (err instanceof ApiError) {
             setError(err.message);
@@ -55,16 +56,7 @@ export const InstructorSignUp = () => {
         }
       }
     },
-    [
-      navigate,
-      email,
-      firstName,
-      lastName,
-      phone,
-      password,
-      confirmPassword,
-      departmentId,
-    ]
+    [email, firstName, lastName, phone, password, confirmPassword, departmentId]
   );
   useEffect(() => {
     if (!isLoggedInDepartment()) {
@@ -136,6 +128,12 @@ export const InstructorSignUp = () => {
           <Alert status="error">
             <AlertIcon />
             {error}
+          </Alert>
+        )}
+        {!!success && (
+          <Alert status="success">
+            <AlertIcon />
+            {success}
           </Alert>
         )}
       </Flex>

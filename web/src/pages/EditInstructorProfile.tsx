@@ -7,12 +7,11 @@ import {
   AlertIcon,
   Heading,
   Center,
-  Textarea,
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
 import { getLocalUserId, isLoggedInInstructor } from "../utils/auth";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { callEndpoint } from "../utils/callEndpoint";
 import { NotFound } from "./notFound";

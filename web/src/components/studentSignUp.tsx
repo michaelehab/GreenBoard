@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
 import { ApiError } from "../utils/apiError";
 import {
-  isLoggedIn,
   getLocalDepartmentId,
   studentSignUp,
   isLoggedInDepartment,
@@ -20,6 +19,7 @@ export const StudentSignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const departmentId: string = getLocalDepartmentId();
 
@@ -50,7 +50,7 @@ export const StudentSignUp = () => {
             password,
             departmentId
           );
-          navigate("/");
+          setSuccess("Student Registered Successfully");
         } catch (err) {
           if (err instanceof ApiError) {
             setError(err.message);
@@ -59,7 +59,6 @@ export const StudentSignUp = () => {
       }
     },
     [
-      navigate,
       email,
       firstName,
       lastName,
@@ -145,6 +144,12 @@ export const StudentSignUp = () => {
           <Alert status="error">
             <AlertIcon />
             {error}
+          </Alert>
+        )}
+        {!!success && (
+          <Alert status="success">
+            <AlertIcon />
+            {success}
           </Alert>
         )}
       </Flex>

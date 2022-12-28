@@ -7,11 +7,11 @@ import {
   AlertIcon,
   Center,
   Heading,
-  Image
+  Image,
 } from "@chakra-ui/react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import collegeVector from "../assets/collegesAdmins.jpg"
+import collegeVector from "../assets/collegesAdmins.jpg";
 import { useTitle } from "../utils/useTitle";
 import { isLoggedIn, collegeSignUp } from "../utils/auth";
 import { ApiError } from "../utils/apiError";
@@ -27,6 +27,7 @@ export const CollegeSignUp = () => {
   const [foundedAt, setFoundedAt] = useState(new Date().getFullYear());
   const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
@@ -52,7 +53,7 @@ export const CollegeSignUp = () => {
             location,
             adminPassword
           );
-          navigate("/");
+          setSuccess("College Signed Up Successfully");
         } catch (err) {
           if (err instanceof ApiError) {
             setError(err.message);
@@ -61,7 +62,6 @@ export const CollegeSignUp = () => {
       }
     },
     [
-      navigate,
       email,
       name,
       phone,
@@ -80,7 +80,9 @@ export const CollegeSignUp = () => {
 
   return (
     <Center flexDirection="column">
-      <Heading color="#4d7e3e" my={2}>College Sign Up</Heading>
+      <Heading color="#4d7e3e" my={2}>
+        College Sign Up
+      </Heading>
       <Image src={collegeVector} height={{ sm: "10rem", lg: "20rem" }} />
       <Flex maxW="sm" my={3} mx="auto" direction="column" gap={3}>
         <Flex gap={2}>
@@ -154,6 +156,12 @@ export const CollegeSignUp = () => {
           <Alert status="error">
             <AlertIcon />
             {error}
+          </Alert>
+        )}
+        {!!success && (
+          <Alert status="success">
+            <AlertIcon />
+            {success}
           </Alert>
         )}
       </Flex>

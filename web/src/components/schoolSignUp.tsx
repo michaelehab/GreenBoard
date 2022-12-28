@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
 import {
   getLocalCollegeId,
-  isLoggedIn,
   isLoggedInCollege,
   schoolSignUp,
 } from "../utils/auth";
@@ -20,6 +19,7 @@ export const SchoolSignUp = () => {
   const [confirmAdminPassWord, setConfirmAdminPassWord] = useState("");
   const collegeId: string = getLocalCollegeId();
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const signUp = useCallback(
     async (e: FormEvent | MouseEvent) => {
@@ -32,7 +32,7 @@ export const SchoolSignUp = () => {
       } else {
         try {
           await schoolSignUp(email, name, phone, collegeId, adminPassword);
-          navigate("/");
+          setSuccess("School Registered Successfully");
         } catch (err) {
           if (err instanceof ApiError) {
             setError(err.message);
@@ -40,15 +40,7 @@ export const SchoolSignUp = () => {
         }
       }
     },
-    [
-      navigate,
-      email,
-      name,
-      phone,
-      adminPassword,
-      confirmAdminPassWord,
-      collegeId,
-    ]
+    [email, name, phone, adminPassword, confirmAdminPassWord, collegeId]
   );
   useEffect(() => {
     if (!isLoggedInCollege()) {
@@ -114,6 +106,12 @@ export const SchoolSignUp = () => {
           <Alert status="error">
             <AlertIcon />
             {error}
+          </Alert>
+        )}
+        {!!success && (
+          <Alert status="success">
+            <AlertIcon />
+            {success}
           </Alert>
         )}
       </Flex>
