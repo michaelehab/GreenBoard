@@ -77,12 +77,12 @@ export const App = () => {
         <Route path="/colleges/:collegeId" element={<CollegeProfile />} />
         <Route path="/colleges/edit" element={<EditCollegeProfile />} />
         <Route path="/schools/:schoolId" element={<SchoolProfile />} />
-        <Route path="/school/edit" element={<EditSchoolProfile />} />
+        <Route path="/schools/edit" element={<EditSchoolProfile />} />
         <Route
           path="/departments/:departmentId"
           element={<DepartmentProfile />}
         />
-        <Route path="/department/edit" element={<EditDepartmentProfile />} />
+        <Route path="/departments/edit" element={<EditDepartmentProfile />} />
         <Route path="/students/:studentId" element={<StudentProfile />} />
         <Route path="/students/edit" element={<EditStudentProfile />} />
         <Route

@@ -14,11 +14,14 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import { ApiError } from "../utils/apiError";
 import {
   getLocalCollegeId,
+  getLocalDepartmentId,
   getLocalSchoolId,
   isLoggedIn,
   isLoggedInCollege,
+  isLoggedInDepartment,
   isLoggedInSchool,
   updateCollegePassword,
+  updateDepartmentPassword,
   updateSchoolPassword,
 } from "../utils/auth";
 import { useNavigate, useParams } from "react-router-dom";
@@ -51,6 +54,9 @@ export const ChangePassword = () => {
           } else if (isLoggedInSchool()) {
             await updateSchoolPassword(currentPassword, newPassword);
             navigate(`/schools/${getLocalSchoolId()}`);
+          } else if (isLoggedInDepartment()) {
+            await updateDepartmentPassword(currentPassword, newPassword);
+            navigate(`/departments/${getLocalDepartmentId()}`);
           }
         } catch (err) {
           if (err instanceof ApiError) {

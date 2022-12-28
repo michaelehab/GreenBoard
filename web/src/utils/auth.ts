@@ -4,6 +4,8 @@ import {
   CollegeSignInResponse,
   CollegeSignUpRequest,
   CollegeSignUpResponse,
+  DepartmentChangePasswordRequest,
+  DepartmentChangePasswordResponse,
   DepartmentSignInResponse,
   DepartmentSignUpRequest,
   DepartmentSignUpResponse,
@@ -305,6 +307,19 @@ export const updateSchoolPassword = async (
       newPassword,
     }
   );
+};
+
+export const updateDepartmentPassword = async (
+  currentPassword: string,
+  newPassword: string
+) => {
+  await callEndpoint<
+    DepartmentChangePasswordRequest,
+    DepartmentChangePasswordResponse
+  >("/department/password", "PUT", true, {
+    oldPassword: currentPassword,
+    newPassword,
+  });
 };
 
 export const signOut = () => {
