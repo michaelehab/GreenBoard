@@ -128,7 +128,7 @@ export const InstructorSignUp = () => {
             display="block"
             onClick={signUp}
           >
-            Sign Up
+            Add
           </Button>
         </Box>
 

@@ -87,7 +87,7 @@ export const DepartmentSignUp = () => {
             display="block"
             onClick={signUp}
           >
-            Sign Up
+            Add
           </Button>
         </Box>
 

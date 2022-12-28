@@ -173,6 +173,7 @@ export const schoolSignUp = async (
     }
   );
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+  localStorage.setItem(LOCAL_STORAGE_ROLE, "SCHOOL");
 };
 export const getLocalDepartmentId = (): string => {
   const getId = localStorage.getItem(LOCAL_STORAGE_DepartmentID);
@@ -198,6 +199,7 @@ export const instructorSignUp = async (
     departmentId,
   });
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+  localStorage.setItem(LOCAL_STORAGE_ROLE, "INSTRUCTOR");
 };
 export const studentSignUp = async (
   email: string,
@@ -223,6 +225,7 @@ export const studentSignUp = async (
     }
   );
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+  localStorage.setItem(LOCAL_STORAGE_ROLE, "STUDENT");
 };
 
 export const getLocalSchoolId = (): string => {
@@ -245,6 +248,7 @@ export const departmentSignUp = async (
     adminPassword,
   });
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+  localStorage.setItem(LOCAL_STORAGE_ROLE, "DEPARTMENT");
 };
 export const collegeSignUp = async (
   email: string,
@@ -268,6 +272,7 @@ export const collegeSignUp = async (
     }
   );
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+  localStorage.setItem(LOCAL_STORAGE_ROLE, "COLLEGE");
 };
 
 export const signOut = () => {
