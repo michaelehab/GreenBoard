@@ -1,11 +1,15 @@
 import { SchoolSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
-import { SEED_COLLEGE, SEED_INSTRUCTOR, SEED_INSTRUCTOR_PASSWORD } from "../datastore/sqldb/seeds";
+import {
+  SEED_COLLEGE,
+  SEED_INSTRUCTOR,
+  SEED_INSTRUCTOR_PASSWORD,
+} from "../datastore/sqldb/seeds";
 import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("School tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
-  let schoolId:string;
+  let schoolId: string;
 
   const school: SchoolSignUpRequest = {
     name: "Faculty of Engineering",
@@ -18,6 +22,7 @@ describe("School tests", () => {
   const newName = "Faculty of Arts";
   const newEmail = "newemail@email.com";
   const newPhone = "0103456789";
+  const newPass = "NewPassword";
 
   beforeAll(async () => {
     client = await getTestServer();
@@ -71,7 +76,7 @@ describe("School tests", () => {
     expect(result.body.jwt).toBeDefined();
     expect(result.body.school.name).toEqual(school.name);
     expect(result.body.school.email).toEqual(school.email);
-    schoolId=result.body.school.id;
+    schoolId = result.body.school.id;
   });
 
   it("Signs in with invalid password -- /api/v1/school/signin returns 403", async () => {
@@ -127,11 +132,11 @@ describe("School tests", () => {
         )
       )
       .expect(200);
-      expect(result.body.school).toBeDefined();
-      expect(result.body.school.email).toEqual(school.email);
-      expect(result.body.school.name).toEqual(school.name);
-      expect(result.body.school.phone).toEqual(school.phone);
-      expect(result.body.collegeName).toEqual(SEED_COLLEGE.name);
+    expect(result.body.school).toBeDefined();
+    expect(result.body.school.email).toEqual(school.email);
+    expect(result.body.school.name).toEqual(school.name);
+    expect(result.body.school.phone).toEqual(school.phone);
+    expect(result.body.collegeName).toEqual(SEED_COLLEGE.name);
   });
 
   it("Gets school profile by id as unauthorized-- GET /api/v1/school/:schoolId expects 401", async () => {
@@ -152,7 +157,6 @@ describe("School tests", () => {
       .expect(404);
     expect(result.body.school).toBeUndefined();
   });
-
 
   it("Updates signed in school name -- PUT /api/v1/school/update returns 200", async () => {
     const result = await client
@@ -273,5 +277,72 @@ describe("School tests", () => {
       )
       .expect(400);
     expect(result.body.school).toBeUndefined();
+  });
+  it("Changes school Password with wrong old password -- PUT /api/v1/school/password returns 400", async () => {
+    const result = await client
+      .put(`/api/v1/school/password`)
+      .send({
+        oldPassword: "WrongOldPassword",
+        newPassword: newPass,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/school/signin",
+          newEmail,
+          school.adminPassword
+        )
+      )
+      .expect(400);
+  });
+
+  it("Changes school Password with wrong empty old password -- PUT /api/v1/school/password returns 400", async () => {
+    const result = await client
+      .put(`/api/v1/school/password`)
+      .send({
+        oldPassword: "",
+        newPassword: newPass,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/school/signin",
+          newEmail,
+          school.adminPassword
+        )
+      )
+      .expect(400);
+  });
+
+  it("Changes school Password with wrong empty new password -- PUT /api/v1/school/password returns 400", async () => {
+    const result = await client
+      .put(`/api/v1/school/password`)
+      .send({
+        oldPassword: school.adminPassword,
+        newPassword: "",
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/school/signin",
+          newEmail,
+          school.adminPassword
+        )
+      )
+      .expect(400);
+  });
+
+  it("Changes school Password with right old password -- PUT /api/v1/school/password returns 200", async () => {
+    const result = await client
+      .put(`/api/v1/school/password`)
+      .send({
+        oldPassword: school.adminPassword,
+        newPassword: newPass,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/school/signin",
+          newEmail,
+          school.adminPassword
+        )
+      )
+      .expect(200);
   });
 });

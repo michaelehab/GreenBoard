@@ -15,6 +15,7 @@ describe("Student tests", () => {
   const newLastName: string = "updatedLastName";
   const newPhone: string = "updatedPhone";
   const newEmail: string = "Email@google.com";
+  const newPass: string = "newPass";
   let studentId: string;
 
   const student: StudentSignUpRequest = {
@@ -280,5 +281,57 @@ describe("Student tests", () => {
       )
       .expect(400);
     expect(result.body.student).toBeUndefined();
+  });
+
+  it("Changes student Password with wrong old password -- PUT /api/v1/user/password returns 400", async () => {
+    const result = await client
+      .put(`/api/v1/user/password`)
+      .send({
+        oldPassword: "WrongOldPassword",
+        newPassword: newPass,
+      })
+      .set(
+        await getAuthToken("/api/v1/student/signin", newEmail, student.password)
+      )
+      .expect(400);
+  });
+
+  it("Changes student Password with wrong empty old password -- PUT /api/v1/user/password returns 400", async () => {
+    const result = await client
+      .put(`/api/v1/user/password`)
+      .send({
+        oldPassword: "",
+        newPassword: newPass,
+      })
+      .set(
+        await getAuthToken("/api/v1/student/signin", newEmail, student.password)
+      )
+      .expect(400);
+  });
+
+  it("Changes student Password with wrong empty new password -- PUT /api/v1/user/password returns 400", async () => {
+    const result = await client
+      .put(`/api/v1/user/password`)
+      .send({
+        oldPassword: student.password,
+        newPassword: "",
+      })
+      .set(
+        await getAuthToken("/api/v1/student/signin", newEmail, student.password)
+      )
+      .expect(400);
+  });
+
+  it("Changes student Password with right old password -- PUT /api/v1/user/password returns 200", async () => {
+    const result = await client
+      .put(`/api/v1/user/password`)
+      .send({
+        oldPassword: student.password,
+        newPassword: newPass,
+      })
+      .set(
+        await getAuthToken("/api/v1/student/signin", newEmail, student.password)
+      )
+      .expect(200);
   });
 });
