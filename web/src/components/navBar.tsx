@@ -30,6 +30,7 @@ import {
   getLocalCollegeId,
   getLocalSchoolId,
   getLocalDepartmentId,
+  isLoggedInInstructor,
 } from "../utils/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
@@ -164,7 +165,7 @@ export const NavBar = () => {
                   )}
                 </MenuButton>
                 <MenuList>
-                  {!isLargerThan600 && (
+                  {!isLargerThan600 && isLoggedInUser() && (
                     <>
                       <MenuItem>
                         <Link to={"/announcements"}>My Announcements</Link>

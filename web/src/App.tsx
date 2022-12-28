@@ -28,6 +28,7 @@ import { SchoolProfile } from "./pages/schoolProfile";
 import { EditSchoolProfile } from "./pages/EditSchoolProfile";
 import { DepartmentProfile } from "./pages/departmentProfile";
 import { EditDepartmentProfile } from "./pages/EditDepartmentProfile";
+import { ChangePassword } from "./pages/changePassword";
 
 export const App = () => {
   return (
@@ -79,6 +80,7 @@ export const App = () => {
         />
         <Route path="/department/edit" element={<EditDepartmentProfile />} />
         <Route path="/courses/:courseId/grades" element={<ViewGrades />} />
+        <Route path="/change-password" element={<ChangePassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
