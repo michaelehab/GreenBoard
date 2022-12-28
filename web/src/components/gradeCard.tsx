@@ -1,5 +1,6 @@
 import { Text, Center, Box } from "@chakra-ui/react";
 import { GradeWithName } from "@greenboard/shared";
+import { isLoggedInInstructor } from "../utils/auth";
 
 export const GradeCard: React.FC<GradeWithName> = (grade) => {
   return (
@@ -16,6 +17,11 @@ export const GradeCard: React.FC<GradeWithName> = (grade) => {
         <Text fontSize="md" fontWeight="bold">
           {grade.quizName} | {grade.grade}%
         </Text>
+        {isLoggedInInstructor() && (
+          <Text>
+            {grade.studentFirstName} {grade.studentLastName}
+          </Text>
+        )}
         <Text>{new Date(grade.takenAt).toDateString()}</Text>
       </Box>
     </Center>

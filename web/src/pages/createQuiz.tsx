@@ -190,7 +190,7 @@ export const CreateQuiz = () => {
                 }
               />
               <Input
-                placeholder={`Q${index + 1} Right Choice`}
+                placeholder={`Q${index + 1} Right Choice (A, B, C, or D)`}
                 value={form.rightChoice}
                 variant="outline"
                 name="rightChoice"

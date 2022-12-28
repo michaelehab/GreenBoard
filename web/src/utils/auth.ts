@@ -1,4 +1,6 @@
 import {
+  CollegeChangePasswordRequest,
+  CollegeChangePasswordResponse,
   CollegeSignInResponse,
   CollegeSignUpRequest,
   CollegeSignUpResponse,
@@ -273,6 +275,19 @@ export const collegeSignUp = async (
     }
   );
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
+};
+
+export const updateCollegePassword = async (
+  currentPassword: string,
+  newPassword: string
+) => {
+  await callEndpoint<
+    CollegeChangePasswordRequest,
+    CollegeChangePasswordResponse
+  >("/college/password", "PUT", true, {
+    oldPassword: currentPassword,
+    newPassword,
+  });
 };
 
 export const signOut = () => {

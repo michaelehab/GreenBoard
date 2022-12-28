@@ -127,6 +127,8 @@ export interface GradeWithName {
   quizName: string;
   takenAt: number;
   studentId: string;
+  studentFirstName: string;
+  studentLastName: string;
 }
 
 export interface QuizWithName {

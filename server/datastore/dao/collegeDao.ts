@@ -5,4 +5,5 @@ export interface CollegeDao {
   getCollegeById(id: string): Promise<College | undefined>;
   getCollegeByEmail(email: string): Promise<College | undefined>;
   updateCollege(college: College): Promise<void>;
+  changeCollegePassword(collegeId: string, newPassword: string): Promise<void>;
 }

@@ -144,10 +144,11 @@ export interface GetCollegeResponse {
   college: Pick<College, "email" | "foundedAt" | "location" | "name" | "phone">;
 }
 
-export interface CollegeResetPasswordRequest {
+export interface CollegeChangePasswordRequest {
+  oldPassword: string;
   newPassword: string;
 }
-export interface CollegeResetPasswordResponse {}
+export interface CollegeChangePasswordResponse {}
 
 // School APIs
 export type SchoolSignUpRequest = Pick<
@@ -175,10 +176,11 @@ export interface SchoolUpdateResponse {
   school: Pick<School, "email" | "collegeId" | "name" | "phone">;
 }
 
-export interface SchoolResetPasswordRequest {
+export interface SchoolChangePasswordRequest {
+  oldPassword: string;
   newPassword: string;
 }
-export interface SchoolResetPasswordResponse {}
+export interface SchoolChangePasswordResponse {}
 
 // Department APIs
 export type DepartmentSignUpRequest = Pick<
