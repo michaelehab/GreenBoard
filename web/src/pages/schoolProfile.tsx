@@ -56,10 +56,10 @@ export const SchoolProfile = () => {
 
         <Flex maxW="sm" mx="auto" my={12} direction="column" gap={3}>
           <Box m="auto">
-            <Text fontSize="large"> Name: {schoolData.school.name}</Text>
-            <Text fontSize="large"> Email: {schoolData.school.email}</Text>
+            <Text fontSize="large">Name: {schoolData.school.name}</Text>
+            <Text fontSize="large">Email: {schoolData.school.email}</Text>
             <Text fontSize="large">College Name: {schoolData.collegeName}</Text>
-            <Text fontSize="large"> Phone: {schoolData.school.phone}</Text>
+            <Text fontSize="large">Phone: {schoolData.school.phone}</Text>
           </Box>
           {isLoggedInSchool() && getLocalSchoolId() === schoolId && (
             <Box m="auto" my={12}>
