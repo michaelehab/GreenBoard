@@ -108,7 +108,15 @@ export const UpdateDepartment: ExpressHandler<
   }
 
   if (name) existingDepartment.name = name;
-  if (email) existingDepartment.email = email;
+  if (email) {
+    const departmentWithSameEmail = await db.getDepartmentByEmail(email);
+    if (departmentWithSameEmail) {
+      return res
+        .status(400)
+        .send({ error: "Department with same email exists" });
+    }
+    existingDepartment.email = email;
+  }
 
   await db.updateDepartment(existingDepartment);
   return res.status(200).send({

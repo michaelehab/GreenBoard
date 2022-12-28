@@ -120,7 +120,13 @@ export const UpdateSchool: ExpressHandler<
   }
 
   if (name) existingSchool.name = name;
-  if (email) existingSchool.email = email;
+  if (email) {
+    const schoolWithSameEmail = await db.getSchoolByEmail(email);
+    if (schoolWithSameEmail) {
+      return res.status(400).send({ error: "School with same email exists" });
+    }
+    existingSchool.email = email;
+  }
   if (phone) existingSchool.phone = phone;
 
   await db.updateSchool(existingSchool);
