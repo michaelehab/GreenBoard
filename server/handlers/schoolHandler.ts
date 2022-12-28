@@ -13,6 +13,8 @@ import {
   SchoolUpdateResponse,
   GetSchoolRequest,
   GetSchoolResponse,
+  SchoolChangePasswordRequest,
+  SchoolChangePasswordResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -156,4 +158,37 @@ export const GetSchoolById: ExpressHandlerWithParams<
     },
     collegeName: existingCollege?.name,
   });
+};
+
+export const ChangeSchoolPassword: ExpressHandler<
+  SchoolChangePasswordRequest,
+  SchoolChangePasswordResponse
+> = async (req, res) => {
+  const { newPassword, oldPassword } = req.body;
+
+  if (
+    !newPassword ||
+    !oldPassword ||
+    newPassword === "" ||
+    oldPassword === ""
+  ) {
+    return res.status(400).send({ error: "At least one field is required" });
+  }
+
+  const existingSchool = await db.getSchoolById(res.locals.schoolId);
+
+  if (!existingSchool) {
+    return res.status(404).send({ error: "School not found" });
+  }
+
+  if (getPasswordHashed(oldPassword) !== existingSchool.adminPassword) {
+    return res.status(400).send({ error: "Old Password is not correct" });
+  }
+
+  await db.changeSchoolPassword(
+    existingSchool.id,
+    getPasswordHashed(newPassword)
+  );
+
+  return res.sendStatus(200);
 };
