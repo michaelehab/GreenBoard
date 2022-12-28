@@ -5,6 +5,8 @@ import {
   StudentSignInResponse,
   StudentSignUpRequest,
   StudentSignUpResponse,
+  StudentUpdateRequest,
+  StudentUpdateResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -15,13 +17,20 @@ export const SignUpStudent: ExpressHandler<
   StudentSignUpRequest,
   StudentSignUpResponse
 > = async (req, res) => {
-  const { email, firstName, lastName, password, phone, level, departmentId } =
-    req.body;
+  const {
+    email,
+    firstName,
+    lastName,
+    password,
+    phoneNumber,
+    level,
+    departmentId,
+  } = req.body;
   if (
     !email ||
     !firstName ||
     !lastName ||
-    !phone ||
+    !phoneNumber ||
     !password ||
     !level ||
     !departmentId
@@ -36,17 +45,17 @@ export const SignUpStudent: ExpressHandler<
       .send({ error: "Student with this email already exists!" });
   }
 
-  existingStudent = await db.getStudentByPhoneNumber(phone);
+  existingStudent = await db.getStudentByPhoneNumber(phoneNumber);
   if (existingStudent) {
     return res
       .status(403)
-      .send({ error: "Student with this phone number already exists!" });
+      .send({ error: "Student with this phoneNumber number already exists!" });
   }
 
   const student: Student = {
     id: crypto.randomBytes(20).toString("hex"),
     email,
-    phone,
+    phoneNumber,
     firstName,
     lastName,
     password: getPasswordHashed(password),
@@ -96,8 +105,44 @@ export const SignInStudent: ExpressHandler<
       lastName: existingStudent.lastName,
       level: existingStudent.level,
       departmentId: existingStudent.departmentId,
-      phone: existingStudent.phone,
+      phoneNumber: existingStudent.phoneNumber,
     },
     jwt: signJwt(tokenPayload),
+  });
+};
+
+export const UpdateStudent: ExpressHandler<
+  StudentUpdateRequest,
+  StudentUpdateResponse
+> = async (req, res) => {
+  const { email, firstName, lastName, phoneNumber } = req.body;
+
+  if (
+    (!firstName || firstName === "") &&
+    (!lastName || lastName === "") &&
+    (!email || email === "") &&
+    (!phoneNumber || phoneNumber === "")
+  ) {
+    return res.status(400).send({ error: "At least one field is required" });
+  }
+
+  const existingStudent = await db.getStudentById(res.locals.userId);
+  if (!existingStudent) {
+    return res.status(404).send({ error: "Student not found" });
+  }
+
+  if (firstName) existingStudent.firstName = firstName;
+  if (lastName) existingStudent.lastName = lastName;
+  if (email) existingStudent.email = email;
+  if (phoneNumber) existingStudent.phoneNumber = phoneNumber;
+
+  await db.updateStudentData(existingStudent);
+  return res.status(200).send({
+    student: {
+      email: existingStudent.email,
+      firstName: existingStudent.firstName,
+      lastName: existingStudent.lastName,
+      phoneNumber: existingStudent.phoneNumber,
+    },
   });
 };

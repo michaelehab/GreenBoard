@@ -11,7 +11,7 @@ describe("Instructor tests", () => {
     firstName: "John",
     lastName: "Doe",
     password: "password",
-    phone: "+20123456789",
+    phoneNumber: "+20123456789",
     departmentId: SEED_DEPARTMENT.id,
   };
 
@@ -50,7 +50,7 @@ describe("Instructor tests", () => {
         email: "test@outlook.com",
         firstName: "John",
         lastName: "Doe",
-        phone: "+20123456789",
+        phoneNumber: "+20123456789",
         departmentId: "DEPT001",
       })
       .expect(400);

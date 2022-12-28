@@ -1,17 +1,21 @@
 import { StudentSignUpRequest } from "@greenboard/shared";
 import supertest from "supertest";
 import { SEED_DEPARTMENT } from "../datastore/sqldb/seeds";
-import { getTestServer } from "./testUtils";
+import { getAuthToken, getTestServer } from "./testUtils";
 
 describe("Student tests", () => {
   let client: supertest.SuperTest<supertest.Test>;
+  const newFirstName: string = "updatedFirstName";
+  const newLastName: string = "updatedLastName";
+  const newPhone: string = "updatedPhone";
+  const newEmail: string = "Email@google.com";
 
   const student: StudentSignUpRequest = {
     email: "test@outlook.com",
     firstName: "John",
     lastName: "Doe",
     password: "password",
-    phone: "+20123456789",
+    phoneNumber: "+20123456789",
     level: 2,
     departmentId: SEED_DEPARTMENT.id,
   };
@@ -51,7 +55,7 @@ describe("Student tests", () => {
         email: "test@outlook.com",
         firstName: "John",
         lastName: "Doe",
-        phone: "+20123456789",
+        phoneNumber: "+20123456789",
         level: 2,
         departmentId: "DEPT001",
       })
@@ -93,6 +97,116 @@ describe("Student tests", () => {
       })
       .expect(403);
     expect(result.body.jwt).toBeUndefined();
+    expect(result.body.student).toBeUndefined();
+  });
+  it("Updates signed in student Name -- PUT /api/v1/students/update returns 200", async () => {
+    const result = await client
+      .put("/api/v1/students/update")
+      .send({
+        firstName: newFirstName,
+        lastName: newLastName,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/students/signin",
+          student.email,
+          student.password
+        )
+      )
+      .expect(200);
+    expect(result.body.student).toBeDefined();
+    expect(result.body.student.firstName).toEqual(newFirstName);
+    expect(result.body.student.lastName).toEqual(newLastName);
+    expect(result.body.student.email).toEqual(student.email);
+    expect(result.body.student.phoneNumber).toEqual(student.phoneNumber);
+  });
+
+  it("Updates signed in student not signed in -- PUT /api/v1/students/update returns 403", async () => {
+    const result = await client
+      .put("/api/v1/students/update")
+      .send({
+        firstName: newFirstName,
+      })
+      .expect(401);
+    expect(result.body.student).toBeUndefined();
+  });
+
+  it("Updates signed in student name with empty -- PUT /api/v1/students/update returns 400", async () => {
+    const result = await client
+      .put("/api/v1/students/update")
+      .send({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/students/signin",
+          student.email,
+          student.password
+        )
+      )
+      .expect(400);
+    expect(result.body.student).toBeUndefined();
+  });
+
+  it("Updates signed in student email -- PUT /api/v1/students/update returns 200", async () => {
+    const result = await client
+      .put("/api/v1/students/update")
+      .send({
+        email: newEmail,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/students/signin",
+          student.email,
+          student.password
+        )
+      )
+      .expect(200);
+    expect(result.body.student).toBeDefined();
+    expect(result.body.student.firstName).toEqual(newFirstName);
+    expect(result.body.student.lastName).toEqual(newLastName);
+    expect(result.body.student.email).toEqual(newEmail);
+    expect(result.body.student.phoneNumber).toEqual(student.phoneNumber);
+  });
+
+  it("Updates signed in student phoneNumber -- PUT /api/v1/students/update returns 200", async () => {
+    const result = await client
+      .put("/api/v1/students/update")
+      .send({
+        phoneNumber: newPhone,
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/students/signin",
+          newEmail,
+          student.password
+        )
+      )
+      .expect(200);
+    expect(result.body.student).toBeDefined();
+    expect(result.body.student.lastName).toEqual(newLastName);
+    expect(result.body.student.firstName).toEqual(newFirstName);
+    expect(result.body.student.email).toEqual(newEmail);
+    expect(result.body.student.phoneNumber).toEqual(newPhone);
+  });
+
+  it("Updates signed in student phoneNumber with empty -- PUT /api/v1/students/update returns 400", async () => {
+    const result = await client
+      .put("/api/v1/students/update")
+      .send({
+        phoneNumber: "",
+      })
+      .set(
+        await getAuthToken(
+          "/api/v1/students/signin",
+          newEmail,
+          student.password
+        )
+      )
+      .expect(400);
     expect(result.body.student).toBeUndefined();
   });
 });
