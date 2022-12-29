@@ -5,6 +5,7 @@ import {
   SignInCollege,
   SignUpCollege,
   UpdateCollege,
+  ListSchools,
 } from "../handlers/collegeHandler";
 import {
   parseJwtMiddleware,
@@ -16,6 +17,7 @@ router.post("/signup", SignUpCollege);
 router.post("/signin", SignInCollege);
 router.use(parseJwtMiddleware);
 router.use(requireJwtMiddleware);
+router.get("/schools", ListSchools);
 router.put("/update", UpdateCollege);
 router.get("/:collegeId", GetCollegeById);
 router.put("/password", ChangeCollegePassword);

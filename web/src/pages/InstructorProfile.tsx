@@ -1,6 +1,10 @@
 import { Box, Button, Flex, Heading, Center, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { getLocalUserId, isLoggedInInstructor } from "../utils/auth";
+import {
+  getLocalUserId,
+  isLoggedIn,
+  isLoggedInInstructor,
+} from "../utils/auth";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { callEndpoint } from "../utils/callEndpoint";
@@ -21,7 +25,7 @@ export const InstructorProfile = () => {
     )
   );
   useEffect(() => {
-    if (!isLoggedInInstructor()) {
+    if (!isLoggedIn()) {
       navigate("/");
     }
   }, [navigate, instructorData]);

@@ -21,6 +21,7 @@ import {
   UserDataAndComment,
   UserDataAndPost,
   ClientQuizQuestion,
+  SchoolData,
 } from "./types";
 
 export interface SignInRequest {
@@ -155,6 +156,11 @@ export interface CollegeChangePasswordRequest {
   newPassword: string;
 }
 export interface CollegeChangePasswordResponse {}
+
+export interface ListSchoolsRequest {}
+export interface ListSchoolsResponse {
+  schools: SchoolData[];
+}
 
 // School APIs
 export type SchoolSignUpRequest = Pick<

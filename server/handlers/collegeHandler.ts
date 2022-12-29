@@ -15,6 +15,8 @@ import {
   GetCollegeResponse,
   CollegeChangePasswordRequest,
   CollegeChangePasswordResponse,
+  ListSchoolsRequest,
+  ListSchoolsResponse,
 } from "@greenboard/shared";
 import { db } from "../datastore";
 import crypto from "crypto";
@@ -198,4 +200,19 @@ export const ChangeCollegePassword: ExpressHandler<
   );
 
   return res.sendStatus(200);
+};
+
+export const ListSchools: ExpressHandler<
+  ListSchoolsRequest,
+  ListSchoolsResponse
+> = async (req, res) => {
+  const existingCollege = await db.getCollegeById(res.locals.collegeId);
+  if (!existingCollege) {
+    return res.status(404).send({ error: "College Not Found" });
+  }
+
+  const schools = await db.listSchools(res.locals.collegeId);
+  return res.status(200).send({
+    schools,
+  });
 };

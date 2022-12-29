@@ -34,6 +34,14 @@ export interface School {
   collegeId: string;
 }
 
+export interface SchoolData {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  collegeId: string;
+}
+
 export interface Department {
   id: string;
   name: string;

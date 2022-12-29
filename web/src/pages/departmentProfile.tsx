@@ -1,6 +1,10 @@
 import { Box, Button, Flex, Heading, Center, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { getLocalDepartmentId, isLoggedInDepartment } from "../utils/auth";
+import {
+  getLocalDepartmentId,
+  isLoggedIn,
+  isLoggedInDepartment,
+} from "../utils/auth";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -22,7 +26,7 @@ export const DepartmentProfile = () => {
   );
 
   useEffect(() => {
-    if (!isLoggedInDepartment()) {
+    if (!isLoggedIn()) {
       navigate("/");
     }
   }, [navigate, departmentData]);

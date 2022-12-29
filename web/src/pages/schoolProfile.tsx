@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Heading, Center, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { getLocalSchoolId, isLoggedInSchool } from "../utils/auth";
+import { getLocalSchoolId, isLoggedIn, isLoggedInSchool } from "../utils/auth";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { GetSchoolRequest, GetSchoolResponse } from "@greenboard/shared";
@@ -19,7 +19,7 @@ export const SchoolProfile = () => {
   );
 
   useEffect(() => {
-    if (!isLoggedInSchool()) {
+    if (!isLoggedIn()) {
       navigate("/");
     }
   }, [navigate, schoolData]);

@@ -33,6 +33,7 @@ import { EditStudentProfile } from "./pages/EditStudentProfile";
 import { InstructorProfile } from "./pages/InstructorProfile";
 import { EditInstructorProfile } from "./pages/EditInstructorProfile";
 import { ChangePassword } from "./pages/changePassword";
+import { ListSchools } from "./pages/listSchools";
 
 export const App = () => {
   return (
@@ -92,6 +93,7 @@ export const App = () => {
         <Route path="/instructors/edit" element={<EditInstructorProfile />} />
         <Route path="/courses/:courseId/grades" element={<ViewGrades />} />
         <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/myschools" element={<ListSchools />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

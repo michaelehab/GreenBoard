@@ -25,6 +25,7 @@ import {
   UserDataAndPost,
   QuizTrial,
   ClientQuizQuestion,
+  SchoolData,
 } from "@greenboard/shared";
 import path from "path";
 import { Database, open as sqliteOpen } from "sqlite";
@@ -207,6 +208,13 @@ export class SQLDataStore implements DataStore {
     await this.db.run(
       "UPDATE colleges SET adminPassword = ? WHERE id = ?",
       newPassword,
+      collegeId
+    );
+  }
+
+  async listSchools(collegeId: string): Promise<SchoolData[]> {
+    return this.db.all<SchoolData[]>(
+      "SELECT id, name, phone, email, collegeId FROM schools WHERE collegeId = ?",
       collegeId
     );
   }

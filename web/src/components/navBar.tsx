@@ -167,6 +167,11 @@ export const NavBar = () => {
                 )}
               </MenuButton>
               <MenuList>
+                {isLoggedInCollege() && (
+                  <MenuItem>
+                    <Link to={"/myschools"}>My Schools</Link>
+                  </MenuItem>
+                )}
                 {!isLargerThan600 && isLoggedInUser() && (
                   <>
                     <MenuItem>

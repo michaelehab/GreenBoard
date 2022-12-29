@@ -1,4 +1,4 @@
-import { College } from "@greenboard/shared";
+import { College, SchoolData } from "@greenboard/shared";
 
 export interface CollegeDao {
   createCollege(college: College): Promise<void>;
@@ -6,4 +6,5 @@ export interface CollegeDao {
   getCollegeByEmail(email: string): Promise<College | undefined>;
   updateCollege(college: College): Promise<void>;
   changeCollegePassword(collegeId: string, newPassword: string): Promise<void>;
+  listSchools(collegeId: string): Promise<SchoolData[]>;
 }

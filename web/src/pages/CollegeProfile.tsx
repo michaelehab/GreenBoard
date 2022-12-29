@@ -1,6 +1,10 @@
 import { Box, Button, Flex, Heading, Center, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { getLocalCollegeId, isLoggedInCollege } from "../utils/auth";
+import {
+  getLocalCollegeId,
+  isLoggedIn,
+  isLoggedInCollege,
+} from "../utils/auth";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { GetCollegeRequest, GetCollegeResponse } from "@greenboard/shared";
@@ -20,7 +24,7 @@ export const CollegeProfile = () => {
   );
 
   useEffect(() => {
-    if (!isLoggedInCollege()) {
+    if (!isLoggedIn()) {
       navigate("/");
     }
   }, [navigate, collegeData]);
