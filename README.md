@@ -1,8 +1,6 @@
 <div align = "center">
   
   ![GreenBoard logo](https://user-images.githubusercontent.com/29122581/210644273-bb8d1c00-8cd4-4bfa-9eea-b713104a7332.png)
-  ![GitHub stars](https://img.shields.io/github/stars/michaelehab/GreenBoard?style=plastic)
-  ![GitHub forks](https://img.shields.io/github/forks/michaelehab/GreenBoard?style=plastic)
   ![GitHub repo size](https://img.shields.io/github/repo-size/michaelehab/GreenBoard?style=plastic)
   ![GitHub top language](https://img.shields.io/github/languages/top/michaelehab/GreenBoard?style=plastic)
   
