@@ -57,6 +57,9 @@ within a specific course.
 ## Attributes
 ![GreenBoard-Attributes](https://user-images.githubusercontent.com/29122581/210643568-e980ea10-7c94-4152-9cef-115d87dafbd9.png)
 
+## Test suites (We followed TDD)
+![jest-tests](https://user-images.githubusercontent.com/29122581/210649871-b4a352d0-61af-4b6f-b609-f5faf96407d8.png)
+
 ## Screenshots
 ### Home Page
 ![home-page](https://user-images.githubusercontent.com/29122581/210645245-9a444e69-83b0-4fd0-988d-11b48bed4057.png)
